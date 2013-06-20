@@ -64,7 +64,6 @@ def valida_mundos(str_mundo):
 def url_casos_evaluacion(problema, nombre_original_archivo):
     return os.path.join('casos', problema.nombre_administrativo+'.nkec')
 
-
 class Nivel(models.Model):
     nombre      = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField()
@@ -152,3 +151,4 @@ class Participacion(models.Model):
 
     class Meta:
         verbose_name_plural = 'participaciones'
+        unique_together = ("usuario", "concurso")

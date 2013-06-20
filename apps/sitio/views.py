@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
@@ -28,7 +28,7 @@ def problemas_view(request):
 
 def problema_detalle(request, nombre_administrativo):
     data['path'] = request.path
-    data['problema'] = Problema.objects.get(nombre_administrativo=nombre_administrativo)
+    data['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
     data['js'] = ['js/mundo.js', 'js/problema.js']
     return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
 

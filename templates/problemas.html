@@ -1,0 +1,61 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Problemas {% endblock %}
+{% block contenido %}
+  <div class="span12">
+    <h4>&iexcl;A programar!</h4>
+    <p>Aqu&iacute; encontrar&aacute;s una interesante lista de problemas. No pierdas ni un segundo y dev&oacute;rala de pies a cabeza, te est&aacute;n esperando ansiosos por que los resuelvas</p>
+    <div class="row">
+      <div class="span3"></div>
+      <div class="span6">
+        <h3 style="text-align:center;">Lista de problemas</h3>
+        {% for nivel in niveles %}
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th colspan="{% if user.is_authenticated %}5{% else %}4{% endif %}" style="text-align:center;">
+                  <p class="lead">{{ nivel.nombre }}</p>
+                  <small>{{ nivel.descripcion }}</small>
+                </th>
+              </tr>
+              <tr>
+                <th>Problema</th>
+                <th><abbr title="Veces">V.</abbr> Resuelto</th>
+                <th><abbr title="Veces">V.</abbr> Intentado</th>
+                <th>Mejor tiempo</th>
+                {% if user.is_authenticated %}
+                  <th>T&uacute;</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for problema in nivel.problema_set.all %}
+                <tr>
+                  <td>
+                    <a href="/problema/{{ problema.nombre_administrativo }}">{{ problema.nombre }}</a>
+                  </td>
+                  <td>{{ problema.veces_resuelto }}</td>
+                  <td>{{ problema.veces_intentado }}</td>
+                  <td>{% ifequal problema.mejor_tiempo -1 %}---{% else %}{{ problema.mejor_tiempo }}{% endifequal %}</td>
+                  {% if user.is_authenticated %}
+                    <td>
+                      {% comment %}
+                        {% if user.ha_intentado_problema user.id problema.id %}
+                          <? $score = $this->Usuario->mejor_puntaje($this->user_id, $problema->id);?>
+                          <?=badge($score)?>
+                        {% else %}
+                          <span class="badge badge-inverse">---</span>
+                        {% endif %}
+                      {% endcomment %}
+                    </td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+      </div>
+      <div class="span3"></div>
+    </div>
+  </div>
+{% endblock %}

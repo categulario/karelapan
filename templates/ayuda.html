@@ -1,0 +1,23 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span6">
+    <div class="well">
+      <h3>Preguntas frecuentes</h3>
+      <p>En esta sección encontrarás respuestas a preguntas muy comunes sobre este evaluador. Si tienes dudas también puedes preguntar</p>
+      <p style="text-align:center;">
+        <a href="/faqs" class="btn btn-large btn-primary">Entrar</a>
+      </p>
+    </div>
+</div>
+<div class="span6">
+  <div class="well">
+    <h3>Wiki</h3>
+    <p>Consulta la documentación existente sobre karel, karelapan y otros proyectos relacionados.</p>
+    <p style="text-align:center;">
+      <a href="/wiki" class="btn btn-large btn-primary">Entrar</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

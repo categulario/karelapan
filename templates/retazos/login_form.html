@@ -1,0 +1,22 @@
+<form class="form-horizontal" method="post" action="/auth/login/">
+  {% csrf_token %}
+  <div class="control-group">
+    <label class="control-label" for="correo">Correo</label>
+    <div class="controls">
+      <input type="text" id="correo" name="correo" placeholder="tu@correo.com">
+      <input type="hidden" name="redirect" value="/usuarios">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="pass">Password</label>
+    <div class="controls">
+      <input type="password" id="pass" name="pass" placeholder="123pase">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn btn-large btn-info">Entrar</button>
+      <a href="/registro" class="btn">Registrarme</a>
+    </div>
+  </div>
+</form>

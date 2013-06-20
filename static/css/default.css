@@ -1,0 +1,12 @@
+body{
+  background-image: url('../img/bg.png');
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+textarea{
+  font-family: monospace;
+}
+dd.faq{
+  margin-bottom: 30px;
+}

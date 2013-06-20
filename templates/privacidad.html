@@ -1,0 +1,25 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span2"></div>
+  <div class="span8">
+    <h3>Aviso de privacidad <small>Qué es de la información que nos proporcionas</small></h3>
+    <p><strong>Lo primero que debes saber</strong> es que Abraham Toriz Cruz, con domicilio en 2º priv. de José Mancisidor bis #157B, es responsable de
+recabar sus datos personales, del uso que se le dé a los mismos y de su protección.</p>
+    <p><strong>Al momento del registro</strong> en esta plataforma se entiende que estás de acuerdo con este aviso y manifiestas consentimiento del manejo
+    de la información personal que nos proporcionas.</p>
+    <p><strong>¿Para qué es usada mi información personal?</strong> Los datos que requerimos nos permiten conocer el desempeño en programación que se tiene en
+    los distintos lugares donde es usada la plataforma, así como para llevar un control de aquellos usuarios que participan en la olimpiada mexicana de informática.</p>
+    <p><strong>¿Qué información me solicitan?</strong> Para poder llevar un control de los usuarios solicitamos tu nombre, género, fecha de nacimiento y lugar de procedencia,
+    si además participas en la olimpiada de informática solicitamos tus datos académicos como nombre de tu escuela y grado que cursas.</p>
+    <p><strong>¿Qué derechos tengo?</strong> Conforme a la ley, tú puedes acceder, rectificar y cancelar tus datos personales
+    así como oponerte al tratamiento de los mismos o revocar el consentimiento que nos hayas otorgado. Esto lo puedes realizar en la sección de tu
+    <a href="{% url 'apps.sitio.views.perfil_view' %}">perfil</a>.</p>
+    <p><strong>¿Mis datos personales son transferidos a terceros?</strong>No. Salvo que participes en olimpiadas de informática, caso en el cual
+    tu información será compartida con el Consejo de Ciencias y Tecnologías de la Información (CONSCIENTI) para fines de control.</p>
+    <p><strong>¿Dónde puedo consultar los cambios en la política de privacidad?</strong> En esta mismo sitio.</p>
+    <p>Fecha última actualización <em>2013-06-19</em></p>
+  </div>
+  <div class="span2"></div>
+{% endblock %}

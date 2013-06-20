@@ -1,0 +1,16 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span12">
+    <h3>Preguntas frecuentes <small><a href="/ayuda">volver</a></small></h3>
+    <dl>
+      {% for pregunta in preguntas %}
+        <dt>{{ pregunta }}</dt>
+        {% autoescape off %}
+        <dd class="faq">{{ pregunta.respuesta_full }}</dd>
+        {% endautoescape %}
+      {% endfor %}
+    </dl>
+  </div>
+{% endblock %}

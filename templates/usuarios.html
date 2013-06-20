@@ -1,0 +1,39 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  {% if not user.is_authenticated %}
+    <div class="span3"></div>
+    <div class="span6">
+      <h4>&iexcl;Inicia sesi&oacute;n!</h4>
+      <p>Debes entrar para poder conocer la lista de usuarios de este evaluador en l&iacute;nea.</p>
+      {% include "retazos/login_form.html" %}
+    </div>
+    <div class="span3"></div>
+  {% else %}
+    <div class="span2"></div>
+    <div class="span8">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Lugar</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Puntos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in usuarios %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td><a href="/usuario/{{ usuario.id }}">{{ usuario }}</a></td>
+              <td>{{ usuario.estado }}</td>
+              <td>{{ usuario.puntaje }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="span2"></div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,201 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karelapan | {% block titulo %}{% endblock %}</title>
+    <script type="text/javascript" language="javascript" src="{% static 'js/jquery.js' %}" ></script>
+    <script type="text/javascript" language="javascript" src="{% static 'js/bootstrap.js' %}" ></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+  </head>
+  <body>
+    {% if FB %}
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1&appId=435820073153569";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    {% endif %}
+    <div class="container" id="header">
+      <div class="row">
+        <div class="span12">
+          <div class="page-header">
+            <h1><img src="{% static 'img/cover800x150.mini.png' %}" class=""> <small>R&iacute;o de Karel <span class="label label-info">&#915; Gamma</span></small></h1>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- barra-->
+        <div class="span12">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="container">
+                <!-- Boton -->
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </a>
+
+                <!-- Brand -->
+                <a class="brand" href="/">Karel</a>
+
+                <!-- Cosas -->
+                <div class="nav-collapse collapse">
+                  <ul class="nav">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Problemas
+                        <b class="caret"></b>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a href="/problemas">Lista</a></li>
+                        <li><a href="/envios">Env&iacute;os</a></li>
+                        <li><a href="/concursos">Concursos</a></li>
+                        <li><a href="/medallero">Medallero</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/usuarios">Usuarios</a></li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Ayuda
+                        <b class="caret"></b>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a href="/faqs">Preguntas frecuentes</a></li>
+                        <li><a href="/wiki">Wiki</a></li>
+                        <li><a href="/privacidad">Aviso de privacidad</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                  {% if not user.is_authenticated %}
+                    <form class="navbar-form pull-right" method="post" action="/auth/login/">
+                      {% csrf_token %}
+                      <input type="text" class="span2" placeholder="tu@correo.com" name="correo">
+                      <input type="password" class="span2" placeholder="123pase" name="pass">
+                      <input type="hidden" class="span2" name="redirect" value="{{ path }}">
+                      <div class="btn-group">
+                        <button class="btn btn-success" type="submit">&iexcl;Entrar!</button>
+                        <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a href="/usuarios/olvide_mi_contrasenia">Olvid&eacute; mi contrase&ntilde;a</a></li>
+                        </ul>
+                      </div>
+                      <a href="/registro" class="btn btn-info">Registro</a>
+                    </form>
+                  {% else %}
+                    <ul class="nav pull-right">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                          <strong>Hola {{ user.nombre }}</strong>
+                          <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a href="/perfil">Perfil</a></li>
+                          <li><a href="/mis_soluciones">Mis soluciones</a></li>
+                          <li><a href="/auth/logout">Salir</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <strong>&iexcl;Hey!</strong> {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% for aviso in avisos %}
+          <div class="alert alert-{{ aviso.tipo }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>&iexcl;Mira!</strong> {{ aviso }}
+          </div>
+        {% endfor %}
+      <div class="row">
+        {% block contenido %}
+          <div class="span12"><h3>Karelapan</h3></div>
+        {% endblock %}
+      </div>
+      <div class="row">
+        <div class="span12" style="height: 50px;"></div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="span3">
+          <strong>Aplicaciones</strong>
+          <ul>
+            <li><a href="#">Android</a></li>
+            <li><a href="#">Ubuntu</a></li>
+            <li><a href="#">Windows</a></li>
+            <li><a href="#">Mac</a></li>
+          </ul>
+        </div>
+        <div class="span3">
+          <strong>&iexcl;Suscr&iacute;bete!</strong>
+          <p><a href="/problemas/feed" target="_blank"><i class="icon-search"></i> Feed RSS de problemas</a></p>
+          <strong>Proyectos Involucrados</strong>
+          <ul>
+            <li><a href="https://github.com/developingo/KarelCore" target="_blank">KarelCore</a> El n&uacute;cleo de Karel</li>
+            <li><a href="https://github.com/developingo/KarelWebRender" target="_blank">Karelize.js</a> &iquest;Ya notaste que los mundos no son im&aacute;genes?</li>
+            <li><a href="https://github.com/developingo/KarelMovil" target="_blank">KarelMovil</a> Karel para android</li>
+            <li><a href="https://github.com/developingo/wconvert" target="_blank">Wconvert</a> Convierte entre el viejo formato de mundos y el nuevo.</li>
+          </ul>
+        </div>
+        <div class="span3">
+          <address>
+            <strong>Desarrolladores</strong><br>
+            <a href="http://twitter.com/Categulario" target="_blank">@Categulario</a><br>
+            <a href="http://twitter.com/HouseCkleiin" target="_blank">@HouseCkleiin</a>
+          </address>
+          <address>
+            <strong>Documentación</strong><br>
+            <a href="/wiki">Karel Wiki</a><br>
+            <a href="/privacidad">Aviso de privacidad</a><br>
+          </address>
+        </div>
+        <div class="span3">
+          <address>
+            <strong>Karelapan</strong><br>
+            123 <abbr title="Avenida">Av.</abbr> Recursi&oacute;n, <abbr title="Departamento">Dpto.</abbr> 755<br>
+            San Bucle, LI 127.0.0.1<br>
+            <abbr title="Telefono">T:</abbr> (123) 456-7890<br>
+            <strong>Contacto</strong><br>
+            <a href="mailto:{{ CA }}">{{ CA }}</a><br>
+          </address>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" id="base_url" value="<?=base_url()?>">
+    {% if GA %}
+        <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-17396954-13']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
+    {% endif %}
+  </body>
+</html>

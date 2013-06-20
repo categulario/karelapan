@@ -1,0 +1,112 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} {{ usuario }} {% endblock %}
+{% block contenido %}
+  <div class="span2"></div>
+  <div class="span8">
+    <h3>{{ usuario }} <small>De {{ usuario.estado }}</small></h3>
+    <em><a href="mailto:{{ usuario.correo }}">{{ usuario.correo }}</a></em><br><br>
+    <p>{{ usuario.descripcion }}</p>
+
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#sobre_mi" data-toggle="tab">Sobre mí</a></li>
+        <li><a href="#problemas" data-toggle="tab">Problemas</a></li>
+        <li><a href="#contrasenia" data-toggle="tab">Cambia tu contraseña</a></li>
+        <li><a href="#perfil_editar" data-toggle="tab">Edita tus datos</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="sobre_mi">
+          <p><strong>Pertenece a los grupos</strong> {{ usuario.lista_grupos }}</p>
+          <p>
+            Ha obtenido {{ usuario.puntaje }} puntos en este evaluador desde el <em>{{ usuario.fecha_registro }}</em><br>
+            Resolvi&oacute; {{ usuario.problemas_resueltos }} {% ifequal usuario.problemas_resueltos 1 %}problema{% else %}problemas{% endifequal %} desde entonces.
+          </p>
+        </div>
+        <div class="tab-pane" id="problemas">
+          <h4>Problemas resueltos por ti <small><a href="/mis_soluciones">Ver mis soluciones</a></small></h4>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Categoría</th>
+                <th>Problema</th>
+                <th>Mejor tiempo</th>
+                <th>Tu tiempo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for problema in usuario.lista_problemas_resueltos %}
+                <tr>
+                  <td><?=$this->Problema->obtener_nivel($problema->level)->name?></td>
+                  <td><a href="<?=base_url()?>problemas/ver/<?=$problema->admin_title?>"><?=$problema->title?></a></td>
+                  <td><?=$problema->best_time?></td>
+                  <td><?=$this->Usuario->mejor_tiempo($id, $problema->id)?></td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3">¡No has resuelto ningún problema!</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <h4>Problemas intentados por ti</h4>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Categoría</th>
+                <th>Problema</th>
+                <th>Puntaje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for problema in usuario.lista_problemas_intentados %}
+                <tr>
+                  <td><?=$this->Problema->obtener_nivel($problema->level)->name?></td>
+                  <td><a href="<?=base_url()?>problemas/ver/<?=$problema->admin_title?>"><?=$problema->title?></a></td>
+                  <td><?=badge($this->Usuario->mejor_puntaje($id, $problema->id))?></td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3">Tal parece que no has dejado ningún problema a medias...</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane" id="contrasenia">
+          <form class="form-horizontal" method="post">
+            <div class="control-group">
+              <label class="control-label" for="contrasenia">Contraseña anterior</label>
+              <div class="controls">
+                <input type="password" name="old" id="pass_anterior" placeholder="123pase">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="pass">Nueva contraseña</label>
+              <div class="controls">
+                <input type="password" name="new" id="pass" placeholder="123pase">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="pass_repeat">Repetir contraseña</label>
+              <div class="controls">
+                <input type="password" name="new_confirm" id="pass_repeat" placeholder="123pase">
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <input type="submit" class="btn btn-success" value="Cambiar">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="tab-pane active" id="perfil_editar">
+          <strong>poner edicion del perfil aqui y baja de registro</strong>
+          <a href="{% url 'apps.sitio.views.privacidad_view' %}">Enlace al aviso de privacidad</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span2"></div>
+{% endblock %}

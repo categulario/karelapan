@@ -144,6 +144,7 @@ class Concurso(models.Model):
             ("puede_ver_ranking", "Puede ver ranking"),
         )
 
+
 class Participacion(models.Model):
     usuario     = models.ForeignKey(Usuario)
     concurso    = models.ForeignKey(Concurso)

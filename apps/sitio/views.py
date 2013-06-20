@@ -29,6 +29,7 @@ def problemas_view(request):
 def problema_detalle(request, nombre_administrativo):
     data['path'] = request.path
     data['problema'] = Problema.objects.get(nombre_administrativo=nombre_administrativo)
+    data['js'] = ['js/mundo.js', 'js/problema.js']
     return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
 
 def envios_view(request):

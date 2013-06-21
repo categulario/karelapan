@@ -19,6 +19,10 @@
           {% endif %}
         </form>
       </div>
+    {% empty %}
+      <div class="well well-small">
+        <p class="lead">No hay concursos activos en este momento</p>
+      </div>
     {% endfor %}
     {% if perms.evaluador.puede_ver_ranking %}
       <h3>Concursos para otros tiempos o deshabilitados</h3>
@@ -34,6 +38,10 @@
               <a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}" class="btn btn-info">Ver ranking</a>
             {% endif %}
           </form>
+        </div>
+      {% empty %}
+        <div class="well well-small">
+          No hay concursos viejos o así.
         </div>
       {% endfor %}
     {% endif %}

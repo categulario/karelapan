@@ -40,7 +40,7 @@ def envios_view(request):
 def concursos_view(request):
     if request.user.is_authenticated():
         data['path'] = request.path
-        data['concursos'] = Concurso.objects.all()
+        data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all())
         return render_to_response('concursos.html', data, context_instance=RequestContext(request))
     else:
         messages.warning(request, 'Debes iniciar sesión para ver los concursos')

@@ -10,9 +10,10 @@
       <div class="well well-small">
         <p class="lead">{{ concurso }}</p>
         <p>{{ concurso.descripcion }}</p>
-        <h4>Quedan [tiempo restante]</h4>
+        <h4>Quedan {{ concurso.quedan_dias }}{{ concurso.quedan_horas }}{{ concurso.quedan_minutos }}{{ concurso.quedan_segundos }}</h4>
         <form method="post" action="{% url 'apps.sitio.views.concurso_participar' %}">
           <input type="hidden" name="concurso" value="{{ concurso.id }}">
+          <input type="hidden" name="participar" value="1">
           <input type="submit" class="btn btn-success" value="Participar!">
           {% if perms.evaluador.puede_ver_ranking %}
             <a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}" class="btn btn-info">Ver ranking</a>
@@ -25,12 +26,12 @@
       </div>
     {% endfor %}
     {% if perms.evaluador.puede_ver_ranking %}
-      <h3>Concursos para otros tiempos o deshabilitados</h3>
-      {% for concurso in concursos %}
+      <h3>Todos los concursos <small>Para ti que tienes permiso de verlos</small></h3>
+      {% for concurso in concursos_todos %}
         <div class="well well-small">
           <p class="lead">{{ concurso }}</p>
           <p>{{ concurso.descripcion }}</p>
-          <h4>desde [fecha inicio] hasta [fecha fin]</h4>
+          <h4>desde {{ concurso.fecha_inicio}} <br>hasta {{ concurso.fecha_fin }}</h4>
           <form method="post" action="{% url 'apps.sitio.views.concurso_participar' %}">
             <input type="hidden" name="concurso" value="{{ concurso.id }}">
             <input type="submit" class="btn btn-success" value="Ver problemas">

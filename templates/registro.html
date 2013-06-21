@@ -2,7 +2,34 @@
 {% load staticfiles %}
 {% block titulo %} Registro {% endblock %}
 {% block contenido %}
-  <div class="span12">
-    <h1>Registro <small>Poner aviso de privacidad</small></h1>
+  <div class="span3"></div>
+  <div class="span6">
+    <h3>&iexcl;Registraos!</h3>
+    <p>A continuaci&oacute;n proporciona tus datos para registrarte en el sistema y poder acumular tus puntajes, participar en concursos y as&iacute;...</p>
+    <p></p>
+    <p>No olvides leer nuestra <a href="{% url 'apps.sitio.views.privacidad_view' %}">política de privacidad</a></p>
+    <form class="form-horizontal" method="post" action="./">
+      {% csrf_token %}
+      {% for elemento in formulario %}
+        <div class="control-group">
+          <label class="control-label" for="{{ elemento.id }}">{{ elemento.label_tag }}</label>
+          <div class="controls">
+            {{ elemento }}
+          </div>
+        </div>
+      {% endfor %}
+      <div class="control-group">
+        <label class="control-label">¿Eres un robot?</label>
+        <div class="controls" id="recaptcha"></div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-large btn-info">Registrarme</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="span3">
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
   </div>
 {% endblock %}

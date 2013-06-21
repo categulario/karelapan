@@ -4,10 +4,13 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib import messages
-import django.contrib.auth as auth
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
+from apps.sitio.forms import RegistroForm
 from apps.evaluador.models import Nivel, Problema, Concurso
 from apps.usuarios.models import Usuario
+import django.contrib.auth as auth
+from django.utils import timezone
+import datetime
 
 data = {
     'GA'        : settings.GOOGLE_ANALYTHICS,
@@ -40,7 +43,17 @@ def envios_view(request):
 def concursos_view(request):
     if request.user.is_authenticated():
         data['path'] = request.path
-        data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all())
+        data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
+        data['concursos_todos'] = Concurso.objects.all()
+        for concurso in data['concursos']:
+            diferencia = concurso.fecha_fin - timezone.now()
+            concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
+            horas = diferencia.seconds/3600
+            concurso.quedan_horas   = ['', " %d horas"%horas][horas!=0]
+            minutos = (diferencia.seconds/60)%60
+            concurso.quedan_minutos = ['', " %d minutos"%minutos][minutos!=0]
+            segundos = diferencia.seconds%60
+            concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
         return render_to_response('concursos.html', data, context_instance=RequestContext(request))
     else:
         messages.warning(request, 'Debes iniciar sesión para ver los concursos')
@@ -89,9 +102,14 @@ def privacidad_view(request):
 def registro_view(request):
     if not request.user.is_authenticated():
         data['path'] = request.path
+        data['formulario'] = RegistroForm
+        data['js'] = ['js/jquery-ui.js', 'js/registro.js']
+        data['css'] = ['css/ui/jquery-ui.css']
+        data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         return render_to_response('registro.html', data, context_instance=RequestContext(request))
     else:
         messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo pretendes registrarte?')
+        return HttpResponseRedirect('/')
 
 def perfil_view(request):
     if request.user.is_authenticated():

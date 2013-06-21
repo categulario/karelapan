@@ -164,4 +164,4 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return "%s %s %s"%(self.nombre, self.appat, self.apmat)
 
     class Meta:
-        ordering = ('puntaje',)
+        ordering = ('nombre', 'appat', 'apmat')

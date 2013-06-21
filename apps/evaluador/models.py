@@ -143,6 +143,7 @@ class Concurso(models.Model):
         permissions = (
             ("puede_ver_ranking", "Puede ver ranking"),
         )
+        ordering    = ['-fecha_inicio']
 
 
 class Participacion(models.Model):

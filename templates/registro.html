@@ -7,14 +7,21 @@
     <h3>&iexcl;Registraos!</h3>
     <p>A continuaci&oacute;n proporciona tus datos para registrarte en el sistema y poder acumular tus puntajes, participar en concursos y as&iacute;...</p>
     <p></p>
-    <p>No olvides leer nuestra <a href="{% url 'apps.sitio.views.privacidad_view' %}">política de privacidad</a></p>
+    <p>Al registrarte estás aceptando la siguiente <a href="{% url 'apps.sitio.views.privacidad_view' %}" target="_blank">política de privacidad</a></p>
     <form class="form-horizontal" method="post" action="./">
       {% csrf_token %}
       {% for elemento in formulario %}
         <div class="control-group">
-          <label class="control-label" for="{{ elemento.id }}">{{ elemento.label_tag }}</label>
+          <label class="control-label" for="id_{{ elemento.html_name }}" id="{{ elemento.html_name }}_label">{{ elemento.label }}</label>
           <div class="controls">
             {{ elemento }}
+            {% if elemento.errors %}
+              <ul class="unstyled errorlist">
+              {% for error in elemento.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+              </ul>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
@@ -31,5 +38,11 @@
   </div>
   <div class="span3">
     <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+    <script>
+        Recaptcha.create("{{ RECAPTCHA_PUBLIC_KEY }}", "recaptcha", {
+            theme: "clean",
+            callback: Recaptcha.focus_response_field
+        });
+    </script>
   </div>
 {% endblock %}

@@ -11,6 +11,7 @@ from apps.usuarios.models import Usuario
 import django.contrib.auth as auth
 from django.utils import timezone
 import datetime
+from modules.recaptcha import verifica
 
 data = {
     'GA'        : settings.GOOGLE_ANALYTHICS,
@@ -102,11 +103,27 @@ def privacidad_view(request):
 def registro_view(request):
     if not request.user.is_authenticated():
         data['path'] = request.path
-        data['formulario'] = RegistroForm
         data['js'] = ['js/jquery-ui.js', 'js/registro.js']
         data['css'] = ['css/ui/jquery-ui.css']
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
-        return render_to_response('registro.html', data, context_instance=RequestContext(request))
+        if request.method == 'POST':
+            formulario = RegistroForm(request.POST)
+            if formulario.is_valid():
+                respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
+                if respuesta == True:
+                    messages.success(request, 'Ya estás registrado')
+                    return HttpResponseRedirect('/')
+                else:
+                    messages.error(request, 'Recaptcha dice que eres un robot: %s'%(respuesta))
+                    data['formulario'] = formulario
+                    return render_to_response('registro.html', data, context_instance=RequestContext(request))
+            else:
+                messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
+                data['formulario'] = formulario
+                return render_to_response('registro.html', data, context_instance=RequestContext(request))
+        else:
+            data['formulario'] = RegistroForm()
+            return render_to_response('registro.html', data, context_instance=RequestContext(request))
     else:
         messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo pretendes registrarte?')
         return HttpResponseRedirect('/')

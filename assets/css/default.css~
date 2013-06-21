@@ -17,7 +17,7 @@ i.question{
 	height: 20px;
 	display: inline-block;
 }
-ul.errorlist > li{
+ul.errorlist{
 	font-size: 10px;
 	color: red;
 }

@@ -16,3 +16,4 @@ Aquí las diferencias del nuevo karelapan con el viejo karelapan.
 * Consideraciones y ejemplos. Las consideraciones se editan como parte del problema (pese a seguir siendo una tabla distinta en base de datos) y la tabla de mundos se integró con la tabla de los problemas.
 * Integración con el IDE web de karel. Como parte final del proyecto se integró karelapan con karel.js para que los alumnos puedan resolver los problemas directo en el navegador.
 * Wiki. EL nuevo karelapan integra la wiki, lugar de documentación sobre karel.
+* Preguntas durante el examen. Ahora se podrán realizar preguntas durante un examen para los organizadores.

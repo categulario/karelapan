@@ -16,7 +16,7 @@ var WorldRender = function(context){
 
             context.fillStyle = '#0000FF';
             context.beginPath();
-            if (world.orientation == 0) { // oeste
+            if (world.karel.orientacion == 'oeste') { // oeste
                 context.moveTo( origen.x, origen.y+15 );
                 context.lineTo( origen.x+13, origen.y );
                 context.lineTo( origen.x+13, origen.y+7 );
@@ -24,7 +24,7 @@ var WorldRender = function(context){
                 context.lineTo( origen.x+27, origen.y+23 );
                 context.lineTo( origen.x+13, origen.y+23 );
                 context.lineTo( origen.x+13, origen.y+30 );
-            } else if (world.orientation == 1) { // norte
+            } else if (world.karel.orientacion == 'norte') { // norte
                 context.moveTo ( origen.x, origen.y+13 );
                 context.lineTo ( origen.x+15, origen.y );
                 context.lineTo ( origen.x+30, origen.y+13 );
@@ -32,7 +32,7 @@ var WorldRender = function(context){
                 context.lineTo ( origen.x+23, origen.y+27 );
                 context.lineTo ( origen.x+7, origen.y+27 );
                 context.lineTo ( origen.x+7, origen.y+13 );
-            } else if (world.orientation == 2) { // este
+            } else if (world.karel.orientacion == 'este') { // este
                 context.moveTo ( origen.x+3, origen.y+7 );
                 context.lineTo ( origen.x+17, origen.y+7 );
                 context.lineTo ( origen.x+17, origen.y );
@@ -40,7 +40,7 @@ var WorldRender = function(context){
                 context.lineTo ( origen.x+17, origen.y+30 );
                 context.lineTo ( origen.x+17, origen.y+23 );
                 context.lineTo ( origen.x+3, origen.y+23 );
-            } else if (world.orientation == 3) { // sur
+            } else if (world.karel.orientacion == 'sur') { // sur
                 context.moveTo ( origen.x+7, origen.y+3 );
                 context.lineTo ( origen.x+23, origen.y+3 );
                 context.lineTo ( origen.x+23, origen.y+17 );
@@ -69,20 +69,6 @@ var WorldRender = function(context){
         this.num_columnas = (tamanio_lienzo.x/30 + Math.ceil((tamanio_lienzo.x%30)/30.))*1
         this.num_filas = (tamanio_lienzo.y/30 + Math.ceil((tamanio_lienzo.y%30)/30.))*1
 
-        if(track_karel) {
-          //Rastrea la ubicación de karel y lo forza a aparecer
-          if(world.i < this.primera_fila) {
-            this.primera_fila = Math.floor(world.i)
-          } else if (world.i > ((this.primera_fila + this.num_filas)-2)) {
-            this.primera_fila = Math.floor(world.i - this.num_filas) +3
-          }
-          if(world.j < this.primera_columna) {
-            this.primera_columna = Math.floor(world.j)
-          } else if (world.j > ((this.primera_columna + this.num_columnas)-2)) {
-            this.primera_columna = Math.floor(world.j - this.num_columnas) +3
-          }
-        }
-
         //Cuadrados de las esquinas
         for(var i=0;i<this.num_columnas;i++){
             for(j=0;j<this.num_columnas;j++) {
@@ -101,52 +87,68 @@ var WorldRender = function(context){
             for(var columna=this.primera_columna;columna<this.primera_columna+this.num_columnas;columna++){
                 //Dibujar a karel
 
-                if (world.i === fila && world.j === columna) {
+                if (world.karel.posicion[0] == fila && world.karel.posicion[1] == columna) {
                     var referencia = {x: origen.x+(num_columna-1)*30, y: origen.y-(num_fila-1)*30};
 
                     dibuja_karel(context, world, referencia);
                 }
 
                 //Paredes
-                context.fillStyle="#191919";
-                var paredes = world.walls(fila, columna);
-                if ((paredes & 0x1) != 0) { // oeste
-                    context.fillRect(origen.x+(num_columna-1)*30-1, origen.y-(num_fila-1)*30, 4, 30);
-                }
-                if ((paredes & 0x2) != 0) { // norte
-                    context.fillRect(origen.x+(num_columna-1)*30+1, origen.y-(num_fila-1)*30+27-30, 30, 4);
-                }
-                if ((paredes & 0x4) != 0) { // este
-                    context.fillRect(origen.x+(num_columna-1)*30-1+30, origen.y-(num_fila-1)*30, 4, 30);
-                }
-                if ((paredes & 0x8) != 0) { // oeste
-                    context.fillRect(origen.x+(num_columna-1)*30+1, origen.y-(num_fila-1)*30+27, 30, 4);
-                }
+                var casilla = world.casillas_dict[fila+','+columna];
+                if(casilla){
+                    context.fillStyle="#191919";
+                    if (casilla.paredes.indexOf('oeste')!=-1 || columna==1) { // oeste
+                        context.fillRect(origen.x+(num_columna-1)*30-1, origen.y-(num_fila-1)*30, 4, 30);
+                    }
+                    if (casilla.paredes.indexOf('norte')!=-1 || fila==100) { // norte
+                        context.fillRect(origen.x+(num_columna-1)*30+1, origen.y-(num_fila-1)*30+27-30, 30, 4);
+                    }
+                    if (casilla.paredes.indexOf('este')!=-1 || columna==100) { // este
+                        context.fillRect(origen.x+(num_columna-1)*30-1+30, origen.y-(num_fila-1)*30, 4, 30);
+                    }
+                    if (casilla.paredes.indexOf('sur')!=-1 || fila==1) { // sur
+                        context.fillRect(origen.x+(num_columna-1)*30+1, origen.y-(num_fila-1)*30+27, 30, 4);
+                    }
 
-                //Zumbadores
-                var zumbadores = world.buzzers(fila, columna);
-                if (zumbadores == -1 || zumbadores > 0) {
-                    if (zumbadores == -1) {
-                        context.fillStyle = '#00FF00';
-                        context.fillRect(origen.x+(num_columna-1)*30+8, origen.y-(num_fila-1)*30+8, 16, 12);
+                    //Zumbadores
+                    var zumbadores = casilla.zumbadores;
+                    if (zumbadores == -1 || zumbadores > 0) {
+                        if (zumbadores == -1) {
+                            context.fillStyle = '#00FF00';
+                            context.fillRect(origen.x+(num_columna-1)*30+8, origen.y-(num_fila-1)*30+8, 16, 12);
 
-                        context.font = '25px monospace';
-                        context.fillStyle = '#000000';
-                        context.fillText('∞', origen.x+(num_columna-1)*30+9, origen.y-(num_fila-1)*30+23);
-                    } else if (zumbadores < 10) {
-                        context.fillStyle = '#00FF00';
-                        context.fillRect(origen.x+(num_columna-1)*30+9, origen.y-(num_fila-1)*30+8, 12, 14);
+                            context.font = '25px monospace';
+                            context.fillStyle = '#000000';
+                            context.fillText('∞', origen.x+(num_columna-1)*30+9, origen.y-(num_fila-1)*30+23);
+                        } else if (zumbadores < 10) {
+                            context.fillStyle = '#00FF00';
+                            context.fillRect(origen.x+(num_columna-1)*30+9, origen.y-(num_fila-1)*30+8, 12, 14);
 
-                        context.font = '12px monospace';
-                        context.fillStyle = '#000000';
-                        context.fillText(String(zumbadores), origen.x+(num_columna-1)*30+11, origen.y-(num_fila-1)*30+20);
-                    } else {
-                        context.fillStyle = '#00FF00';
-                        context.fillRect(origen.x+(num_columna-1)*30+7, origen.y-(num_fila-1)*30+8, 16, 14);
+                            context.font = '12px monospace';
+                            context.fillStyle = '#000000';
+                            context.fillText(String(zumbadores), origen.x+(num_columna-1)*30+11, origen.y-(num_fila-1)*30+20);
+                        } else {
+                            context.fillStyle = '#00FF00';
+                            context.fillRect(origen.x+(num_columna-1)*30+7, origen.y-(num_fila-1)*30+8, 16, 14);
 
-                        context.font = '12px monospace';
-                        context.fillStyle = '#000000';
-                        context.fillText(String(zumbadores), origen.x+(num_columna-1)*30+8, origen.y-(num_fila-1)*30+20);
+                            context.font = '12px monospace';
+                            context.fillStyle = '#000000';
+                            context.fillText(String(zumbadores), origen.x+(num_columna-1)*30+8, origen.y-(num_fila-1)*30+20);
+                        }
+                    }
+                } else {
+                    context.fillStyle="#191919";
+                    if (columna==1) { // oeste
+                        context.fillRect(origen.x+(num_columna-1)*30-1, origen.y-(num_fila-1)*30, 4, 30);
+                    }
+                    if (fila==100) { // norte
+                        context.fillRect(origen.x+(num_columna-1)*30+1, origen.y-(num_fila-1)*30+27-30, 30, 4);
+                    }
+                    if (columna==100) { // este
+                        context.fillRect(origen.x+(num_columna-1)*30-1+30, origen.y-(num_fila-1)*30, 4, 30);
+                    }
+                    if (fila==1) { // sur
+                        context.fillRect(origen.x+(num_columna-1)*30+1, origen.y-(num_fila-1)*30+27, 30, 4);
                     }
                 }
                 num_columna += 1
@@ -214,5 +216,16 @@ var WorldRender = function(context){
         context.lineTo(mundo_ancho-25-50+30+8, 45+30)
         context.closePath()
         context.fill()
+        //Mochila
+
+        context.fillStyle = '#A8D9F3';
+        context.fillRect(32, 12, 150, 25);
+
+        context.font = '14px monospace';
+        context.fillStyle = '#000000';
+        if(world.karel.mochila != -1)
+            context.fillText('mochila: '+world.karel.mochila, 35, 20);
+        else
+            context.fillText('mochila: infinito', 35, 30);
     }
 }

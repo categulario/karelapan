@@ -19,6 +19,9 @@ class Olimpiada(models.Model):
     def __unicode__(self):
         return "%d %s"%(self.anio, self.sede)
 
+    class Meta:
+        ordering = ['anio']
+
 def default_group():
     try:
         return [Grupo.objects.get(nombre='usuarios')]

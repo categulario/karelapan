@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="/auth/login/">
+<form class="form-horizontal" method="post" action="{% url 'apps.sitio.views.login' %}">
   {% csrf_token %}
   <div class="control-group">
     <label class="control-label" for="correo">Correo</label>
@@ -16,7 +16,7 @@
   <div class="control-group">
     <div class="controls">
       <button type="submit" class="btn btn-large btn-info">Entrar</button>
-      <a href="/registro" class="btn">Registrarme</a>
+      <a href="{% url 'apps.sitio.views.registro_view' %}" class="btn">Registrarme</a>
     </div>
   </div>
 </form>

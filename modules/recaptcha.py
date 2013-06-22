@@ -26,7 +26,7 @@ import urllib2
 
 def verifica(privatekey, remoteip, challenge, response):
     respuesta = urllib2.urlopen('http://www.google.com/recaptcha/api/verify', urllib.urlencode({
-        'private_key': privatekey,
+        'privatekey': privatekey,
         'remoteip': remoteip,
         'challenge': challenge,
         'response': response

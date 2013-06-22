@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 import pymongo
 import json
 import os
+import json
 
 def valida_dimensiones(cadena):
     """Valida una cadena de dimensiones para usarse como dimensiones de
@@ -63,6 +64,13 @@ def valida_mundos(str_mundo):
 
 def url_casos_evaluacion(problema, nombre_original_archivo):
     return os.path.join('casos', problema.nombre_administrativo+'.nkec')
+
+def valida_json(cadena):
+    """identifica si la cadena es json"""
+    try:
+        json.loads(cadena)
+    except:
+        raise ValidationError('No es un json valido')
 
 class Nivel(models.Model):
     nombre      = models.CharField(max_length=100, unique=True)
@@ -157,6 +165,27 @@ class Participacion(models.Model):
 
 class Envio(models.Model):
     """Describe un envío que se va a la cola de evaluación"""
-    usuario     = models.ForeignKey(Usuario)
-    problema    = models.ForeignKey(Problema)
-    hora        = models.DateTimeField(auto_now_add=True)
+    usuario             = models.ForeignKey(Usuario)
+    problema            = models.ForeignKey(Problema)
+    hora                = models.DateTimeField(auto_now_add=True)
+    estatus             = models.CharField(max_length=1, choices=(
+        ('E', 'Evaluado'),
+        ('P', 'Pendiente de evaluacion'),
+        ('S', 'En evaluación')
+    ), default='P')
+    puntaje             = models.IntegerField(default=0)
+    codigo              = models.TextField(blank=True, null=True)
+    codigo_archivo      = models.FilePathField(path='/home/abraham/Desarrollo/django/KarelapanDjango/codigos')
+    tiempo_ejecucion    = models.IntegerField(default=0)
+    resultado           = models.CharField(max_length=17, choices=(
+        ('OK', 'Ok'),
+        ('ERROR_COMPILACION', 'Error de compilación'),
+        ('CASOS_INCOMPLETOS', 'Casos incompletos')
+    ), default='OK')
+    mensaje             = models.CharField(max_length=250, blank=True)
+    concurso            = models.ForeignKey(Concurso, null=True, blank=True)
+    ip                  = models.IPAddressField(blank=True, null=True)
+    casos               = models.TextField(validators=[valida_json], blank=True)
+
+    class Meta:
+        ordering    = ['-hora']

@@ -4,14 +4,16 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from apps.sitio.forms import RegistroForm
-from apps.evaluador.models import Nivel, Problema, Concurso
+from apps.evaluador.models import Nivel, Problema, Concurso, Envio
 from apps.usuarios.models import Usuario
-import django.contrib.auth as auth
+from django.contrib import auth
 from django.utils import timezone
-import datetime
 from modules.recaptcha import verifica
+import datetime
+import uuid
 
 data = {
     'GA'        : settings.GOOGLE_ANALYTHICS,
@@ -19,6 +21,14 @@ data = {
     'FB'        : settings.FACEBOOK,
     'avisos'    : Aviso.objects.filter(mostrado=True)
 }
+
+def sube_archivo_codigo(archivo_subido):
+    nuevo_nombre = str(uuid.uuid1())+'.karel'
+    with open('codigos/'+nuevo_nombre, 'wb+') as destino:
+        for chunk in archivo_subido.chunks():
+            destino.write(chunk)
+    return nuevo_nombre
+
 
 def index_view(request):
     data['path'] = request.path
@@ -34,39 +44,55 @@ def problemas_view(request):
 
 def problema_detalle(request, nombre_administrativo):
     if request.method == 'POST': #Recibimos un envío
-        pass
-    else:
-        data['path'] = request.path
-        data['host'] = request.get_host()
-        data['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
-        data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
-        return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
+        if request.user.is_authenticated():
+            problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+            usuario = request.user
+            archivo_codigo = ''
+            if 'codigo' in request.FILES:
+                if request.FILES['codigo'].size < 22528:
+                    archivo_codigo = sube_archivo_codigo(request.FILES['codigo'])
+                else:
+                    messages.warning(request, 'El archivo pesa demasiado, lo siento')
+                    return HttpResponseRedirect('/problema/'+nombre_administrativo)
+            else:
+                archivo_codigo = str(uuid.uuid1())+'.karel'
+                f = open('codigos/'+archivo_codigo, 'w')
+                f.write(request.POST['codigo'])
+                f.close()
+            envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo)
+            envio.save()
+            messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos')
+        else:
+            messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
+    data['path'] = request.path
+    data['host'] = request.get_host()
+    data['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+    data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+    return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
 
+@login_required
 def envios_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['concursos'] = request.path
+    data['envios'] = Envio.objects.filter(concurso__isnull=True)
     return render_to_response('envios.html', data, context_instance=RequestContext(request))
 
+@login_required
 def concursos_view(request):
-    if request.user.is_authenticated():
-        data['path'] = request.path
-        data['host'] = request.get_host()
-        data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
-        data['concursos_todos'] = Concurso.objects.all()
-        for concurso in data['concursos']:
-            diferencia = concurso.fecha_fin - timezone.now()
-            concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
-            horas = diferencia.seconds/3600
-            concurso.quedan_horas   = ['', " %d horas"%horas][horas!=0]
-            minutos = (diferencia.seconds/60)%60
-            concurso.quedan_minutos = ['', " %d minutos"%minutos][minutos!=0]
-            segundos = diferencia.seconds%60
-            concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
-        return render_to_response('concursos.html', data, context_instance=RequestContext(request))
-    else:
-        messages.warning(request, 'Debes iniciar sesión para ver los concursos')
-        return HttpResponseRedirect('/')
+    data['path'] = request.path
+    data['host'] = request.get_host()
+    data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
+    data['concursos_todos'] = Concurso.objects.all()
+    for concurso in data['concursos']:
+        diferencia = concurso.fecha_fin - timezone.now()
+        concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
+        horas = diferencia.seconds/3600
+        concurso.quedan_horas   = ['', " %d horas"%horas][horas!=0]
+        minutos = (diferencia.seconds/60)%60
+        concurso.quedan_minutos = ['', " %d minutos"%minutos][minutos!=0]
+        segundos = diferencia.seconds%60
+        concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
+    return render_to_response('concursos.html', data, context_instance=RequestContext(request))
 
 def concurso_participar(request):
     if request.user.is_authenticated():
@@ -75,12 +101,9 @@ def concurso_participar(request):
         messages.warning(request, 'Debes iniciar sesión para ver los concursos')
         return HttpResponseRedirect('/')
 
+@login_required
 def concurso_ver_ranking(request, id_concurso):
-    if request.user.is_authenticated():
-        pass
-    else:
-        messages.warning(request, 'Debes iniciar sesión para ver los concursos')
-        return HttpResponseRedirect('/')
+    pass
 
 def medallero_view(request):
     data['path'] = request.path
@@ -91,8 +114,11 @@ def usuarios_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
     data['usuarios'] = Usuario.objects.all()
+    if 'next' in request.GET:
+        data['next'] = request.GET['next']
     return render_to_response('usuarios.html', data, context_instance=RequestContext(request))
 
+@login_required
 def usuario_view(request, id_usuario):
     data['path'] = request.path
     data['host'] = request.get_host()
@@ -149,26 +175,20 @@ def registro_view(request):
         messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo pretendes registrarte?')
         return HttpResponseRedirect('/')
 
+@login_required
 def perfil_view(request):
-    if request.user.is_authenticated():
-        data['path'] = request.path
-        data['host'] = request.get_host()
-        data['usuario'] = request.user
-        data['asesorados'] = Usuario.objects.filter(asesor=request.user)
-        return render_to_response('perfil.html', data, context_instance=RequestContext(request))
-    else:
-        messages.error(request, 'No has iniciado sesión...¿Qué perfil te voy a mostrar?')
-        return HttpResponseRedirect('/')
+    data['path'] = request.path
+    data['host'] = request.get_host()
+    data['usuario'] = request.user
+    data['asesorados'] = Usuario.objects.filter(asesor=request.user)
+    return render_to_response('perfil.html', data, context_instance=RequestContext(request))
 
+@login_required
 def mis_soluciones_view(request):
-    if request.user.is_authenticated():
-        data['path'] = request.path
-        data['host'] = request.get_host()
-        data['usuario'] = request.user
-        return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
-    else:
-        messages.error(request, 'No has iniciado sesión...¿Qué te voy a mostrar?')
-        return HttpResponseRedirect('/')
+    data['path'] = request.path
+    data['host'] = request.get_host()
+    data['usuario'] = request.user
+    return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
 
 def faqs_view(request):
     data['path'] = request.path
@@ -199,53 +219,44 @@ def login(request):
         messages.warning(request, '¿No ya estabas dentro? %s'%request.user)
         return HttpResponseRedirect('/')
 
+@login_required
 def logout(request):
-    if request.user.is_authenticated():
-        auth.logout(request)
-        messages.success(request, 'Nos vemos pronto')
-        return HttpResponseRedirect('/')
-    else:
-        messages.warning(request, 'Aguanta, no iniciaste sesión o ya habías salido...')
-        return HttpResponseRedirect('/')
+    auth.logout(request)
+    messages.success(request, 'Nos vemos pronto')
+    return HttpResponseRedirect('/')
 
+@login_required
 def internal_change_pass(request):
-    if request.user.is_authenticated():
-        oldpass     = request.POST['old']
-        pass1       = request.POST['pass1']
-        pass2       = request.POST['pass2']
-        if pass1==pass2:
-            if auth.authenticate(username=request.user.correo, password=oldpass):
-                request.user.set_password(pass1)
-                request.user.save()
-                messages.success(request, 'Password cambiado')
-                return HttpResponseRedirect('/perfil')
-            else:
-                messages.warning(request, 'Tu contraseña anterior no es la bena')
-                return HttpResponseRedirect('/perfil')
+    oldpass     = request.POST['old']
+    pass1       = request.POST['pass1']
+    pass2       = request.POST['pass2']
+    if pass1==pass2:
+        if auth.authenticate(username=request.user.correo, password=oldpass):
+            request.user.set_password(pass1)
+            request.user.save()
+            messages.success(request, 'Password cambiado')
+            return HttpResponseRedirect('/perfil')
         else:
-            messages.warning(request, '¡Las contraseñas no coinciden!')
+            messages.warning(request, 'Tu contraseña anterior no es la bena')
             return HttpResponseRedirect('/perfil')
     else:
-        messages.error(request, '¡Qué pretendes!')
-        return HttpResponseRedirect('/')
+        messages.warning(request, '¡Las contraseñas no coinciden!')
+        return HttpResponseRedirect('/perfil')
 
+@login_required
 def external_change_pass(request):
-    if request.user.is_authenticated():
-        if request.user.has_perm('apps.usuarios.can_change_usuario'):
-            pass1 = request.POST['pass1']
-            pass2 = request.POST['pass2']
-            if pass1==pass2:
-                u = Usuario.objects.get(pk=request.POST['usuario'])
-                u.set_password(pass1)
-                u.save()
-                messages.success(request, 'Password cambiado')
-                return HttpResponseRedirect(request.POST['redirect'])
-            else:
-                messages.warning(request, '¡Las contraseñas no coinciden!')
-                return HttpResponseRedirect(request.POST['redirect'])
+    if request.user.has_perm('apps.usuarios.can_change_usuario'):
+        pass1 = request.POST['pass1']
+        pass2 = request.POST['pass2']
+        if pass1==pass2:
+            u = Usuario.objects.get(pk=request.POST['usuario'])
+            u.set_password(pass1)
+            u.save()
+            messages.success(request, 'Password cambiado')
+            return HttpResponseRedirect(request.POST['redirect'])
         else:
-            messages.error(request, '¡No tienes permiso de realizar esta acción!')
-            return HttpResponseRedirect('/')
+            messages.warning(request, '¡Las contraseñas no coinciden!')
+            return HttpResponseRedirect(request.POST['redirect'])
     else:
-        messages.error(request, '¡Qué pretendes!')
+        messages.error(request, '¡No tienes permiso de realizar esta acción!')
         return HttpResponseRedirect('/')

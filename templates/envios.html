@@ -1,8 +1,34 @@
 {% extends 'template.html' %}
 {% load staticfiles %}
-{% block titulo %} Inicio {% endblock %}
+{% block titulo %} Envíos {% endblock %}
 {% block contenido %}
   <div class="span12">
-    <h1>Lista de envios</h1>
-  </div>
+      <h3>Problemas enviados por los usuarios <small><a href="{% url 'apps.sitio.views.mis_soluciones_view' %}">Ver s&oacute;lo las m&iacute;as</a></small></h3>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Problema</th>
+            <th>Puntos</th>
+            <th>Tiempo Ejecuci&oacute;n</th>
+            <th>Terminaci&oacute;n</th>
+            <th>Mensaje</th>
+            <th>Hora</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for envio in envios %}
+          <tr class="{% ifequal envio.resultado 'OK' %}success{% endifequal %}{% ifequal envio.resultado 'CASOS_INCOMPLETOS' %}warning{% endifequal %}{% ifequal envio.resultado 'ERROR_COMPILACION' %}error{% endifequal %}">
+            <td><a href="{% url 'apps.sitio.views.usuario_view' envio.usuario.id %}">{{ envio.usuario }}</a></td>
+            <td><a href="{% url 'apps.sitio.views.problema_detalle' envio.problema.nombre_administrativo %}">{{ envio.problema }}</a></td>
+            <td>{{ envio.puntaje }}</td>
+            <td>{{ envio.tiempo_ejecucion }}</td>
+            <td>{{ envio.resultado }}</td>
+            <td>{{ envio.mensaje }}</td>
+            <td>{{ envio.hora }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
 {% endblock %}

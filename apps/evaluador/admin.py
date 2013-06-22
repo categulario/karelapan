@@ -43,7 +43,12 @@ class ParticipacionAdmin(admin.ModelAdmin):
     list_filter     = ('concurso', 'puntaje')
     readonly_fields = ('puntaje',)
 
+class EnvioAdmin(admin.ModelAdmin):
+    list_display    = ('id', 'usuario', 'problema', 'hora', 'estatus', 'puntaje', 'tiempo_ejecucion', 'resultado', 'concurso', 'ip')
+    list_filter     = ('problema', 'hora', 'estatus', 'puntaje', 'resultado', 'concurso')
+
 admin.site.register(Nivel, NivelAdmin)
 admin.site.register(Problema, ProblemaAdmin)
 admin.site.register(Concurso, ConcursoAdmin)
 admin.site.register(Participacion, ParticipacionAdmin)
+admin.site.register(Envio, EnvioAdmin)

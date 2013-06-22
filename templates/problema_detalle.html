@@ -104,7 +104,7 @@
         </table>
       </div>
     {% endif %}
-    <h3>{{ problema.nombre }}</h3>
+    <h3>{{ problema.nombre }}<input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema"></h3>
     <small><a href="/problemas">Volver a la lista de problemas</a></small><br><br>
     <p>{{ problema.descripcion }}</p>
     <h4>Problema</h4>
@@ -136,32 +136,36 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#tab1" data-toggle="tab">Sube un archivo</a></li>
             <li><a href="#tab2" data-toggle="tab">Copypega tu c&oacute;digo</a></li>
+            <li><a href="#tab3" data-toggle="tab">Resuelve en Karelécatl</a></li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab1">
               <form method="post" action="./" enctype="multipart/form-data">
+                {% csrf_token %}
                 <input type="file" name="codigo">
                 <input type="hidden" name="redirect" value="">
                 <input type="hidden" name="option" value="file">
-                <input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema">
                 <input type="submit" value="Evaluar" class="btn">
               </form>
             </div>
             <div class="tab-pane" id="tab2">
               <form method="post" action="./">
+                {% csrf_token %}
                 <input type="hidden" name="option" value="direct">
                 <input type="hidden" name="redirect" value="">
-                <input type="hidden" name="id_problema" value="{{ problema.id }}">
                 <textarea name="codigo" rows="10" class="input-xxlarge"></textarea>
                 <input type="submit" value="Evaluar" class="btn">
               </form>
+            </div>
+            <div class="tab-pane" id="tab3">
+                <a href="" class="btn btn-info btn-large">¡Vamos!</a>
             </div>
           </div>
         </div>
       </div>
     {% else %}
       <div class="well">
-        <strong>Inicia sesión o <a href="/usuarios/registro">regístrate</a> para enviar soluciones a este problema</strong>
+        <strong>Inicia sesión o <a href="/registro">regístrate</a> para enviar soluciones a este problema</strong>
       </div>
     {% endif %}
   </div>

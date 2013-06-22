@@ -98,7 +98,6 @@ class Problema(models.Model):
     limite_ejecucion        = models.IntegerField(default=200000)
     mundo                   = models.TextField(validators=[valida_mundos])
     mundo_resuelto          = models.TextField(validators=[valida_mundos])
-    dimensiones             = models.CharField(max_length=15, validators=[valida_dimensiones])
     casos_de_evaluacion     = models.FileField(upload_to=url_casos_evaluacion)
 
     def __unicode__(self):
@@ -154,3 +153,10 @@ class Participacion(models.Model):
     class Meta:
         verbose_name_plural = 'participaciones'
         unique_together = ("usuario", "concurso")
+
+
+class Envio(models.Model):
+    """Describe un envío que se va a la cola de evaluación"""
+    usuario     = models.ForeignKey(Usuario)
+    problema    = models.ForeignKey(Problema)
+    hora        = models.DateTimeField(auto_now_add=True)

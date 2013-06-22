@@ -143,16 +143,12 @@
               <form method="post" action="./" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="codigo">
-                <input type="hidden" name="redirect" value="">
-                <input type="hidden" name="option" value="file">
                 <input type="submit" value="Evaluar" class="btn">
               </form>
             </div>
             <div class="tab-pane" id="tab2">
               <form method="post" action="./">
                 {% csrf_token %}
-                <input type="hidden" name="option" value="direct">
-                <input type="hidden" name="redirect" value="">
                 <textarea name="codigo" rows="10" class="input-xxlarge"></textarea>
                 <input type="submit" value="Evaluar" class="btn">
               </form>

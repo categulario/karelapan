@@ -208,6 +208,27 @@ def logout(request):
         messages.warning(request, 'Aguanta, no iniciaste sesión o ya habías salido...')
         return HttpResponseRedirect('/')
 
+def internal_change_pass(request):
+    if request.user.is_authenticated():
+        oldpass     = request.POST['old']
+        pass1       = request.POST['pass1']
+        pass2       = request.POST['pass2']
+        if pass1==pass2:
+            if auth.authenticate(username=request.user.correo, password=oldpass):
+                request.user.set_password(pass1)
+                request.user.save()
+                messages.success(request, 'Password cambiado')
+                return HttpResponseRedirect('/perfil')
+            else:
+                messages.warning(request, 'Tu contraseña anterior no es la bena')
+                return HttpResponseRedirect('/perfil')
+        else:
+            messages.warning(request, '¡Las contraseñas no coinciden!')
+            return HttpResponseRedirect('/perfil')
+    else:
+        messages.error(request, '¡Qué pretendes!')
+        return HttpResponseRedirect('/')
+
 def external_change_pass(request):
     if request.user.is_authenticated():
         if request.user.has_perm('apps.usuarios.can_change_usuario'):

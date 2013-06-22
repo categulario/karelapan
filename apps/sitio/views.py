@@ -22,28 +22,36 @@ data = {
 
 def index_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     data['noticias'] = Noticia.objects.all()
     return render_to_response('inicio.html', data, context_instance=RequestContext(request))
 
 def problemas_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     data['niveles'] = Nivel.objects.all()
     return render_to_response('problemas.html', data, context_instance=RequestContext(request))
 
 def problema_detalle(request, nombre_administrativo):
-    data['path'] = request.path
-    data['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
-    data['js'] = ['js/mundo.js', 'js/problema.js']
-    return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
+    if request.method == 'POST': #Recibimos un envío
+        pass
+    else:
+        data['path'] = request.path
+        data['host'] = request.get_host()
+        data['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+        data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+        return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
 
 def envios_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     data['concursos'] = request.path
     return render_to_response('envios.html', data, context_instance=RequestContext(request))
 
 def concursos_view(request):
     if request.user.is_authenticated():
         data['path'] = request.path
+        data['host'] = request.get_host()
         data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
         data['concursos_todos'] = Concurso.objects.all()
         for concurso in data['concursos']:
@@ -76,33 +84,40 @@ def concurso_ver_ranking(request, id_concurso):
 
 def medallero_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
 def usuarios_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     data['usuarios'] = Usuario.objects.all()
     return render_to_response('usuarios.html', data, context_instance=RequestContext(request))
 
 def usuario_view(request, id_usuario):
     data['path'] = request.path
+    data['host'] = request.get_host()
     data['usuario'] = Usuario.objects.get(pk=id_usuario)
     return render_to_response('usuario_ver.html', data, context_instance=RequestContext(request))
 
 def wiki_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     return render_to_response('wiki.html', data, context_instance=RequestContext(request))
 
 def ayuda_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     return render_to_response('ayuda.html', data, context_instance=RequestContext(request))
 
 def privacidad_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     return render_to_response('privacidad.html', data, context_instance=RequestContext(request))
 
 def registro_view(request):
     if not request.user.is_authenticated():
         data['path'] = request.path
+        data['host'] = request.get_host()
         data['js'] = ['js/jquery-ui.js', 'js/registro.js']
         data['css'] = ['css/ui/jquery-ui.css']
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
@@ -111,16 +126,22 @@ def registro_view(request):
             if formulario.is_valid():
                 respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
                 if respuesta == True:
-                    messages.success(request, 'Ya estás registrado')
-                    return HttpResponseRedirect('/')
+                    if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
+                        nuevo_usario = formulario.save(commit=False)
+                        nuevo_usario.set_password(request.POST['contrasenia'])
+                        nuevo_usario.save()
+                        nuevo_usario.grupo = request.POST.getlist('grupo')
+                        nuevo_usario.save()
+                        messages.success(request, 'registrado')
+                        return HttpResponseRedirect('/')
+                    else:
+                        messages.error(request, 'Las contraseñas no coinciden')
                 else:
                     messages.error(request, 'Recaptcha dice que eres un robot: %s'%(respuesta))
-                    data['formulario'] = formulario
-                    return render_to_response('registro.html', data, context_instance=RequestContext(request))
             else:
                 messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
-                data['formulario'] = formulario
-                return render_to_response('registro.html', data, context_instance=RequestContext(request))
+            data['formulario'] = formulario
+            return render_to_response('registro.html', data, context_instance=RequestContext(request))
         else:
             data['formulario'] = RegistroForm()
             return render_to_response('registro.html', data, context_instance=RequestContext(request))
@@ -131,7 +152,9 @@ def registro_view(request):
 def perfil_view(request):
     if request.user.is_authenticated():
         data['path'] = request.path
+        data['host'] = request.get_host()
         data['usuario'] = request.user
+        data['asesorados'] = Usuario.objects.filter(asesor=request.user)
         return render_to_response('perfil.html', data, context_instance=RequestContext(request))
     else:
         messages.error(request, 'No has iniciado sesión...¿Qué perfil te voy a mostrar?')
@@ -140,6 +163,7 @@ def perfil_view(request):
 def mis_soluciones_view(request):
     if request.user.is_authenticated():
         data['path'] = request.path
+        data['host'] = request.get_host()
         data['usuario'] = request.user
         return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
     else:
@@ -148,6 +172,7 @@ def mis_soluciones_view(request):
 
 def faqs_view(request):
     data['path'] = request.path
+    data['host'] = request.get_host()
     data['preguntas'] = PreguntaFrecuente.objects.filter(mostrado=True)
     return render_to_response('faqs.html', data, context_instance=RequestContext(request))
 

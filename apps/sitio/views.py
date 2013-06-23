@@ -57,18 +57,21 @@ def problema_detalle(request, nombre_administrativo):
             else:
                 archivo_codigo = str(uuid.uuid1())+'.karel'
                 f = open('codigos/'+archivo_codigo, 'w')
-                f.write(request.POST['codigo'])
+                f.write(request.POST['codigo'].encode("utf-8"))
                 f.close()
-            envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo)
+            envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open('codigos/'+archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
+            problema.veces_intentado += 1
+            problema.save()
             envio.save()
             messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos')
         else:
             messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
-    data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
-    return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
+    d = data.copy()
+    d['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+    d['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+    return render_to_response('problema_detalle.html', d, context_instance=RequestContext(request))
 
 @login_required
 def envios_view(request):
@@ -187,7 +190,7 @@ def perfil_view(request):
 def mis_soluciones_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['usuario'] = request.user
+    data['envios'] = Envio.objects.filter(usuario=request.user, concurso__isnull=True)
     return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
 
 def faqs_view(request):

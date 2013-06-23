@@ -1,5 +1,4 @@
 import os
-from django.contrib.messages import constants as messages
 # Django settings for karelapan project.
 
 DEBUG = True

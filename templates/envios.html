@@ -7,6 +7,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
+            <th></th>
             <th>Usuario</th>
             <th>Problema</th>
             <th>Puntos</th>
@@ -18,13 +19,14 @@
         </thead>
         <tbody>
         {% for envio in envios %}
-          <tr class="{% ifequal envio.resultado 'OK' %}success{% endifequal %}{% ifequal envio.resultado 'CASOS_INCOMPLETOS' %}warning{% endifequal %}{% ifequal envio.resultado 'ERROR_COMPILACION' %}error{% endifequal %}">
+          <tr class="{% ifnotequal envio.estatus 'E' %}info{% else %}{% ifequal envio.resultado 'OK' %}success{% endifequal %}{% ifequal envio.resultado 'CASOS_INCOMPLETOS' %}warning{% endifequal %}{% ifequal envio.resultado 'ERROR_COMPILACION' %}error{% endifequal %}{% endifnotequal %}">
+            <td>{% ifequal envio.estatus 'E' %}<i class="icon-ok" title="Código evaluado"></i>{% else %}{% ifequal envio.estatus 'P' %}<i class="icon-pause" title="Pendiente de evaluación"></i>{% else %}<i class="icon-eye-open" title="Código en evaluación"></i>{% endifequal %}{% endifequal %}</td>
             <td><a href="{% url 'apps.sitio.views.usuario_view' envio.usuario.id %}">{{ envio.usuario }}</a></td>
             <td><a href="{% url 'apps.sitio.views.problema_detalle' envio.problema.nombre_administrativo %}">{{ envio.problema }}</a></td>
-            <td>{{ envio.puntaje }}</td>
-            <td>{{ envio.tiempo_ejecucion }}</td>
-            <td>{{ envio.resultado }}</td>
-            <td>{{ envio.mensaje }}</td>
+            <td>{% ifequal envio.estatus 'E' %}{{ envio.puntaje }}{% endifequal %}</td>
+            <td>{% ifequal envio.estatus 'E' %}{{ envio.tiempo_ejecucion }}{% endifequal %}</td>
+            <td>{% ifequal envio.estatus 'E' %}{{ envio.resultado }}{% endifequal %}</td>
+            <td>{% ifequal envio.estatus 'E' %}{{ envio.mensaje }}{% endifequal %}</td>
             <td>{{ envio.hora }}</td>
           </tr>
         {% endfor %}

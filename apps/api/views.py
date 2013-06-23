@@ -1,4 +1,4 @@
-from apps.evaluador.models import Problema
+from apps.evaluador.models import Problema, Envio
 from apps.usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
 import django.contrib.auth as auth
@@ -22,3 +22,10 @@ def nombres_escuela(request):
         return HttpResponse('['+','.join(escuelas)+']', content_type='text/plain')
     else:
         return HttpResponse('[]', content_type='text/plain')
+
+def descarga_codigo(request, id_envio):
+    envio = get_object_or_404(Envio, pk=id_envio)
+    if envio.usuario == request.user:
+        return HttpResponse(envio.codigo, content_type='text/plain')
+    else:
+        return HttpResponse('', content_type='text/plain')

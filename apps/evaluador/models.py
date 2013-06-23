@@ -184,7 +184,7 @@ class Envio(models.Model):
     ), default='OK')
     mensaje             = models.CharField(max_length=250, blank=True)
     concurso            = models.ForeignKey(Concurso, null=True, blank=True)
-    ip                  = models.IPAddressField(blank=True, null=True)
+    ip                  = models.IPAddressField(blank=True, null=True, default='0.0.0.0')
     casos               = models.TextField(validators=[valida_json], blank=True)
 
     class Meta:

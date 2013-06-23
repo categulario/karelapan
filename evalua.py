@@ -57,7 +57,7 @@ if __name__ == '__main__':
             grammar.verificar_sintaxis() #Pedimos que genere el arbol de instrucciones
             grammar.expandir_arbol()
         except KarelException, ke:
-            resultado['mensaje'] = "El archivo %s tiene errores: %s cerca de la linea %d"%(arch, ke[0], grammar.obtener_linea_error())
+            resultado['mensaje'] = "El archivo tiene errores: %s cerca de la linea %d"%(ke[0], grammar.obtener_linea_error())
             resultado['resultado'] = "ERROR_COMPILACION"
         else:
             t_inicio = time()
@@ -134,6 +134,14 @@ if __name__ == '__main__':
             resultado['efectividad'] = puntaje/float(suma_puntos)
             resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
         #TODO hacer las cosas respectivas con los valores obtenidos
-        print json.dumps(resultado)
+        cursor.execute("UPDATE evaluador_envio SET estatus='E', puntaje=%s, tiempo_ejecucion=%s, resultado=%s, mensaje=%s, casos=%s WHERE id=%s", (
+            resultado['puntaje'],
+            resultado['tiempo_ejecucion'],
+            resultado['resultado'],
+            resultado['mensaje'],
+            json.dumps(resultado['casos']),
+            envio['id']
+        ))
+        connection.commit()
     cursor.close()
     connection.close()

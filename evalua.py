@@ -28,6 +28,7 @@ from karel.kworld import kworld
 from karel.krunner import krunner
 from karel.kutil import KarelException
 from karelapan import settings
+from time import time
 
 if __name__ == '__main__':
     connection = psycopg2.connect("dbname=%s user=%s password=%s"%(settings.DATABASES['default']['NAME'], settings.DATABASES['default']['USER'], settings.DATABASES['default']['PASSWORD']))
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     envio = cursor.fetchone() #El envío a calificar
     if envio is not None:
         cursor.execute("UPDATE evaluador_envio SET estatus='S' WHERE id='%d'"%envio['id'])
-        connection.commit()
+        connection.commit()#Nos aseguramos de marcar este envio y evitar que otra llamada del evaluador lo revise
         cursor.execute("SELECT * FROM evaluador_problema WHERE id='%d'"%envio['problema_id'])
         problema = cursor.fetchone() #El problema
         resultado = { #Almacena el resultado de esta ejecución
@@ -48,7 +49,7 @@ if __name__ == '__main__':
             "efectividad": 0.0,
             "tiempo_ejecucion": 0
         }
-        archivomundo = 'media/'+problema['casos_de_evaluacion']
+        archivomundo = settings.MEDIA_ROOT+'/'+problema['casos_de_evaluacion']
         f = file(archivomundo)
         kec = json.load(f) #Tenemos el archivo de condiciones de evaluacion cargado.
         arch = envio['codigo_archivo'] #Programa a evaluar

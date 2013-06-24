@@ -169,3 +169,7 @@ LOGIN_URL = '/usuarios'
 
 RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
 RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
+
+RAIZ_CODIGOS = '/home/abraham/Desarrollo/django/KarelapanDjango/codigos/'
+
+REVISIONES_POR_MINUTO = 1

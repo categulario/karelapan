@@ -24,10 +24,33 @@
             <td><a href="{% url 'apps.sitio.views.problema_detalle' envio.problema.nombre_administrativo %}">{{ envio.problema }}</a></td>
             <td>{% ifequal envio.estatus 'E' %}{{ envio.puntaje }}{% endifequal %}</td>
             <td>{% ifequal envio.estatus 'E' %}{{ envio.tiempo_ejecucion }}{% endifequal %}</td>
-            <td>{% ifequal envio.estatus 'E' %}{{ envio.resultado }}{% endifequal %}</td>
-            <td>{% ifequal envio.estatus 'E' %}{{ envio.mensaje }}{% endifequal %}</td>
             <td>
-              <a href="{% url 'apps.api.views.descarga_codigo' envio.id %}" target="_blank"><i class="icon-circle-arrow-down"></i></a>
+              {% ifequal envio.estatus 'E' %}<a href="#" class="casos-evaluacion">{{ envio.resultado }}</a> {{ envio.mensaje }}
+                {% if envio.resultado == 'CASOS_INCOMPLETOS' or envio.resultado == 'OK' %}
+                  <table class="table tabla-casos" style="display:none;">
+                    <thead>
+                      <tr>
+                        <td>Caso</td>
+                        <td>Puntos</td>
+                        <td>Terminación</td>
+                        <td>Mensaje</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for caso in envio.lee_casos %}
+                        <tr>
+                          <td>{{ forloop.counter }}</td>
+                          <td>{{ caso.puntos_obtenidos }}</td>
+                          <td>{{ caso.terminacion }}</td>
+                          <td>{{ caso.mensaje }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                {% endif %}
+              {% else %}
+                <a class="btn casos-pendiente"><i class="icon-remove"></i></a>
+              {% endifequal %}
             </td>
             <td>{{ envio.hora }}</td>
           </tr>

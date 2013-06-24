@@ -135,6 +135,11 @@ if __name__ == '__main__':
             resultado['efectividad'] = puntaje/float(suma_puntos)
             resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
         #TODO hacer las cosas respectivas con los valores obtenidos
+        if resultado['resultado'] == 'OK': #La evaluación es buena, el usuario incremeta problemas resuelto y el problema veces resuelto.
+            cursor.execute('UPDATE usuarios_usuario SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (envio['usuario_id'], ))
+            connection.commit()
+            cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1 WHERE id=%s', (envio['problema_id'], ))
+            connection.commit()
         cursor.execute("UPDATE evaluador_envio SET estatus='E', puntaje=%s, tiempo_ejecucion=%s, resultado=%s, mensaje=%s, casos=%s WHERE id=%s", (
             resultado['puntaje'],
             resultado['tiempo_ejecucion'],

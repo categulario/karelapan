@@ -90,7 +90,7 @@ class Problema(models.Model):
     nombre_administrativo   = models.CharField(max_length=140, unique=True)
     descripcion             = models.TextField()
     problema                = models.TextField()
-    agradecimiento          = models.TextField()
+    agradecimiento          = models.TextField(blank=True)
     veces_resuelto          = models.IntegerField(default=0)
     veces_intentado         = models.IntegerField(default=0)
     mejor_tiempo            = models.IntegerField(default=-1)
@@ -186,6 +186,19 @@ class Envio(models.Model):
     concurso            = models.ForeignKey(Concurso, null=True, blank=True)
     ip                  = models.IPAddressField(blank=True, null=True, default='0.0.0.0')
     casos               = models.TextField(validators=[valida_json], blank=True)
+
+    def lee_casos(self):
+        class Caso:
+            def __init__(self, puntos_obtenidos, mensaje, puntos_valor, terminacion):
+                self.puntos_obtenidos = puntos_obtenidos
+                self.mensaje = mensaje
+                self.puntos_valor = puntos_valor
+                self.terminacion = terminacion
+        jason = json.loads(self.casos)
+        arr_casos = []
+        for casito in jason:
+            arr_casos.append(Caso(casito['obtenidos'], casito['mensaje'], casito['puntos'], casito['terminacion']))
+        return arr_casos
 
     class Meta:
         ordering    = ['-hora']

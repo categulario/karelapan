@@ -194,8 +194,10 @@ def perfil_view(request):
 def mis_soluciones_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['envios'] = Envio.objects.filter(usuario=request.user, concurso__isnull=True)
-    return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
+    d = data.copy()
+    d['envios'] = Envio.objects.filter(usuario=request.user, concurso__isnull=True)
+    d['js'] = ['js/envios.js']
+    return render_to_response('mis_soluciones.html', d, context_instance=RequestContext(request))
 
 def faqs_view(request):
     data['path'] = request.path

@@ -24,7 +24,7 @@ data = {
 
 def sube_archivo_codigo(archivo_subido):
     nuevo_nombre = str(uuid.uuid1())+'.karel'
-    with open('codigos/'+nuevo_nombre, 'wb+') as destino:
+    with open(settings.RAIZ_CODIGOS+nuevo_nombre, 'wb+') as destino:
         for chunk in archivo_subido.chunks():
             destino.write(chunk)
     return nuevo_nombre
@@ -33,33 +33,35 @@ def sube_archivo_codigo(archivo_subido):
 def index_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['noticias'] = Noticia.objects.all()
-    return render_to_response('inicio.html', data, context_instance=RequestContext(request))
+    d = data.copy()
+    d['noticias'] = Noticia.objects.all()
+    return render_to_response('inicio.html', d, context_instance=RequestContext(request))
 
 def problemas_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['niveles'] = Nivel.objects.all()
-    return render_to_response('problemas.html', data, context_instance=RequestContext(request))
+    d = data.copy()
+    d['niveles'] = Nivel.objects.all()
+    return render_to_response('problemas.html', d, context_instance=RequestContext(request))
 
 def problema_detalle(request, nombre_administrativo):
     if request.method == 'POST': #Recibimos un envío
         if request.user.is_authenticated():
             problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
             usuario = request.user
-            archivo_codigo = ''
+            archivo_codigo = settings.RAIZ_CODIGOS
             if 'codigo' in request.FILES:
                 if request.FILES['codigo'].size < 22528:
-                    archivo_codigo = sube_archivo_codigo(request.FILES['codigo'])
+                    archivo_codigo += sube_archivo_codigo(request.FILES['codigo'])
                 else:
                     messages.warning(request, 'El archivo pesa demasiado, lo siento')
                     return HttpResponseRedirect('/problema/'+nombre_administrativo)
             else:
-                archivo_codigo = str(uuid.uuid1())+'.karel'
-                f = open('codigos/'+archivo_codigo, 'w')
+                archivo_codigo += str(uuid.uuid1())+'.karel'
+                f = open(archivo_codigo, 'w')
                 f.write(request.POST['codigo'].encode("utf-8"))
                 f.close()
-            envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open('codigos/'+archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
+            envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
             problema.veces_intentado += 1
             problema.save()
             envio.save()
@@ -77,8 +79,10 @@ def problema_detalle(request, nombre_administrativo):
 def envios_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['envios'] = Envio.objects.filter(concurso__isnull=True)
-    return render_to_response('envios.html', data, context_instance=RequestContext(request))
+    d = data.copy()
+    d['envios'] = Envio.objects.filter(concurso__isnull=True)
+    d['js'] = ['js/envios.js']
+    return render_to_response('envios.html', d, context_instance=RequestContext(request))
 
 @login_required
 def concursos_view(request):

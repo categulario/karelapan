@@ -20,7 +20,7 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#
+#  Demonio evaluador de Karel
 import psycopg2, json
 from psycopg2.extras import DictCursor
 from karel.kgrammar import kgrammar
@@ -28,11 +28,12 @@ from karel.kworld import kworld
 from karel.krunner import krunner
 from karel.kutil import KarelException
 from karelapan import settings
-from time import time
+from time import time, sleep
 
-if __name__ == '__main__':
-    connection = psycopg2.connect("dbname=%s user=%s password=%s"%(settings.DATABASES['default']['NAME'], settings.DATABASES['default']['USER'], settings.DATABASES['default']['PASSWORD']))
-    cursor = connection.cursor(cursor_factory=DictCursor)
+connection = psycopg2.connect("dbname=%s user=%s password=%s"%(settings.DATABASES['default']['NAME'], settings.DATABASES['default']['USER'], settings.DATABASES['default']['PASSWORD']))
+cursor = connection.cursor(cursor_factory=DictCursor)
+
+while True:
     cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY hora ASC")
     envio = cursor.fetchone() #El envío a calificar
     if envio is not None:
@@ -149,5 +150,6 @@ if __name__ == '__main__':
             envio['id']
         ))
         connection.commit()
-    cursor.close()
-    connection.close()
+    sleep(2)
+cursor.close()
+connection.close()

@@ -11,7 +11,7 @@ $(document).ready(function(){
     $('#id_nombre_escuela').typeahead({
         source: function(q, p){
             $.ajax({
-                'url': 'http://localhost:8000/api/nombres_escuela',
+                'url': 'http://'+$("#host").val()+'/api/nombres_escuela',
                 'type': 'get',
                 'data': {
                     'q': q

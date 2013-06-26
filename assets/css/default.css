@@ -11,16 +11,19 @@ dd.faq{
   margin-bottom: 30px;
 }
 i.question{
-	background-image: url('../img/question.png');
-	background-repeat: no-repeat;
-	width: 20px;
-	height: 20px;
-	display: inline-block;
+        background-image: url('../img/question.png');
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
 }
 ul.errorlist > li{
-	font-size: 10px;
-	color: red;
+        font-size: 10px;
+        color: red;
 }
 .tabla-casos{
-	font-size: 12px;
+        font-size: 12px;
+}
+.center{
+    text-align:center !important;
 }

@@ -2,10 +2,8 @@
 from django.db import models
 from apps.usuarios.models import Usuario, Grupo
 from django.core.exceptions import ValidationError
-import pymongo
 import json
 import os
-import json
 
 def valida_dimensiones(cadena):
     """Valida una cadena de dimensiones para usarse como dimensiones de

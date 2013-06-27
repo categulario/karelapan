@@ -121,6 +121,7 @@ while True:
                         resultado['resultado'] = "CASOS_INCOMPLETOS"
                         resultado['mensaje'] = "Tu codigo no funciona en todos los casos"
                 else:
+                    all_ok = False
                     resultado['resultado'] = "CASOS_INCOMPLETOS"
                     resultado['mensaje'] = 'Tu codigo no funciona en todos los casos'
                 suma_puntos += int(caso['puntaje'])
@@ -150,6 +151,9 @@ while True:
             envio['id']
         ))
         connection.commit()
-    sleep(2)
+        print "%d Evalué un código"%time()
+    else:
+        print "No evalué nada %d"%time()
+        sleep(1)
 cursor.close()
 connection.close()

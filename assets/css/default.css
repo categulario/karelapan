@@ -27,3 +27,8 @@ ul.errorlist > li{
 .center{
     text-align:center !important;
 }
+#pie{
+    background-image:url('../img/kareld.png');
+    background-repeat:no-repeat;
+    background-position: left bottom;
+}

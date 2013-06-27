@@ -22,6 +22,7 @@ data = {
     'avisos'    : Aviso.objects.filter(mostrado=True)
 }
 
+
 def sube_archivo_codigo(archivo_subido):
     nuevo_nombre = str(uuid.uuid1())+'.karel'
     with open(settings.RAIZ_CODIGOS+nuevo_nombre, 'wb+') as destino:

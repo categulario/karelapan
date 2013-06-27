@@ -1,4 +1,5 @@
 import os
+import logging
 # Django settings for karelapan project.
 
 DEBUG = True
@@ -172,4 +173,10 @@ RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
 
 RAIZ_CODIGOS = '/home/abraham/Desarrollo/django/KarelapanDjango/codigos/'
 
-REVISIONES_POR_MINUTO = 1
+#Cosas del demonio evaluador de karel
+#Ruta absoluta al archivo del registro
+LOGFILE = 'registro.log'
+#Formato del registro
+LOG_FORMAT = '[%(asctime)s] %(levelname)s %(message)s'
+#Nivel del registro
+LOG_LEVEL = logging.DEBUG

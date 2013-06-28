@@ -18,6 +18,7 @@ logging.basicConfig(filename=settings.LOGFILE, level=settings.LOG_LEVEL, format=
 def main():
     connection = psycopg2.connect("dbname=%s user=%s password=%s"%(settings.DATABASES['default']['NAME'], settings.DATABASES['default']['USER'], settings.DATABASES['default']['PASSWORD']))
     cursor = connection.cursor(cursor_factory=DictCursor)
+    logging.debug('Demonio iniciado')
     while True:
         cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY hora ASC")
         envio = cursor.fetchone() #El envío a calificar
@@ -150,12 +151,14 @@ if __name__ == '__main__':
     elif 'stop' in sys.argv:
         print 'Deteniendo...'
         daemonize.stop()
+        logging.debug('Demonio detenido')
         print 'Detenido'
     elif 'restart' in sys.argv or 'reload' in sys.argv:
         print 'Deteniendo...'
         daemonize.stop()
         print 'Listo, ahora arrancando...'
-        daemonize.start()
+        logging.debug('Demonio reiniciado')
+        daemonize.start(main, '--debug' in sys.argv)
         print 'Listo'
     else:
         print 'El demonio evaluador de Karel'

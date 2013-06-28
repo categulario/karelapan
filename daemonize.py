@@ -1,5 +1,3 @@
-# Copyright 2007 Jerry Seutter yello (*a*t*) thegeeks.net
-
 import fcntl
 import os
 import sys

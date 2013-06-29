@@ -136,6 +136,7 @@ def main():
                 json.dumps(resultado['casos']),
                 envio['id']
             ))
+            cursor.execute("select actualiza_puntaje(%d)"%envio['usuario_id'])
             connection.commit()
             logging.debug("Evalué un código con el id %d para el problema %d enviado por el usuario %d"%(envio['id'], envio['problema_id'], envio['usuario_id']))
         else:

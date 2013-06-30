@@ -1,10 +1,10 @@
+# -*- coding:utf-8 -*-
 import fcntl
 import os
 import sys
 import time
+from karelapan.settings import LOCKFILE
 from signal import SIGTERM
-
-LOCKFILE = '/tmp/daemonize.lock'
 
 def start(fun_to_start, debug=False):
     try:
@@ -117,3 +117,16 @@ def stop():
         else:
             print str(err)
             sys.exit(1)
+
+def wasap():
+    try:
+        pf = file(LOCKFILE, 'r')
+        pid = int(pf.read().strip())
+        pf.close()
+    except IOError:
+        pid = None
+
+    if not pid:
+        print "Kareld no está corriendo"
+    else:
+        print "Kareld está corriendo con PID %d"%pid

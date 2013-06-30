@@ -180,3 +180,5 @@ LOGFILE = 'registro.log'
 LOG_FORMAT = '[%(asctime)s] %(levelname)s %(message)s'
 #Nivel del registro
 LOG_LEVEL = logging.DEBUG
+#Archivo de bloqueo para kareld
+LOCKFILE = '/tmp/kareld.lock'

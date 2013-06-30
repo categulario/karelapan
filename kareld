@@ -13,7 +13,34 @@ from karel.kworld import kworld
 from karel.kutil import KarelException
 from karelapan import settings
 
+VERSION = '1.0'
+FECHA = 'Junio 2013'
+
 logging.basicConfig(filename=settings.LOGFILE, level=settings.LOG_LEVEL, format=settings.LOG_FORMAT)
+
+def info():
+    print """
+Kareld - El demonio evaluador de karel %s (%s)
+
+Uso:
+kareld [argumentos [más argumentos]]
+
+Argumentos:
+    start           Arranca el demonio de karel (si no está corriendo)
+    stop            Detiene el demonio
+    restart         Reinicia el demonio
+    reload          Lo mismo que el de arriba
+    wasap           Indica el estado (corriendo o detenido) del demonio
+
+Adicional:
+    --debug         Originalmente el demonio de karel manda stdout y
+                    stderr a /dev/null, debug evita este comportamiento
+                    y manda ambas salidas a la salida estándar.
+    --version       Muestra la versión de kareld
+    --help          Muestra esta ayuda
+
+Las configuraciones de kareld están en '%s'
+"""%(VERSION, FECHA, settings.__file__)
 
 def main():
     connection = psycopg2.connect("dbname=%s user=%s password=%s"%(settings.DATABASES['default']['NAME'], settings.DATABASES['default']['USER'], settings.DATABASES['default']['PASSWORD']))
@@ -145,7 +172,11 @@ def main():
     connection.close()
 
 if __name__ == '__main__':
-    if 'start' in sys.argv:
+    if '--help' in sys.argv or '-h' in sys.argv:
+        info()
+    elif '--version' in sys.argv or '-v' in sys.argv:
+        print '%s %s'%(VERSION, FECHA)
+    elif 'start' in sys.argv:
         print 'Arrancando...'
         daemonize.start(main, '--debug' in sys.argv)
         print 'Arrancado'
@@ -161,6 +192,9 @@ if __name__ == '__main__':
         logging.debug('Demonio reiniciado')
         daemonize.start(main, '--debug' in sys.argv)
         print 'Listo'
+    elif 'wasap' in sys.argv:
+        daemonize.wasap()
     else:
         print 'El demonio evaluador de Karel'
         print '\tuso: start|stop|reload|restart'
+        print 'Vea kareld --help para más información'

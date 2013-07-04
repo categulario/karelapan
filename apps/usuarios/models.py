@@ -146,9 +146,16 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active           = models.BooleanField(default=True)
     is_admin            = models.BooleanField(default=False)
     fecha_registro      = models.DateTimeField(auto_now_add=True)
+    problemas           = models.ManyToManyField('evaluador.Problema', through='evaluador.Envio', blank=True, editable=False)
 
     USERNAME_FIELD = 'correo'
     objects = UsuarioManager()
+
+    def lista_problemas_intentados(self):
+        return [2]
+
+    def lista_problemas_resueltos(self):
+        return self.problemas.filter(envio__puntaje=100)
 
     def lista_grupos(self):
         return ','.join([str(g) for g in self.grupo.all()])

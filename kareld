@@ -47,7 +47,7 @@ def main():
     cursor = connection.cursor(cursor_factory=DictCursor)
     logging.debug('Demonio iniciado')
     while True:
-        cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY hora ASC")
+        cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY hora ASC LIMIT 1")
         envio = cursor.fetchone() #El envío a calificar
         if envio is not None:
             cursor.execute("UPDATE evaluador_envio SET estatus='S' WHERE id='%d'"%envio['id'])
@@ -150,10 +150,13 @@ def main():
                 resultado['efectividad'] = puntaje/float(suma_puntos)
                 resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
             #TODO hacer las cosas respectivas con los valores obtenidos
-            if resultado['resultado'] == 'OK': #La evaluación es buena, el usuario incremeta problemas resuelto y el problema veces resuelto.
+            if resultado['resultado'] == 'OK': #La evaluación es buena, el usuario incremeta problemas resueltos y el problema veces resuelto.
                 cursor.execute('UPDATE usuarios_usuario SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (envio['usuario_id'], ))
                 connection.commit()
-                cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1 WHERE id=%s', (envio['problema_id'], ))
+                if problema['mejor_tiempo'] < resultado['tiempo_ejecucion']:
+                    cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1, mejor_tiempo = %s WHERE id=%s', (resultado['tiempo_ejecucion'], envio['problema_id']))
+                else:
+                    cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1 WHERE id=%s', (envio['problema_id'], ))
                 connection.commit()
             cursor.execute("UPDATE evaluador_envio SET estatus='E', puntaje=%s, tiempo_ejecucion=%s, resultado=%s, mensaje=%s, casos=%s WHERE id=%s", (
                 resultado['puntaje'],

@@ -153,7 +153,7 @@ def main():
             if resultado['resultado'] == 'OK': #La evaluación es buena, el usuario incremeta problemas resueltos y el problema veces resuelto.
                 cursor.execute('UPDATE usuarios_usuario SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (envio['usuario_id'], ))
                 connection.commit()
-                if problema['mejor_tiempo'] < resultado['tiempo_ejecucion']:
+                if problema['mejor_tiempo'] == -1 or resultado['tiempo_ejecucion'] < problema['mejor_tiempo']:
                     cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1, mejor_tiempo = %s WHERE id=%s', (resultado['tiempo_ejecucion'], envio['problema_id']))
                 else:
                     cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1 WHERE id=%s', (envio['problema_id'], ))

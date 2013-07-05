@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 from django.db import models
-from apps.usuarios.models import Usuario, Grupo
 from django.core.exceptions import ValidationError
 import json
 import os
@@ -93,7 +92,7 @@ class Problema(models.Model):
     veces_intentado         = models.IntegerField(default=0)
     mejor_tiempo            = models.IntegerField(default=-1)
     mejor_puntaje           = models.IntegerField(default=-1)
-    autor                   = models.ForeignKey(Usuario)
+    autor                   = models.ForeignKey('usuarios.Usuario')
     fecha_publicacion       = models.DateField(auto_now_add=True)
     nivel                   = models.ForeignKey(Nivel)
     publico                 = models.BooleanField(default=True)
@@ -137,9 +136,9 @@ class Concurso(models.Model):
     nombre          = models.CharField(max_length=140)
     descripcion     = models.TextField()
     activo          = models.BooleanField(default=True)
-    autor           = models.ForeignKey(Usuario)
+    autor           = models.ForeignKey('usuarios.Usuario')
     problemas       = models.ManyToManyField(Problema)
-    grupos          = models.ManyToManyField(Grupo)
+    grupos          = models.ManyToManyField('usuarios.Grupo')
 
     def __unicode__(self):
         return self.nombre
@@ -152,7 +151,7 @@ class Concurso(models.Model):
 
 
 class Participacion(models.Model):
-    usuario     = models.ForeignKey(Usuario)
+    usuario     = models.ForeignKey('usuarios.Usuario')
     concurso    = models.ForeignKey(Concurso)
     puntaje     = models.IntegerField(default=0)
 
@@ -163,7 +162,7 @@ class Participacion(models.Model):
 
 class Envio(models.Model):
     """Describe un envío que se va a la cola de evaluación"""
-    usuario             = models.ForeignKey(Usuario)
+    usuario             = models.ForeignKey('usuarios.Usuario')
     problema            = models.ForeignKey(Problema)
     hora                = models.DateTimeField(auto_now_add=True)
     estatus             = models.CharField(max_length=1, choices=(

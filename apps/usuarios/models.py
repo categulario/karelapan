@@ -172,6 +172,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
                 lista_problemas.append(problema)
         return lista_problemas
 
+    def mejor_puntaje(self, problema):
+        if Envio.objects.filter(usuario=self, problema=problema, concurso=None):
+            return Envio.objects.filter(usuario=self, problema=problema, concurso=None).aggregate(Max('puntaje'))['puntaje__max']
+        else:
+            return '---'
+
     def lista_grupos(self):
         return ','.join([str(g) for g in self.grupo.all()])
 

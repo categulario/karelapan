@@ -29,7 +29,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for problema in nivel.problema_set.all %}
+              {% for problema in nivel.problemas %}
                 <tr>
                   <td>
                     <a href="/problema/{{ problema.nombre_administrativo }}">{{ problema.nombre }}</a>
@@ -39,14 +39,7 @@
                   <td>{% ifequal problema.mejor_tiempo -1 %}---{% else %}{{ problema.mejor_tiempo }}{% endifequal %}</td>
                   {% if user.is_authenticated %}
                     <td>
-                      {% comment %}
-                        {% if user.ha_intentado_problema user.id problema.id %}
-                          <? $score = $this->Usuario->mejor_puntaje($this->user_id, $problema->id);?>
-                          <?=badge($score)?>
-                        {% else %}
-                          <span class="badge badge-inverse">---</span>
-                        {% endif %}
-                      {% endcomment %}
+                      {{ problema.mejor_puntaje_usuario }}
                     </td>
                   {% endif %}
                 </tr>

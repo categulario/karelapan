@@ -42,7 +42,13 @@ def problemas_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
     d = data.copy()
-    d['niveles'] = Nivel.objects.all()
+    niveles = Nivel.objects.all()
+    for nivel in niveles:
+        nivel.problemas = nivel.problema_set.all()
+        if request.user.is_authenticated():
+            for problema in nivel.problemas:
+                problema.mejor_puntaje_usuario = request.user.mejor_puntaje(problema)
+    d['niveles'] = niveles
     return render_to_response('problemas.html', d, context_instance=RequestContext(request))
 
 def problema_detalle(request, nombre_administrativo):

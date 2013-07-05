@@ -53,9 +53,12 @@ def problemas_view(request):
     return render_to_response('problemas.html', d, context_instance=RequestContext(request))
 
 def problema_detalle(request, nombre_administrativo):
+    problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+    data['path'] = request.path
+    data['host'] = request.get_host()
+    d = data.copy()
     if request.method == 'POST': #Recibimos un envío
         if request.user.is_authenticated():
-            problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
             usuario = request.user
             archivo_codigo = settings.RAIZ_CODIGOS
             if 'codigo' in request.FILES:
@@ -74,12 +77,9 @@ def problema_detalle(request, nombre_administrativo):
             problema.save()
             envio.save()
             messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos')
+            d['enviado'] = True
         else:
             messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    d = data.copy()
-    problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
     d['problema'] = problema
     d['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
     if request.user.is_authenticated():

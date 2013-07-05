@@ -165,4 +165,13 @@
       </div>
     {% endif %}
   </div>
+  {% if enviado %}
+    <!--El problema se envió, así que buscamos por una respuesta-->
+    <script>
+      var busca_envio = function(){
+          alert('pollo');
+      }
+      interval = setInterval(busca_envio, 1000);
+    </script>
+  {% endif %}
 {% endblock %}

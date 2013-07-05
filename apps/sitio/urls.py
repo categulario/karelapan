@@ -22,4 +22,5 @@ urlpatterns = patterns('apps.sitio.views',
     url(r'^auth/logout/$', 'logout'),
     url(r'^auth/change_pass/$', 'external_change_pass'),
     url(r'^auth/change_pass_internal/$', 'internal_change_pass'),
+    url(r'^baja/$', 'baja'),
 )

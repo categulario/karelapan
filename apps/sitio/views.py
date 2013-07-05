@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
-from apps.sitio.forms import RegistroForm
+from apps.sitio.forms import RegistroForm, PerfilForm
 from apps.evaluador.models import Nivel, Problema, Concurso, Envio
 from apps.usuarios.models import Usuario
 from django.contrib import auth
@@ -136,7 +136,7 @@ def medallero_view(request):
 def usuarios_view(request):
     data['path'] = request.path
     data['host'] = request.get_host()
-    data['usuarios'] = Usuario.objects.all()
+    data['usuarios'] = Usuario.objects.all().order_by('-puntaje')
     if 'next' in request.GET:
         data['next'] = request.GET['next']
     return render_to_response('usuarios.html', data, context_instance=RequestContext(request))
@@ -181,7 +181,7 @@ def registro_view(request):
                         nuevo_usario.save()
                         nuevo_usario.grupo = request.POST.getlist('grupo')
                         nuevo_usario.save()
-                        messages.success(request, 'registrado')
+                        messages.success(request, 'Te has registrado correctamente')
                         return HttpResponseRedirect('/')
                     else:
                         messages.error(request, 'Las contraseñas no coinciden')
@@ -204,6 +204,16 @@ def perfil_view(request):
     data['host'] = request.get_host()
     data['usuario'] = request.user
     data['asesorados'] = Usuario.objects.filter(asesor=request.user)
+    if request.method == 'POST':
+        formulario = PerfilForm(request.POST, instance=request.user)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, 'Tus datos han sido actualizados')
+        else:
+            messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
+        data['formulario'] = formulario
+        return render_to_response('perfil.html', data, context_instance=RequestContext(request))
+    data['formulario'] = PerfilForm(instance=request.user)
     return render_to_response('perfil.html', data, context_instance=RequestContext(request))
 
 @login_required
@@ -285,3 +295,10 @@ def external_change_pass(request):
     else:
         messages.error(request, '¡No tienes permiso de realizar esta acción!')
         return HttpResponseRedirect('/')
+
+@login_required
+def baja(request):
+    """Procesa la baja del sistema"""
+    request.user.delete()
+    messages.warning(request, 'Chau, esperamos verte pronto')
+    return HttpResponseRedirect('/')

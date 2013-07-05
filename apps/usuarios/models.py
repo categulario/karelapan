@@ -213,7 +213,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return lista_usuarios
 
     def lista_grupos(self):
-        return ','.join([str(g) for g in self.grupo.all()])
+        return ', '.join([str(g) for g in self.grupo.all()])
 
     def get_full_name(self):
         return "%s %s %s"%(self.nombre, self.appat, self.apmat)

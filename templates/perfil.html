@@ -106,8 +106,38 @@
           </form>
         </div>
         <div class="tab-pane" id="perfil_editar">
-          <strong>poner edicion del perfil aqui y baja de registro</strong>
-          <a href="{% url 'apps.sitio.views.privacidad_view' %}">Enlace al aviso de privacidad</a>
+          <strong>Información de tu perfil</strong> A continuación están los datos que nos proporcionaste, aquí puedes
+          actualizar la información de ser necesario. No olvides consultar el
+          <a href="{% url 'apps.sitio.views.privacidad_view' %}">aviso de privacidad</a><br><br>
+          <form class="form-horizontal" method="post" action="./">
+            {% csrf_token %}
+            {% for elemento in formulario %}
+              <div class="control-group">
+                <label class="control-label" for="id_{{ elemento.html_name }}" id="{{ elemento.html_name }}_label">{{ elemento.label }}</label>
+                <div class="controls">
+                  {{ elemento }}
+                  {% if elemento.errors %}
+                    <ul class="unstyled errorlist">
+                    {% for error in elemento.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-large btn-info">Guardar</button>
+              </div>
+            </div>
+          </form>
+          <div class="alert alert-block alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Baja del sistema</h4>
+            ¿Lo has pensado una y mil veces? Si es así, puedes darte de baja del sistema haciendo click <a href="{% url 'apps.sitio.views.baja' %}" onclick="return confirm('¿Continuar?');">aquí U.u</a>.<br>
+            Esto ocasionará que pierdas todos tus puntos en los problemas que hayas resuelto... Piénsalo dos veces más =)
+          </div>
         </div>
         {% if asesorados.len != 0 %}
           <div class="tab-pane" id="asesorados">

@@ -2,6 +2,8 @@
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager, PermissionsMixin, Group
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from apps.evaluador.models import Envio
+from django.db.models import Min
 import datetime
 
 class Grupo(models.Model):
@@ -152,10 +154,16 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     def lista_problemas_intentados(self):
-        return [2]
+        lista_problemas = self.problemas.filter(envio__puntaje__lt=100).distinct('problema')
+        for problema in lista_problemas:
+            problema.mejor_puntaje_usuario = Envio.objects.filter(usuario=self, problema=problema).aggregate(Max('puntaje'))['puntaje__max']
+        return lista_problemas
 
     def lista_problemas_resueltos(self):
-        return self.problemas.filter(envio__puntaje=100)
+        lista_problemas = self.problemas.filter(envio__puntaje=100).distinct('problema')
+        for problema in lista_problemas:
+            problema.mejor_tiempo_usuario = Envio.objects.filter(usuario=self, problema=problema, resultado='OK').aggregate(Min('tiempo_ejecucion'))['tiempo_ejecucion__min']
+        return lista_problemas
 
     def lista_grupos(self):
         return ','.join([str(g) for g in self.grupo.all()])

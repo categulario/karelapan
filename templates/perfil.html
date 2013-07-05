@@ -40,10 +40,10 @@
             <tbody>
               {% for problema in usuario.lista_problemas_resueltos %}
                 <tr>
-                  <td><?=$this->Problema->obtener_nivel($problema->level)->name?></td>
-                  <td><a href="<?=base_url()?>problemas/ver/<?=$problema->admin_title?>"><?=$problema->title?></a></td>
-                  <td><?=$problema->best_time?></td>
-                  <td><?=$this->Usuario->mejor_tiempo($id, $problema->id)?></td>
+                  <td>{{ problema.nivel }}</td>
+                  <td><a href="{% url 'apps.sitio.views.problema_detalle' problema.nombre_administrativo %}">{{ problema }}</a></td>
+                  <td>{{ problema.mejor_tiempo }}</td>
+                  <td>{{ problema.mejor_tiempo_usuario }}</td>
                 </tr>
               {% empty %}
                 <tr>

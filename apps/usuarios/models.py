@@ -4,6 +4,7 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from apps.evaluador.models import Envio
 from django.db.models import Min, Max
+from modules.badges import badgify
 import datetime
 
 class Grupo(models.Model):
@@ -159,7 +160,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         for envio in Envio.objects.filter(puntaje__lt=100, usuario=self, concurso=None):
             if envio.problema not in lista_problemas and envio.problema not in problemas_resueltos:
                 problema = envio.problema
-                problema.mejor_puntaje_usuario = Envio.objects.filter(usuario=self, problema=problema, concurso=None).aggregate(Max('puntaje'))['puntaje__max']
+                problema.mejor_puntaje_usuario = badgify(Envio.objects.filter(usuario=self, problema=problema, concurso=None).aggregate(Max('puntaje'))['puntaje__max'])
                 lista_problemas.append(problema)
         return lista_problemas
 
@@ -173,10 +174,43 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return lista_problemas
 
     def mejor_puntaje(self, problema):
-        if Envio.objects.filter(usuario=self, problema=problema, concurso=None):
-            return Envio.objects.filter(usuario=self, problema=problema, concurso=None).aggregate(Max('puntaje'))['puntaje__max']
+        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=None)
+        if envios:
+            return envios.aggregate(Max('puntaje'))['puntaje__max']
         else:
             return '---'
+
+    def primer_puntaje(self, problema):
+        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=None)
+        if envios:
+            return envios.order_by('hora')[0].puntaje
+        else:
+            return '---'
+
+    def intentos(self, problema):
+        return Envio.objects.filter(usuario=self, problema=problema, concurso=None).count()
+
+    def mejor_tiempo(self, problema):
+        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=None, puntaje=100)
+        if envios:
+            return envios.aggregate(Min('tiempo_ejecucion'))['tiempo_ejecucion__min']
+        else:
+            return '---'
+
+    def usuarios_resuelto(self, problema):
+        lista_usuarios = []
+        for envio in Envio.objects.filter(puntaje=100, problema=problema, concurso=None).order_by('usuario__puntaje'):
+            if envio.usuario not in lista_usuarios:
+                lista_usuarios.append(envio.usuario)
+        return lista_usuarios
+
+    def usuarios_intentado(self, problema):
+        usuarios_resueltos = self.usuarios_resuelto(problema)
+        lista_usuarios = []
+        for envio in Envio.objects.filter(puntaje__lt=100, problema=problema, concurso=None):
+            if envio.usuario not in lista_usuarios and envio.usuario not in usuarios_resueltos:
+                lista_usuarios.append(envio.usuario)
+        return lista_usuarios
 
     def lista_grupos(self):
         return ','.join([str(g) for g in self.grupo.all()])

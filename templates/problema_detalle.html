@@ -17,13 +17,13 @@
         <strong>Mis intentos:</strong>
         <dl class="dl-horizontal">
           <dt>Mejor puntaje</dt>
-          <dd>---</dd>
+          <dd>{{ mejor_puntaje }}</dd>
           <dt>Primer puntaje</dt>
-          <dd>---</dd>
+          <dd>{{ primer_puntaje }}</dd>
           <dt>Intentos</dt>
-          <dd>0</dd>
+          <dd>{{ intentos }}</dd>
           <dt>Mejor tiempo</dt>
-          <dd>--- <abbr title="Milisegundos">ms</abbr></dd>
+          <dd>{{ mejor_tiempo }} <abbr title="Milisegundos">ms</abbr></dd>
         </dl>
       {% endif %}
     </div>
@@ -44,9 +44,9 @@
         <div style="max-height:300px; overflow:auto;">
           <table class="table table-striped table-hover">
             <tbody>
-              {% for usuario in problema.resuelto_por %}
+              {% for usuario in usuarios_resuelto %}
                 <tr>
-                  <td><a href="/usuarios/ver/{{ usuario.id }}">{{ usuario }}</a></td>
+                  <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.id %}">{{ usuario }}</a></td>
                 </tr>
               {% empty %}
                 <tr>
@@ -64,9 +64,9 @@
         <div style="max-height:300px; overflow:auto;">
           <table class="table table-striped table-hover">
             <tbody>
-              {% for usuario in problema.intentado_por %}
+              {% for usuario in usuarios_intentado %}
                 <tr>
-                  <td><a href="/usuarios/ver/{{ usuario.id }}">{{ usuario }}</a></td>
+                  <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.id %}">{{ usuario }}</a></td>
                 </tr>
               {% empty %}
                 <tr>

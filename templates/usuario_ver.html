@@ -65,7 +65,7 @@
                 <tr>
                   <td>{{ problema.nivel }}</td>
                   <td><a href="{% url 'apps.sitio.views.problema_detalle' problema.nombre_administrativo %}">{{ problema }}</a></td>
-                  <td>{{ problema.mejor_puntaje_usuario }}</td>
+                  <td>{% autoescape off %}{{ problema.mejor_puntaje_usuario }}{% endautoescape %}</td>
                 </tr>
               {% empty %}
                 <tr>

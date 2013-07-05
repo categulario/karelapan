@@ -224,7 +224,7 @@ var WorldRender = function(context){
         context.font = '14px monospace';
         context.fillStyle = '#000000';
         if(world.karel.mochila != -1)
-            context.fillText('mochila: '+world.karel.mochila, 35, 20);
+            context.fillText('mochila: '+world.karel.mochila, 35, 30);
         else
             context.fillText('mochila: infinito', 35, 30);
     }

@@ -12,6 +12,7 @@ from apps.usuarios.models import Usuario
 from django.contrib import auth
 from django.utils import timezone
 from modules.recaptcha import verifica
+from modules.badges import badgify
 import datetime
 import uuid
 
@@ -47,7 +48,7 @@ def problemas_view(request):
         nivel.problemas = nivel.problema_set.all()
         if request.user.is_authenticated():
             for problema in nivel.problemas:
-                problema.mejor_puntaje_usuario = request.user.mejor_puntaje(problema)
+                problema.mejor_puntaje_usuario = badgify(request.user.mejor_puntaje(problema))
     d['niveles'] = niveles
     return render_to_response('problemas.html', d, context_instance=RequestContext(request))
 
@@ -78,8 +79,16 @@ def problema_detalle(request, nombre_administrativo):
     data['path'] = request.path
     data['host'] = request.get_host()
     d = data.copy()
-    d['problema'] = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+    problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
+    d['problema'] = problema
     d['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+    if request.user.is_authenticated():
+        d['mejor_puntaje'] = request.user.mejor_puntaje(problema)
+        d['primer_puntaje'] = request.user.primer_puntaje(problema)
+        d['intentos'] = request.user.intentos(problema)
+        d['mejor_tiempo'] = request.user.mejor_tiempo(problema)
+        d['usuarios_resuelto'] = request.user.usuarios_resuelto(problema)
+        d['usuarios_intentado'] = request.user.usuarios_intentado(problema)
     return render_to_response('problema_detalle.html', d, context_instance=RequestContext(request))
 
 @login_required

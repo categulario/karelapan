@@ -39,7 +39,9 @@
                   <td>{% ifequal problema.mejor_tiempo -1 %}---{% else %}{{ problema.mejor_tiempo }}{% endifequal %}</td>
                   {% if user.is_authenticated %}
                     <td>
-                      {{ problema.mejor_puntaje_usuario }}
+                      {% autoescape off %}
+                        {{ problema.mejor_puntaje_usuario }}
+                      {% endautoescape %}
                     </td>
                   {% endif %}
                 </tr>

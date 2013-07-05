@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser , BaseUserManager, Permi
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from apps.evaluador.models import Envio
-from django.db.models import Min
+from django.db.models import Min, Max
 import datetime
 
 class Grupo(models.Model):
@@ -154,15 +154,22 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     def lista_problemas_intentados(self):
-        lista_problemas = self.problemas.filter(envio__puntaje__lt=100).distinct('problema')
-        for problema in lista_problemas:
-            problema.mejor_puntaje_usuario = Envio.objects.filter(usuario=self, problema=problema).aggregate(Max('puntaje'))['puntaje__max']
+        problemas_resueltos = self.lista_problemas_resueltos()
+        lista_problemas = []
+        for envio in Envio.objects.filter(puntaje__lt=100, usuario=self, concurso=None):
+            if envio.problema not in lista_problemas and envio.problema not in problemas_resueltos:
+                problema = envio.problema
+                problema.mejor_puntaje_usuario = Envio.objects.filter(usuario=self, problema=problema, concurso=None).aggregate(Max('puntaje'))['puntaje__max']
+                lista_problemas.append(problema)
         return lista_problemas
 
     def lista_problemas_resueltos(self):
-        lista_problemas = self.problemas.filter(envio__puntaje=100).distinct('problema')
-        for problema in lista_problemas:
-            problema.mejor_tiempo_usuario = Envio.objects.filter(usuario=self, problema=problema, resultado='OK').aggregate(Min('tiempo_ejecucion'))['tiempo_ejecucion__min']
+        lista_problemas = []
+        for envio in Envio.objects.filter(puntaje=100, usuario=self, concurso=None):
+            if envio.problema not in lista_problemas:
+                problema = envio.problema
+                problema.mejor_tiempo_usuario = Envio.objects.filter(usuario=self, problema=problema, resultado='OK', concurso=None).aggregate(Min('tiempo_ejecucion'))['tiempo_ejecucion__min']
+                lista_problemas.append(problema)
         return lista_problemas
 
     def lista_grupos(self):

@@ -76,8 +76,8 @@ def problema_detalle(request, nombre_administrativo):
             problema.veces_intentado += 1
             problema.save()
             envio.save()
-            messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos')
-            d['enviado'] = True
+            messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos (o espera a que se cargue el veredicto)')
+            d['envio'] = envio.id
         else:
             messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
     d['problema'] = problema

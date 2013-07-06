@@ -3,6 +3,7 @@ from apps.usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
 import django.contrib.auth as auth
 from django.http import HttpResponseRedirect, HttpResponse
+import json
 
 def index(request):
     return HttpResponse("Bienvenido a la API de Karelapan. Ejecute un comando.", content_type="text/plain")
@@ -28,4 +29,21 @@ def descarga_codigo(request, id_envio):
     if envio.usuario == request.user:
         return HttpResponse(envio.codigo, content_type='text/plain')
     else:
-        return HttpResponse('', content_type='text/plain')
+        return HttpResponse('Forbidden', content_type='text/plain')
+
+def envio(request, id_envio):
+    envio = get_object_or_404(Envio, pk=id_envio)
+    if envio.usuario == request.user and envio.concurso == None:
+        if envio.estatus == 'E':
+            resultado = {
+                'puntaje': envio.puntaje,
+                'tiempo_ejecucion': envio.tiempo_ejecucion,
+                'resultado': envio.resultado,
+                'mensaje': envio.mensaje,
+                'casos': json.loads(envio.casos)
+            }
+            return HttpResponse(json.dumps(resultado), content_type='text/plain')
+        else:
+            return HttpResponse(envio.estatus, content_type='text/plain')
+    else:
+        return HttpResponse('Forbidden', content_type='text/plain')

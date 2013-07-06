@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.evaluador.models import Envio
 from django.db.models import Min, Max
 from modules.badges import badgify
-import datetime, md5
+import datetime, hashlib
 
 class Grupo(models.Model):
     nombre      = models.CharField(max_length=50, unique=True)
@@ -35,7 +35,7 @@ def default_group():
 
 def default_omi():
     try:
-        return Olimpiada.objects.get(anio=datetime.date.today().year)
+        return Olimpiada.objects.get_or_create(anio=1512)
     except ObjectDoesNotExist:
         o = Olimpiada(anio=datetime.date.today().year)
         o.save()
@@ -155,10 +155,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     def gravatar(self):
-        return 'http://www.gravatar.com/avatar/'+md5.new(self.correo).hexdigest()+'?s=200&r=g&d=monsterid'
+        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.correo).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
 
     def gravatar_pequenio(self):
-        return 'http://www.gravatar.com/avatar/'+md5.new(str(self.correo).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
+        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.correo).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
 
     def lista_problemas_intentados(self):
         problemas_resueltos = self.lista_problemas_resueltos()

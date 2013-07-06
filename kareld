@@ -67,89 +67,93 @@ def main():
             f = file(archivomundo)
             kec = json.load(f) #Tenemos el archivo de condiciones de evaluacion cargado.
             arch = envio['codigo_archivo'] #Programa a evaluar
-            grammar = kgrammar(flujo=open(arch), archivo=arch, strict=True,futuro=problema['futuro'], strong_logic=problema['logica_fuerte'])
             try:
-                grammar.verificar_sintaxis() #Pedimos que genere el arbol de instrucciones
-                grammar.expandir_arbol()
+                grammar = kgrammar(flujo=open(arch), archivo=arch, strict=True,futuro=problema['futuro'], strong_logic=problema['logica_fuerte'])
             except KarelException, ke:
-                resultado['mensaje'] = "El archivo tiene errores: %s cerca de la linea %d"%(ke[0], grammar.obtener_linea_error())
+                resultado['mensaje'] = "El archivo tiene errores: %s"%ke[0]
                 resultado['resultado'] = "ERROR_COMPILACION"
             else:
-                t_inicio = time.time()
-                puntaje = 0
-                num_caso = 0
-                suma_puntos = 0
-                for caso in kec['casos']:
-                    num_caso += 1
-                    mun = kworld(filas=caso['mundo']['dimensiones']['filas'], columnas=caso['mundo']['dimensiones']['columnas'], karel_pos=tuple(caso['mundo']['karel']['posicion']), orientacion=caso['mundo']['karel']['orientacion'], mochila=caso['mundo']['karel']['mochila'])
-                    mun.carga_casillas(caso['mundo']['casillas'])
+                try:
+                    grammar.verificar_sintaxis() #Pedimos que genere el arbol de instrucciones
+                    grammar.expandir_arbol()
+                except KarelException, ke:
+                    resultado['mensaje'] = "El archivo tiene errores: %s cerca de la linea %d"%(ke[0], grammar.obtener_linea_error())
+                    resultado['resultado'] = "ERROR_COMPILACION"
+                else:
+                    t_inicio = time.time()
+                    puntaje = 0
+                    num_caso = 0
+                    suma_puntos = 0
+                    for caso in kec['casos']:
+                        num_caso += 1
+                        mun = kworld(filas=caso['mundo']['dimensiones']['filas'], columnas=caso['mundo']['dimensiones']['columnas'], karel_pos=tuple(caso['mundo']['karel']['posicion']), orientacion=caso['mundo']['karel']['orientacion'], mochila=caso['mundo']['karel']['mochila'])
+                        mun.carga_casillas(caso['mundo']['casillas'])
 
-                    limite_recursion = problema['limite_recursion']
-                    limite_iteracion = problema['limite_iteracion']
-                    limite_ejecucion = problema['limite_ejecucion']
+                        limite_recursion = problema['limite_recursion']
+                        limite_iteracion = problema['limite_iteracion']
+                        limite_ejecucion = problema['limite_ejecucion']
 
-                    runner = krunner(
-                        grammar.ejecutable,
-                        mundo=mun,
-                        limite_recursion=limite_recursion,
-                        limite_iteracion=limite_iteracion,
-                        limite_ejecucion=limite_ejecucion
-                    )
-                    runner.run()
-                    all_ok = True
-                    if runner.estado == 'OK':
-                        if caso['resultado'].has_key('karel'):
-                            #Debemos buscar la posicion de karel o su mochila
-                            if caso['resultado']['karel'].has_key('posicion'):
-                                #verificamos la posicion
-                                if tuple(caso['resultado']['karel']['posicion']) != runner.mundo.mundo['karel']['posicion']:
-                                    all_ok = False
-                                    runner.mensaje = 'La posicion de Karel es incorrecta'
-                            if caso['resultado']['karel'].has_key('orientacion'):
-                                #verificamos la posicion
-                                if caso['resultado']['karel']['orientacion'] != runner.mundo.mundo['karel']['orientacion']:
-                                    all_ok = False
-                                    runner.mensaje = 'La orientacion de Karel es incorrecta'
-                            if caso['resultado']['karel'].has_key('mochila'):
-                                #verificamos la posicion
-                                if caso['resultado']['karel']['mochila'] != runner.mundo.mundo['karel']['mochila']:
-                                    all_ok = False
-                                    runner.mensaje = 'La cantidad de zumbadores en la mochila de Karel es incorrecta'
-                        if caso['resultado'].has_key('casillas'):
-                            for casilla in caso['resultado']['casillas']:
-                                fila, columna = casilla['fila'], casilla['columna']
-                                if runner.mundo.mundo['casillas'].has_key((fila, columna)):
-                                    if runner.mundo.mundo['casillas'][(fila, columna)]['zumbadores'] != casilla['zumbadores']:
+                        runner = krunner(
+                            grammar.ejecutable,
+                            mundo=mun,
+                            limite_recursion=limite_recursion,
+                            limite_iteracion=limite_iteracion,
+                            limite_ejecucion=limite_ejecucion
+                        )
+                        runner.run()
+                        all_ok = True
+                        if runner.estado == 'OK':
+                            if caso['resultado'].has_key('karel'):
+                                #Debemos buscar la posicion de karel o su mochila
+                                if caso['resultado']['karel'].has_key('posicion'):
+                                    #verificamos la posicion
+                                    if tuple(caso['resultado']['karel']['posicion']) != runner.mundo.mundo['karel']['posicion']:
+                                        all_ok = False
+                                        runner.mensaje = 'La posicion de Karel es incorrecta'
+                                if caso['resultado']['karel'].has_key('orientacion'):
+                                    #verificamos la posicion
+                                    if caso['resultado']['karel']['orientacion'] != runner.mundo.mundo['karel']['orientacion']:
+                                        all_ok = False
+                                        runner.mensaje = 'La orientacion de Karel es incorrecta'
+                                if caso['resultado']['karel'].has_key('mochila'):
+                                    #verificamos la posicion
+                                    if caso['resultado']['karel']['mochila'] != runner.mundo.mundo['karel']['mochila']:
+                                        all_ok = False
+                                        runner.mensaje = 'La cantidad de zumbadores en la mochila de Karel es incorrecta'
+                            if caso['resultado'].has_key('casillas'):
+                                for casilla in caso['resultado']['casillas']:
+                                    fila, columna = casilla['fila'], casilla['columna']
+                                    if runner.mundo.mundo['casillas'].has_key((fila, columna)):
+                                        if runner.mundo.mundo['casillas'][(fila, columna)]['zumbadores'] != casilla['zumbadores']:
+                                            all_ok = False
+                                            runner.mensaje = 'La cantidad de zumbadores en el mundo es incorrecta!'
+                                            break
+                                    elif casilla['zumbadores'] != 0:
                                         all_ok = False
                                         runner.mensaje = 'La cantidad de zumbadores en el mundo es incorrecta!'
                                         break
-                                elif casilla['zumbadores'] != 0:
-                                    all_ok = False
-                                    runner.mensaje = 'La cantidad de zumbadores en el mundo es incorrecta!'
-                                    break
-                        if all_ok:
-                            puntaje += int(caso['puntaje'])
+                            if all_ok:
+                                puntaje += int(caso['puntaje'])
+                            else:
+                                runner.estado = 'ERROR'
+                                resultado['resultado'] = "CASOS_INCOMPLETOS"
+                                resultado['mensaje'] = "Tu codigo no funciona en todos los casos"
                         else:
-                            runner.estado = 'ERROR'
+                            all_ok = False
                             resultado['resultado'] = "CASOS_INCOMPLETOS"
-                            resultado['mensaje'] = "Tu codigo no funciona en todos los casos"
-                    else:
-                        all_ok = False
-                        resultado['resultado'] = "CASOS_INCOMPLETOS"
-                        resultado['mensaje'] = 'Tu codigo no funciona en todos los casos'
-                    suma_puntos += int(caso['puntaje'])
-                    resultado['casos'].append({
-                        "terminacion": runner.estado,
-                        "mensaje": runner.mensaje,
-                        "puntos": caso['puntaje'],
-                        "obtenidos": [0, caso['puntaje']][all_ok]
-                    })
-                t_fin = time.time()
-                resultado['puntaje'] = puntaje
-                resultado['total'] = suma_puntos
-                resultado['efectividad'] = puntaje/float(suma_puntos)
-                resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
-            #TODO hacer las cosas respectivas con los valores obtenidos
+                            resultado['mensaje'] = 'Tu codigo no funciona en todos los casos'
+                        suma_puntos += int(caso['puntaje'])
+                        resultado['casos'].append({
+                            "terminacion": runner.estado,
+                            "mensaje": runner.mensaje,
+                            "puntos": caso['puntaje'],
+                            "obtenidos": [0, caso['puntaje']][all_ok]
+                        })
+                    t_fin = time.time()
+                    resultado['puntaje'] = puntaje
+                    resultado['total'] = suma_puntos
+                    resultado['efectividad'] = puntaje/float(suma_puntos)
+                    resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
             if resultado['resultado'] == 'OK': #La evaluación es buena, el usuario incremeta problemas resueltos y el problema veces resuelto.
                 cursor.execute('UPDATE usuarios_usuario SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (envio['usuario_id'], ))
                 connection.commit()

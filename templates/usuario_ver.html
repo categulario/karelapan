@@ -5,8 +5,9 @@
   <div class="span2"></div>
   <div class="span8">
     <h3>{{ usuario }} <small>De {{ usuario.estado }}</small></h3>
-    <em><a href="mailto:{{ usuario.correo }}">{{ usuario.correo }}</a></em><br><br>
+    <p><em><a href="mailto:{{ usuario.correo }}">{{ usuario.correo }}</a></em></p>
     <p>{{ usuario.descripcion }}</p>
+    <p><small>{% if usuario.asesor %}{% ifequal usuario.asesor.sexo 'M' %}Asesor{% else %}Asesora{% endifequal %}: <a href="{% url 'apps.sitio.views.usuario_view' usuario.asesor.id %}">{{ usuario.asesor }}</a>{% endif %}</small></p>
 
     <div class="tabbable">
       <ul class="nav nav-tabs">

@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.evaluador.models import Envio
 from django.db.models import Min, Max
 from modules.badges import badgify
-import datetime
+import datetime, md5
 
 class Grupo(models.Model):
     nombre      = models.CharField(max_length=50, unique=True)
@@ -153,6 +153,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'correo'
     objects = UsuarioManager()
+
+    def gravatar(self):
+        return 'http://www.gravatar.com/avatar/'+md5.new(self.correo).hexdigest()+'?s=200&r=g&d=monsterid'
+
+    def gravatar_pequenio(self):
+        return 'http://www.gravatar.com/avatar/'+md5.new(str(self.correo).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
 
     def lista_problemas_intentados(self):
         problemas_resueltos = self.lista_problemas_resueltos()

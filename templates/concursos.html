@@ -2,23 +2,14 @@
 {% load staticfiles %}
 {% block titulo %} Inicio {% endblock %}
 {% block contenido %}
-  <div class="span3"></div>
-  <div class="span6">
+  <div class="span12">
     <h3>Concursos activos</h3>
     <p>A continuaci&oacute;n aparecen algunos concursos en los que puedes participar y obtener puntajes para etapas posteriores o simplemente para medirte en tiempo real con otros usuarios de este evaluador en l&iacute;nea.</p>
     {% for concurso in concursos %}
       <div class="well well-small">
         <p class="lead">{{ concurso }}</p>
         <p>{{ concurso.descripcion }}</p>
-        <h4>Quedan {{ concurso.quedan_dias }}{{ concurso.quedan_horas }}{{ concurso.quedan_minutos }}{{ concurso.quedan_segundos }}</h4>
-        <form method="post" action="{% url 'apps.sitio.views.concurso_participar' %}">
-          <input type="hidden" name="concurso" value="{{ concurso.id }}">
-          <input type="hidden" name="participar" value="1">
-          <input type="submit" class="btn btn-success" value="Participar!">
-          {% if perms.evaluador.puede_ver_ranking %}
-            <a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}" class="btn btn-info">Ver ranking</a>
-          {% endif %}
-        </form>
+        <h4>Quedan {{ concurso.quedan_dias }}{{ concurso.quedan_horas }}{{ concurso.quedan_minutos }}{{ concurso.quedan_segundos }} <a href="" class="btn btn-success">Participar</a></h4>
       </div>
     {% empty %}
       <div class="well well-small">
@@ -29,16 +20,17 @@
       <h3>Todos los concursos <small>Para ti que tienes permiso de verlos</small></h3>
       {% for concurso in concursos_todos %}
         <div class="well well-small">
-          <p class="lead">{{ concurso }}</p>
+          <p class="lead">{{ concurso }} <small class="muted">Grupos: {{ concurso.lista_grupos }}</small></p>
           <p>{{ concurso.descripcion }}</p>
-          <h4>desde {{ concurso.fecha_inicio}} <br>hasta {{ concurso.fecha_fin }}</h4>
-          <form method="post" action="{% url 'apps.sitio.views.concurso_participar' %}">
-            <input type="hidden" name="concurso" value="{{ concurso.id }}">
-            <input type="submit" class="btn btn-success" value="Ver problemas">
-            {% if perms.evaluador.puede_ver_ranking %}
-              <a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}" class="btn btn-info">Ver ranking</a>
-            {% endif %}
-          </form>
+          <h4><small>Desde</small> {{ concurso.fecha_inicio}} <small>hasta</small> {{ concurso.fecha_fin }}</h4>
+          <div class="white">
+            <strong>Problemas</strong>
+            <ul>
+              {% for problema in concurso.problemas.all %}
+                <li><a href="">{{ problema }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       {% empty %}
         <div class="well well-small">
@@ -47,5 +39,4 @@
       {% endfor %}
     {% endif %}
   </div>
-  <div class="span3"></div>
 {% endblock %}

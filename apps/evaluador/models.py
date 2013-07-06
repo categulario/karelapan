@@ -143,6 +143,9 @@ class Concurso(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    def lista_grupos(self):
+        return ', '.join([str(g) for g in self.grupos.all()])
+
     class Meta:
         permissions = (
             ("puede_ver_ranking", "Puede ver ranking"),

@@ -3,8 +3,8 @@
 {% block titulo %} Envíos {% endblock %}
 {% block contenido %}
   <div class="span12">
-      <h3>Problemas enviados por los usuarios <small><a href="{% url 'apps.sitio.views.mis_soluciones_view' %}">Ver s&oacute;lo las m&iacute;as</a></small></h3>
-      <table class="table table-hover">
+    <h3>Problemas enviados por los usuarios <small><a href="{% url 'apps.sitio.views.mis_soluciones_view' %}">Ver s&oacute;lo las m&iacute;as</a></small></h3>
+    <table class="table table-hover">
         <thead>
           <tr>
             <th></th>
@@ -57,5 +57,22 @@
         {% endfor %}
         </tbody>
       </table>
+    <div class="pagination pagination-centered">
+      <ul>
+        <li><a href="{% url 'apps.sitio.views.envios_view' %}">Últimos</a></li>
+        {% if envios.has_previous %}
+          <li><a href="{% url 'apps.sitio.views.envios_view' %}?pagina={{ envios.previous_page_number }}">Más recientes</a></li>
+        {% else %}
+          <li class="disabled"><a>Más recientes</a></li>
+        {% endif %}
+        <li class="active"><a>{{ envios.number }}</a></li>
+        {% if envios.has_next %}
+          <li><a href="{% url 'apps.sitio.views.envios_view' %}?pagina={{ envios.next_page_number }}">Más viejos</a></li>
+        {% else %}
+          <li class="disabled"><a>Más viejos</a></li>
+        {% endif %}
+        <li><a href="{% url 'apps.sitio.views.envios_view' %}?pagina={{ envios.paginator.num_pages }}">Primeros</a></li>
+      </ul>
     </div>
+  </div>
 {% endblock %}

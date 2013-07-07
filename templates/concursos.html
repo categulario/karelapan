@@ -24,7 +24,7 @@
       {% for concurso in concursos_todos %}
         <div class="well well-small">
           <p class="lead">{{ concurso }} <small class="muted">Grupos: {{ concurso.lista_grupos }}</small></p>
-          <p>{{ concurso.descripcion }}</p>
+          <p>{{ concurso.descripcion }} <strong><a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}">ranking</a></strong></p>
           <h4><small>Desde</small> {{ concurso.fecha_inicio}} <small>hasta</small> {{ concurso.fecha_fin }}</h4>
           <div class="white">
             <strong>Problemas</strong>

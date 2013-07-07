@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from apps.sitio.forms import RegistroForm, PerfilForm
-from apps.evaluador.models import Nivel, Problema, Concurso, Envio
+from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion
 from apps.usuarios.models import Usuario
 from django.contrib import auth
 from django.utils import timezone
@@ -134,12 +134,78 @@ def concursos_view(request):
         concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
     return render_to_response('concursos.html', data, context_instance=RequestContext(request))
 
-def concurso_participar(request):
-    if request.user.is_authenticated():
-        pass
+@login_required
+def problema_concurso(request, id_concurso, id_problema):
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    problema = get_object_or_404(Problema, pk=id_problema)
+    if problema in concurso.problemas.all() and concurso in Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True):
+        data = {
+            'path'          : request.path,
+            'host'          : request.get_host(),
+            'concurso'      : concurso,
+            'problema'      : problema,
+            'avisos'        : Aviso.objects.filter(mostrado=True),
+            'mejor_puntaje' : request.user.mejor_puntaje(problema, concurso),
+            'primer_puntaje': request.user.primer_puntaje(problema, concurso),
+            'intentos'      : request.user.intentos(problema, concurso),
+            'mejor_tiempo'  : request.user.mejor_tiempo(problema, concurso),
+            'js'            : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+        }
+        if request.method == 'POST': #Recibimos un envío
+            usuario = request.user
+            archivo_codigo = settings.RAIZ_CODIGOS
+            if 'codigo' in request.FILES:
+                if request.FILES['codigo'].size < 22528:
+                    archivo_codigo += sube_archivo_codigo(request.FILES['codigo'])
+                else:
+                    messages.warning(request, 'El archivo pesa demasiado, lo siento')
+                    return HttpResponseRedirect('/concurso/%d/problema/%d'%(int(id_concurso), int(id_problema)))
+            else:
+                archivo_codigo += str(uuid.uuid1())+'.karel'
+                f = open(archivo_codigo, 'w')
+                f.write(request.POST['codigo'].encode("utf-8"))
+                f.close()
+            envio = Envio(usuario=usuario, problema=problema, concurso=concurso, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
+            envio.save()
+            messages.success(request, 'Problema enviado, espera el veredicto')
+            data['envio'] = envio.id
+        return render_to_response('problema_concurso.html', data, context_instance=RequestContext(request))
     else:
-        messages.warning(request, 'Debes iniciar sesión para ver los concursos')
-        return HttpResponseRedirect('/')
+        messages.error(request, '¡Hey! El tiempo para resolver este concurso terminó')
+        return HttpResponseRedirect('/concurso/%d'%int(id_concurso))
+
+@login_required
+def concurso_view(request, id_concurso):
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    if concurso in Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True):
+        diferencia = concurso.fecha_fin - timezone.now()
+        concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
+        horas = diferencia.seconds/3600
+        concurso.quedan_horas   = ['', " %d horas"%horas][horas!=0]
+        minutos = (diferencia.seconds/60)%60
+        concurso.quedan_minutos = ['', " %d minutos"%minutos][minutos!=0]
+        segundos = diferencia.seconds%60
+        concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
+
+        participacion, creado = Participacion.objects.get_or_create(usuario=request.user, concurso=concurso)
+        if creado:
+            messages.success(request, 'Ahora estás participando en este concurso, ¡A darle!')
+
+        concurso.lista_problemas = []
+        for problema in concurso.problemas.all():
+            problema.mejor_puntaje_usuario = badgify(request.user.mejor_puntaje(problema, concurso))
+            concurso.lista_problemas.append(problema)
+
+        data = {
+            'path'      : request.path,
+            'host'      : request.get_host(),
+            'concurso'  : concurso,
+            'avisos'    : Aviso.objects.filter(mostrado=True)
+        }
+        return render_to_response('concurso.html', data, context_instance=RequestContext(request))
+    else:
+        messages.error(request, 'Este concurso ya no está habilitado para ti')
+        return HttpResponseRedirect('/concursos')
 
 @login_required
 def concurso_ver_ranking(request, id_concurso):

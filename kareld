@@ -47,7 +47,7 @@ def main():
     cursor = connection.cursor(cursor_factory=DictCursor)
     logging.debug('Demonio iniciado')
     while True:
-        cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY hora ASC LIMIT 1")
+        cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY concurso_id,hora ASC LIMIT 1")
         envio = cursor.fetchone() #El envío a calificar
         if envio is not None:
             cursor.execute("UPDATE evaluador_envio SET estatus='S' WHERE id='%d'"%envio['id'])
@@ -154,7 +154,8 @@ def main():
                     resultado['total'] = suma_puntos
                     resultado['efectividad'] = puntaje/float(suma_puntos)
                     resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
-            if resultado['resultado'] == 'OK': #La evaluación es buena, el usuario incremeta problemas resueltos y el problema veces resuelto.
+            if resultado['resultado'] == 'OK' and not envio['concurso_id']: #La evaluación es buena, el usuario incremeta problemas resueltos y el problema veces resuelto.
+                #Si se trata de un concurso se trata distinto
                 cursor.execute('UPDATE usuarios_usuario SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (envio['usuario_id'], ))
                 connection.commit()
                 if problema['mejor_tiempo'] == -1 or resultado['tiempo_ejecucion'] < problema['mejor_tiempo']:
@@ -172,7 +173,10 @@ def main():
             ))
             cursor.execute("select actualiza_puntaje(%d)"%envio['usuario_id'])
             connection.commit()
-            logging.debug("Evalué un código con el id %d para el problema %d enviado por el usuario %d"%(envio['id'], envio['problema_id'], envio['usuario_id']))
+            if envio['concurso_id']:
+                logging.debug("Evalué un código con el id %d para el problema %d enviado por el usuario %d (concurso %d)"%(envio['id'], envio['problema_id'], envio['usuario_id'], envio['concurso_id']))
+            else:
+                logging.debug("Evalué un código con el id %d para el problema %d enviado por el usuario %d"%(envio['id'], envio['problema_id'], envio['usuario_id']))
         else:
             time.sleep(1)
     cursor.close()

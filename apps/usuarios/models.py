@@ -179,25 +179,25 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
                 lista_problemas.append(problema)
         return lista_problemas
 
-    def mejor_puntaje(self, problema):
-        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=None)
+    def mejor_puntaje(self, problema, concurso=None):
+        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=concurso)
         if envios:
             return envios.aggregate(Max('puntaje'))['puntaje__max']
         else:
             return '---'
 
-    def primer_puntaje(self, problema):
-        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=None)
+    def primer_puntaje(self, problema, concurso=None):
+        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=concurso)
         if envios:
             return envios.order_by('hora')[0].puntaje
         else:
             return '---'
 
-    def intentos(self, problema):
-        return Envio.objects.filter(usuario=self, problema=problema, concurso=None).count()
+    def intentos(self, problema, concurso=None):
+        return Envio.objects.filter(usuario=self, problema=problema, concurso=concurso).count()
 
-    def mejor_tiempo(self, problema):
-        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=None, puntaje=100)
+    def mejor_tiempo(self, problema, concurso=None):
+        envios = Envio.objects.filter(usuario=self, problema=problema, concurso=concurso, puntaje=100)
         if envios:
             return envios.aggregate(Min('tiempo_ejecucion'))['tiempo_ejecucion__min']
         else:

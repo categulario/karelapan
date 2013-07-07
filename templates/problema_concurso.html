@@ -1,0 +1,120 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} {{ problema }} {% endblock %}
+{% block contenido %}
+  <div class="span4">
+    <div class="well">
+      <strong>Mis intentos:</strong>
+      <dl class="dl-horizontal">
+        <dt>Mejor puntaje</dt>
+        <dd>{{ mejor_puntaje }}</dd>
+        <dt>Primer puntaje</dt>
+        <dd>{{ primer_puntaje }}</dd>
+        <dt>Intentos</dt>
+        <dd>{{ intentos }}</dd>
+        <dt>Mejor tiempo</dt>
+        <dd>{{ mejor_tiempo }} <abbr title="Milisegundos">ms</abbr></dd>
+      </dl>
+    </div>
+  </div>
+  <div class="span8">
+    <div id="problem_debug"></div>
+    <div id="veredict"></div>
+    <h3>{{ problema.nombre }}<input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema"></h3>
+    <small><a href="/problemas">Volver a la lista de problemas</a></small><br><br>
+    <p>{{ problema.descripcion }}</p>
+    <h4>Problema</h4>
+    <p>{{ problema.problema }}</p>
+    <h4>Consideraciones</h4>
+    <p>
+      <ul>
+        {% for consideracion in problema.consideracion_set.all %}
+          <li>{{ consideracion }}</li>
+        {% endfor %}
+      </ul>
+    </p>
+    <h5>Ejemplo</h5>
+    <div class="row">
+      <div id="kworld" class="span8"></div>
+    </div>
+    <h5>Soluci&oacute;n al mundo de ejemplo</h5>
+    <div class="row">
+      <div id="ksolution" class="span8"></div>
+    </div>
+    {% if problema.agradecimiento %}
+      <h4>Agradecimiento</h4>
+      <p>{{ problema.agradecimiento }}</p>
+    {% else %}
+      <h4></h4>
+    {% endif %}
+    {% if user.is_authenticated %}
+      <div class="well">
+        <strong>Env&iacute;a tu soluci&oacute;n</strong>
+        <div class="tabbable"> <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab">Sube un archivo</a></li>
+            <li><a href="#tab2" data-toggle="tab">Copypega tu c&oacute;digo</a></li>
+            <li><a href="#tab3" data-toggle="tab">Resuelve en Karelécatl</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab1">
+              <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="codigo">
+                <input type="submit" value="Evaluar" class="btn">
+              </form>
+            </div>
+            <div class="tab-pane" id="tab2">
+              <form method="post" action="">
+                {% csrf_token %}
+                <textarea name="codigo" rows="10" class="input-xxlarge"></textarea>
+                <input type="submit" value="Evaluar" class="btn">
+              </form>
+            </div>
+            <div class="tab-pane" id="tab3">
+                <a href="" class="btn btn-info btn-large">¡Vamos!</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="well">
+        <strong>Inicia sesión o <a href="/registro">regístrate</a> para enviar soluciones a este problema</strong>
+      </div>
+    {% endif %}
+  </div>
+  {% if envio %}
+    <!--El problema se envió, así que buscamos por una respuesta-->
+    <script>
+      var busca_envio = function(){
+          $.ajax({
+              'url'    : 'http://'+$("#host").val()+'/api/envio/{{ envio }}/concurso/{{ concurso.id }}',
+              'type'   : 'get',
+              'success': function(msg){
+                  if(msg != 'P' && msg != 'S'){
+                      clearInterval(interval);
+                      var envio = eval('('+msg+')');
+                      if(envio.resultado == 'ERROR_COMPILACION'){
+                          $("#problem_debug").html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>¡Error!</strong> '+envio.mensaje+'</div>');
+                      }
+                      if(envio.resultado == 'CASOS_INCOMPLETOS'){
+                          $("#problem_debug").html('<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>¡Advertencia!</strong> '+envio.mensaje+'</div>');
+                      }
+                      if(envio.resultado == 'OK'){
+                          $("#problem_debug").html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>¡Bien!</strong> '+envio.mensaje+'</div>');
+                      }
+                      if(envio.resultado == 'CASOS_INCOMPLETOS' || envio.resultado == 'OK') {
+                          casos = '';
+                          for(var i=0;i<envio.casos.length;i++){
+                              casos += '<tr><td>'+(i+1)+'</td><td>'+envio.casos[i].terminacion+'</td><td>'+envio.casos[i].mensaje+'</td><td>'+envio.casos[i].obtenidos+'/'+envio.casos[i].puntos+'</td></tr>';
+                          }
+                          $('#veredict').html('<div class="well well-small"><table class="table"><tr><th>#</th><th>Terminaci&oacute;n</th><th>Mensaje</th><th>Puntos</th></tr>'+casos+'<tr><td colspan="3"></td><td><strong>Total: '+envio.puntaje+'/100</strong></td></tr></table></div>');
+                      }
+                  }
+              }
+          });
+      }
+      interval = setInterval(busca_envio, 1000);
+    </script>
+  {% endif %}
+{% endblock %}

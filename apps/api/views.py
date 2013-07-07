@@ -1,8 +1,9 @@
-from apps.evaluador.models import Problema, Envio
+from apps.evaluador.models import Problema, Envio, Concurso
 from apps.usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
 import django.contrib.auth as auth
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils import timezone
 import json
 
 def index(request):
@@ -26,14 +27,20 @@ def nombres_escuela(request):
 
 def descarga_codigo(request, id_envio):
     envio = get_object_or_404(Envio, pk=id_envio)
-    if envio.usuario == request.user:
+    if envio.usuario == request.user and Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True).count() == 0:
         return HttpResponse(envio.codigo, content_type='text/plain')
     else:
         return HttpResponse('Forbidden', content_type='text/plain')
 
-def envio(request, id_envio):
+def envio(request, id_envio, id_concurso=None):
     envio = get_object_or_404(Envio, pk=id_envio)
-    if envio.usuario == request.user and envio.concurso == None:
+    if id_concurso:
+        concurso = get_object_or_404(Concurso, pk=id_concurso)
+    else:
+        concurso = None
+    if envio.usuario == request.user and envio.concurso == concurso:
+        if not concurso and Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True).count() > 0:
+            return HttpResponse('Forbidden', content_type='text/plain')
         if envio.estatus == 'E':
             resultado = {
                 'puntaje': envio.puntaje,

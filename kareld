@@ -171,7 +171,10 @@ def main():
                 json.dumps(resultado['casos']),
                 envio['id']
             ))
-            cursor.execute("select actualiza_puntaje(%d)"%envio['usuario_id'])
+            if envio['concurso_id']:
+                cursor.execute("select actualiza_puntaje_concurso(%d, %d)"%(envio['usuario_id'], envio['concurso_id']))
+            else:
+                cursor.execute("select actualiza_puntaje(%d)"%envio['usuario_id'])
             connection.commit()
             if envio['concurso_id']:
                 logging.debug("Evalué un código con el id %d para el problema %d enviado por el usuario %d (concurso %d)"%(envio['id'], envio['problema_id'], envio['usuario_id'], envio['concurso_id']))

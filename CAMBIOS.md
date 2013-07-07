@@ -8,11 +8,12 @@ Aquí las diferencias del nuevo karelapan con el viejo karelapan.
 * FAQs. Ahora las faqs también son parte del sistema en vez de una página estática y se pueden modificar desde la administración de django.
 * Mundos. Los mundos ahora son un canvas en vez de svg, esto no dará soporte a IE pero sí permite nuevas características relacionadas con el proyecto karel.js entre las cuales se integra el desplazamiento en el mundo.
 * Control del perfil. El nuevo karelapan permite a los usuarios cambiar su contraseña, modificar su perfil y darse de baja del sistema.
-* Nuevo esquema de evaluación. Aunque esto es transparente para el usuario, resulta una ventaja para el sistema que el nuevo esquema de evaluación ahora usa MongoDB para almacenar los resultados, permitiendo mejor y más rápido control de las evaluaciones por parte de los administradores.
+* Imanen de perfil. Karelapan ahora usa imágenes de perfil de Gravatar.
 * Aviso de privacidad. Un elemento importante dadas las nuevas políticas de protección de datos.
 * Base de datos. El nuevo karelapan ahora usa postgresql para manejar su base de datos, aunque realmente también podría ocupar mysql o sqlite por igual.
 * Textos. Algunos textos y formatos cambiaron, aunque en general son cambios menores.
-* Cola de evaluación. Se implementa una cola de evaluación para los problemas del evaluador, mientras que los concursos se evalúan en directo.
+* Diseño. Cambiaron algunas vistas como la de 'concursos'.
+* Cola de evaluación. Se implementa una cola de evaluación para los problemas del evaluador. Los concursos también se evalúan en la cola de evaluación pero con prioridad sobre los envíos normales.
 * Consideraciones y ejemplos. Las consideraciones se editan como parte del problema (pese a seguir siendo una tabla distinta en base de datos) y la tabla de mundos se integró con la tabla de los problemas.
 * Integración con el IDE web de karel. Como parte final del proyecto se integró karelapan con karel.js para que los alumnos puedan resolver los problemas directo en el navegador.
 * Wiki. EL nuevo karelapan integra la wiki, lugar de documentación sobre karel.

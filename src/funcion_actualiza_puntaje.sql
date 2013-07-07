@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE FUNCTION actualiza_puntaje(id_usuario integer)
+﻿CREATE OR REPLACE FUNCTION actualiza_puntaje_concurso(id_usuario integer, id_concurso integer)
   RETURNS void AS
 $BODY$
 	DECLARE
@@ -7,15 +7,15 @@ $BODY$
 		parcial INTEGER;
 	BEGIN
 		suma := 0;
-		FOR problema IN SELECT DISTINCT problema_id FROM evaluador_envio WHERE usuario_id = id_usuario AND concurso_id isnull
+		FOR problema IN SELECT DISTINCT problema_id FROM evaluador_envio WHERE usuario_id = id_usuario AND concurso_id = id_concurso
 		LOOP
-			SELECT MAX(puntaje) INTO parcial FROM evaluador_envio WHERE problema_id=problema.problema_id AND usuario_id=id_usuario AND concurso isnull;
+			SELECT MAX(puntaje) INTO parcial FROM evaluador_envio WHERE problema_id=problema.problema_id AND usuario_id=id_usuario AND concurso_id = id_concurso;
 			suma = suma + parcial;
 		END LOOP;
-		UPDATE usuarios_usuario SET puntaje=suma WHERE id=id_usuario;
+		UPDATE evaluador_participacion SET puntaje=suma WHERE usuario_id=id_usuario AND concurso_id=id_concurso;
 	END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION actualiza_puntaje(integer)
+ALTER FUNCTION actualiza_puntaje_concurso(integer, integer)
   OWNER TO covi;

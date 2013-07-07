@@ -1,6 +1,6 @@
 {% extends 'template.html' %}
 {% load staticfiles %}
-{% block titulo %} Problemas {% endblock %}
+{% block titulo %} {{ problema }} {% endblock %}
 {% block contenido %}
   <div class="span4">
     <div class="well">
@@ -196,7 +196,6 @@
                           }
                           $('#veredict').html('<div class="well well-small"><table class="table"><tr><th>#</th><th>Terminaci&oacute;n</th><th>Mensaje</th><th>Puntos</th></tr>'+casos+'<tr><td colspan="3"></td><td><strong>Total: '+envio.puntaje+'/100</strong></td></tr></table></div>');
                       }
-                      console.log(envio);
                   }
               }
           });

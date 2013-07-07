@@ -17,12 +17,12 @@ from modules.badges import badgify
 import datetime
 import uuid
 
-data = {
-    'GA'        : settings.GOOGLE_ANALYTHICS,
-    'CA'        : settings.ADMINS[0][1],
-    'FB'        : settings.FACEBOOK,
-    'avisos'    : Aviso.objects.filter(mostrado=True)
-}
+#~ data = {
+    #~ 'GA'        : settings.GOOGLE_ANALYTHICS,
+    #~ 'CA'        : settings.ADMINS[0][1],
+    #~ 'FB'        : settings.FACEBOOK,
+    #~ 'avisos'    : Aviso.objects.filter(mostrado=True)
+#~ }
 
 
 def sube_archivo_codigo(archivo_subido):
@@ -34,33 +34,47 @@ def sube_archivo_codigo(archivo_subido):
 
 
 def index_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
-    d = data.copy()
-    d['noticias'] = Noticia.objects.all()
-    return render_to_response('inicio.html', d, context_instance=RequestContext(request))
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+        'noticias'  : Noticia.objects.all()
+    }
+    return render_to_response('inicio.html', data, context_instance=RequestContext(request))
 
 def problemas_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
-    d = data.copy()
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'concurso'  : concurso,
+        'usuarios'  : usuarios,
+        'avisos'    : Aviso.objects.filter(mostrado=True)
+    }
     niveles = Nivel.objects.all()
     for nivel in niveles:
         nivel.problemas = nivel.problema_set.all()
         if request.user.is_authenticated():
             for problema in nivel.problemas:
                 problema.mejor_puntaje_usuario = badgify(request.user.mejor_puntaje(problema))
-    d['niveles'] = niveles
-    return render_to_response('problemas.html', d, context_instance=RequestContext(request))
+    data['niveles'] = niveles
+    return render_to_response('problemas.html', data, context_instance=RequestContext(request))
 
 def problema_detalle(request, nombre_administrativo):
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
-    d = data.copy()
     if request.method == 'POST': #Recibimos un envío
         if request.user.is_authenticated():
             usuario = request.user
@@ -81,19 +95,19 @@ def problema_detalle(request, nombre_administrativo):
             problema.save()
             envio.save()
             messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos (o espera a que se cargue el veredicto)')
-            d['envio'] = envio.id
+            data['envio'] = envio.id
         else:
             messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
-    d['problema'] = problema
-    d['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+    data['problema'] = problema
+    data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
     if request.user.is_authenticated():
-        d['mejor_puntaje'] = request.user.mejor_puntaje(problema)
-        d['primer_puntaje'] = request.user.primer_puntaje(problema)
-        d['intentos'] = request.user.intentos(problema)
-        d['mejor_tiempo'] = request.user.mejor_tiempo(problema)
-        d['usuarios_resuelto'] = request.user.usuarios_resuelto(problema)
-        d['usuarios_intentado'] = request.user.usuarios_intentado(problema)
-    return render_to_response('problema_detalle.html', d, context_instance=RequestContext(request))
+        data['mejor_puntaje'] = request.user.mejor_puntaje(problema)
+        data['primer_puntaje'] = request.user.primer_puntaje(problema)
+        data['intentos'] = request.user.intentos(problema)
+        data['mejor_tiempo'] = request.user.mejor_tiempo(problema)
+        data['usuarios_resuelto'] = request.user.usuarios_resuelto(problema)
+        data['usuarios_intentado'] = request.user.usuarios_intentado(problema)
+    return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
 
 @login_required
 def envios_view(request):
@@ -108,21 +122,30 @@ def envios_view(request):
     except EmptyPage:
         envios = paginator.page(paginator.num_pages)
 
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
-    d = data.copy()
-    d['envios'] = envios
-    d['js'] = ['js/envios.js']
-    return render_to_response('envios.html', d, context_instance=RequestContext(request))
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
+    data['envios'] = envios
+    data['js'] = ['js/envios.js']
+    return render_to_response('envios.html', data, context_instance=RequestContext(request))
 
 @login_required
 def concursos_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
-    data['concursos'] = Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
-    data['concursos_todos'] = Concurso.objects.all()
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'concursos' : Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+        'concursos_todos': Concurso.objects.all()
+    }
     for concurso in data['concursos']:
         diferencia = concurso.fecha_fin - timezone.now()
         concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
@@ -209,54 +232,111 @@ def concurso_view(request, id_concurso):
 
 @login_required
 def concurso_ver_ranking(request, id_concurso):
-    pass
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    usuarios = []
+    for participacion in Participacion.objects.filter(concurso=concurso).order_by('-puntaje'):
+        usuario = participacion.usuario
+        usuario.score = participacion.puntaje
+        usuario.resultados = []
+        for problema in concurso.problemas.all():
+            usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
+        usuarios.append(usuario)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'concurso'  : concurso,
+        'usuarios'  : usuarios,
+        'avisos'    : Aviso.objects.filter(mostrado=True)
+    }
+    return render_to_response('ranking.html', data, context_instance=RequestContext(request))
 
 def medallero_view(request):
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     data['path'] = request.path
     data['host'] = request.get_host()
     data['avisos'] = Aviso.objects.filter(mostrado=True)
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
 def usuarios_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['usuarios'] = Usuario.objects.all().order_by('-puntaje')
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'usuarios'  : Usuario.objects.all().order_by('-puntaje'),
+        'avisos'    : Aviso.objects.filter(mostrado=True)
+    }
     if 'next' in request.GET:
         data['next'] = request.GET['next']
     return render_to_response('usuarios.html', data, context_instance=RequestContext(request))
 
 @login_required
 def usuario_view(request, id_usuario):
-    data['path'] = request.path
-    data['host'] = request.get_host()
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     data['usuario'] = Usuario.objects.get(pk=id_usuario)
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
     return render_to_response('usuario_ver.html', data, context_instance=RequestContext(request))
 
 def wiki_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     return render_to_response('wiki.html', data, context_instance=RequestContext(request))
 
 def ayuda_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     return render_to_response('ayuda.html', data, context_instance=RequestContext(request))
 
 def privacidad_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     return render_to_response('privacidad.html', data, context_instance=RequestContext(request))
 
 def registro_view(request):
     if not request.user.is_authenticated():
-        data['path'] = request.path
-        data['host'] = request.get_host()
-        data['avisos'] = Aviso.objects.filter(mostrado=True)
+        data = {
+            'GA'        : settings.GOOGLE_ANALYTHICS,
+            'CA'        : settings.ADMINS[0][1],
+            'FB'        : settings.FACEBOOK,
+            'path'      : request.path,
+            'host'      : request.get_host(),
+            'avisos'    : Aviso.objects.filter(mostrado=True)
+        }
         data['js'] = ['js/jquery-ui.js', 'js/registro.js']
         data['css'] = ['css/ui/jquery-ui.css']
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
@@ -290,9 +370,14 @@ def registro_view(request):
 
 @login_required
 def perfil_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     data['usuario'] = request.user
     data['asesorados'] = Usuario.objects.filter(asesor=request.user)
     if request.method == 'POST':
@@ -320,18 +405,27 @@ def mis_soluciones_view(request):
     except EmptyPage:
         envios = paginator.page(paginator.num_pages)
 
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
-    d = data.copy()
-    d['envios'] = envios
-    d['js'] = ['js/envios.js']
-    return render_to_response('mis_soluciones.html', d, context_instance=RequestContext(request))
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
+    data['envios'] = envios
+    data['js'] = ['js/envios.js']
+    return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
 
 def faqs_view(request):
-    data['path'] = request.path
-    data['host'] = request.get_host()
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+    }
     data['preguntas'] = PreguntaFrecuente.objects.filter(mostrado=True)
     return render_to_response('faqs.html', data, context_instance=RequestContext(request))
 

@@ -1,0 +1,39 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} {{ concurso }} {% endblock %}
+{% block contenido %}
+  <div class="span12">
+    <h3>Ranking para el concurso <em>{{ concurso }}</em></h3>
+    <h5><a href="{% url 'apps.sitio.views.concursos_view' %}">Volver</a> <span class="muted">-</span> <a href="">Descargar pdf</a></h5>
+    <table class="table table-stripped">
+      <thead>
+        <tr>
+          <th>Lugar</th>
+          <th>Usuario</th>
+          <th>Puntos</th>
+          {% for problema in concurso.problemas.all %}
+            <th>{{ problema }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario in usuarios %}
+          <tr>
+            <td><strong>{{ forloop.counter }}.</strong></td>
+            <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.id %}">{{ usuario }}</a></td>
+            <td>
+              {{ usuario.score }}
+            </td>
+            {% for resultado in usuario.resultados %}
+              <td>
+                {% autoescape off %}
+                  {{ resultado }}
+                {% endautoescape %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

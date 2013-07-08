@@ -19,9 +19,9 @@ def mundo_ejemplo_solucion(request, id_problema):
 
 def nombres_escuela(request):
     if 'q' in request.GET:
-        usuarios = Usuario.objects.filter(nombre_escuela__icontains=request.GET['q'])
-        escuelas = ['"'+str(usuario.nombre_escuela)+'"' for usuario in usuarios]
-        return HttpResponse('['+','.join(escuelas)+']', content_type='text/plain')
+        usuarios = Usuario.objects.filter(nombre_escuela__icontains=request.GET['q']).order_by('nombre_escuela').distinct('nombre_escuela')
+        escuelas = [str(usuario.nombre_escuela) for usuario in usuarios]
+        return HttpResponse(json.dumps(escuelas), content_type='text/plain')
     else:
         return HttpResponse('[]', content_type='text/plain')
 

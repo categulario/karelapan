@@ -52,8 +52,6 @@ def problemas_view(request):
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
         'host'      : request.get_host(),
-        'concurso'  : concurso,
-        'usuarios'  : usuarios,
         'avisos'    : Aviso.objects.filter(mostrado=True)
     }
     niveles = Nivel.objects.all()

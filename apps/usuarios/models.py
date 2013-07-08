@@ -26,12 +26,7 @@ class Olimpiada(models.Model):
         ordering = ['anio']
 
 def default_group():
-    try:
-        return [Grupo.objects.get(nombre='usuarios')]
-    except ObjectDoesNotExist:
-        g = Grupo(nombre='usuarios', descripcion='Usuarios generales del sistema', elegible=True)
-        g.save()
-        return [g]
+    return [Grupo.objects.get_or_create(nombre='usuarios', descripcion='Usuarios generales del sistema', elegible=True)[0]]
 
 def default_omi():
     try:

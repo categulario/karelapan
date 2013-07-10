@@ -32,3 +32,17 @@ ul.errorlist > li{
     background-repeat:no-repeat;
     background-position: left bottom;
 }
+.consulta{
+  background-color: #FFFBDC;
+  border-top: 2px solid #FFBEBE;
+  border-bottom: 2px solid #FFBEBE;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+}
+#consultas{
+	overflow: auto;
+	max-height: 300px;
+}
+.mensaje-consulta{
+	width: 90%;
+}

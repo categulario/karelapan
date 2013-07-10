@@ -52,6 +52,7 @@ class ConsultaAdmin(admin.ModelAdmin):
     list_display    = ('concurso', 'problema', 'mensaje', 'respuesta', 'leido')
     list_filter     = ('concurso', 'problema', 'leido')
     readonly_fields = ('concurso', 'problema', 'usuario', 'mensaje', 'respuesta', 'leido', 'hora')
+    ordering        = ('concurso', 'problema', 'hora')
 
 admin.site.register(Nivel, NivelAdmin)
 admin.site.register(Problema, ProblemaAdmin)

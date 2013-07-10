@@ -17,7 +17,23 @@
       </dl>
     </div>
     <div class="well">
-      <p class="lead">¿Alguna duda?</p>
+      <p class="lead">Consultas</p>
+      <div id="consultas">
+        {% for consulta in consultas %}
+          <div class="consulta">
+            <h5>¿Por qué mi problema está mal?</h5>
+            Resulta que estás enviando código basura. Prueba de nuevo
+          </div>
+        {% endfor %}
+        {% if permite_consultas %}
+          <form id="consulta-form" method="post">
+            <textarea name="mensaje" class="mensaje-consulta" placeholder="¿Tienes dudas sobre este problema?"></textarea><br>
+            <input type="submit" class="btn btn-info" value="Enviar">
+          </form>
+        {% else %}
+          <h5>Ha terminado el periodo de consultas</h5>
+        {% endif %}
+      </div>
     </div>
   </div>
   <div class="span8">

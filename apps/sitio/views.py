@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from apps.sitio.forms import RegistroForm, PerfilForm
-from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion
+from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion, Consulta
 from apps.usuarios.models import Usuario
 from django.contrib import auth
 from django.utils import timezone
@@ -16,14 +16,6 @@ from modules.recaptcha import verifica
 from modules.badges import badgify
 import datetime
 import uuid
-
-#~ data = {
-    #~ 'GA'        : settings.GOOGLE_ANALYTHICS,
-    #~ 'CA'        : settings.ADMINS[0][1],
-    #~ 'FB'        : settings.FACEBOOK,
-    #~ 'avisos'    : Aviso.objects.filter(mostrado=True)
-#~ }
-
 
 def sube_archivo_codigo(archivo_subido):
     nuevo_nombre = str(uuid.uuid1())+'.karel'
@@ -161,16 +153,18 @@ def problema_concurso(request, id_concurso, id_problema):
     problema = get_object_or_404(Problema, pk=id_problema)
     if problema in concurso.problemas.all() and concurso in Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True):
         data = {
-            'path'          : request.path,
-            'host'          : request.get_host(),
-            'concurso'      : concurso,
-            'problema'      : problema,
-            'avisos'        : Aviso.objects.filter(mostrado=True),
-            'mejor_puntaje' : request.user.mejor_puntaje(problema, concurso),
-            'primer_puntaje': request.user.primer_puntaje(problema, concurso),
-            'intentos'      : request.user.intentos(problema, concurso),
-            'mejor_tiempo'  : request.user.mejor_tiempo(problema, concurso),
-            'js'            : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+            'path'              : request.path,
+            'host'              : request.get_host(),
+            'concurso'          : concurso,
+            'problema'          : problema,
+            'avisos'            : Aviso.objects.filter(mostrado=True),
+            'mejor_puntaje'     : request.user.mejor_puntaje(problema, concurso),
+            'primer_puntaje'    : request.user.primer_puntaje(problema, concurso),
+            'intentos'          : request.user.intentos(problema, concurso),
+            'mejor_tiempo'      : request.user.mejor_tiempo(problema, concurso),
+            'consultas'         : Consulta.objects.filter(usuario=request.user, problema=problema, concurso=concurso),
+            'permite_consultas' : True,
+            'js'                : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
         }
         if request.method == 'POST': #Recibimos un envío
             usuario = request.user

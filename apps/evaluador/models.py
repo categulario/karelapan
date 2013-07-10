@@ -217,7 +217,7 @@ class Consulta(models.Model):
     hora        = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering    = ['concurso', 'problema']
+        ordering    = ['hora']
 
     def __unicode__(self):
         return self.mensaje

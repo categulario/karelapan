@@ -54,3 +54,7 @@ def envio(request, id_envio, id_concurso=None):
             return HttpResponse(envio.estatus, content_type='text/plain')
     else:
         return HttpResponse('Forbidden', content_type='text/plain')
+
+@csrf_exempt
+def hacer_consulta(request):
+    """Recibe una consulta de un usuario durante el examen"""

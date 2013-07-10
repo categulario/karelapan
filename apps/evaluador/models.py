@@ -4,20 +4,9 @@ from django.core.exceptions import ValidationError
 import json
 import os
 
-def valida_dimensiones(cadena):
-    """Valida una cadena de dimensiones para usarse como dimensiones de
-    renderizado de mundos"""
-    try:
-        d = [int(i) for i in cadena.split(',')]
-        if len(d)!=4:
-            raise ValueError('Hay menos de cuatro valores aquí')
-        for i in d:
-            if i<1 or i>100:
-                raise ValueError('Uno de los valores está fuera de rango')
-    except ValueError:
-        raise ValidationError('No pude convertir todos los números')
-
 def valida_mundos(str_mundo):
+    """valida que 'str_mundo' sea un documento JSON que representa un
+    mundo válido de karel"""
     try:
         mundo = json.loads(str_mundo)
     except ValueError:
@@ -60,6 +49,8 @@ def valida_mundos(str_mundo):
             raise ValidationError('Este mundo no contiene las llaves principales de karel, mundo y casillas')
 
 def url_casos_evaluacion(problema, nombre_original_archivo):
+    """Obtiene el nombre que tendrá el archivo de un set de casos de
+    evaluación"""
     return os.path.join('casos', problema.nombre_administrativo+'.nkec')
 
 def valida_json(cadena):
@@ -70,6 +61,8 @@ def valida_json(cadena):
         raise ValidationError('No es un json valido')
 
 class Nivel(models.Model):
+    """Los problemas del evaluador están agrupados en estos niveles para
+    su mejor desarrollo con los usuarios"""
     nombre      = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField()
     nivel       = models.IntegerField()
@@ -83,6 +76,8 @@ class Nivel(models.Model):
 
 
 class Problema(models.Model):
+    """Un problema del evaluador o de un concurso para resolverse con
+    karel"""
     nombre                  = models.CharField(max_length=140, unique=True)
     nombre_administrativo   = models.CharField(max_length=140, unique=True)
     descripcion             = models.TextField()
@@ -120,6 +115,8 @@ class Problema(models.Model):
 
 
 class Consideracion(models.Model):
+    """Cada problema de karel tiene consideraciones que limitan el mundo
+    """
     problema    = models.ForeignKey(Problema)
     texto       = models.CharField(max_length=254)
 
@@ -131,14 +128,17 @@ class Consideracion(models.Model):
 
 
 class Concurso(models.Model):
-    fecha_inicio    = models.DateTimeField()
-    fecha_fin       = models.DateTimeField()
-    nombre          = models.CharField(max_length=140)
-    descripcion     = models.TextField()
-    activo          = models.BooleanField(default=True)
-    autor           = models.ForeignKey('usuarios.Usuario')
-    problemas       = models.ManyToManyField(Problema)
-    grupos          = models.ManyToManyField('usuarios.Grupo')
+    """Los usuarios pueden concursar y sacar puntajes independientes en
+    este tipo de concursos"""
+    fecha_inicio        = models.DateTimeField()
+    fecha_fin           = models.DateTimeField()
+    nombre              = models.CharField(max_length=140)
+    descripcion         = models.TextField()
+    activo              = models.BooleanField(default=True)
+    autor               = models.ForeignKey('usuarios.Usuario')
+    problemas           = models.ManyToManyField(Problema)
+    grupos              = models.ManyToManyField('usuarios.Grupo')
+    duracion_preguntas  = models.IntegerField(default=90, help_text="La duración en minutos del periodo en que pueden hacer preguntas los concursantes a partir del inicio del concurso")
 
     def __unicode__(self):
         return self.nombre
@@ -154,6 +154,7 @@ class Concurso(models.Model):
 
 
 class Participacion(models.Model):
+    """Maneja la participación de un usuario en un concurso"""
     usuario     = models.ForeignKey('usuarios.Usuario')
     concurso    = models.ForeignKey(Concurso)
     puntaje     = models.IntegerField(default=0)
@@ -202,3 +203,21 @@ class Envio(models.Model):
 
     class Meta:
         ordering    = ['-hora']
+
+
+class Consulta(models.Model):
+    """Un mensaje de aclaración para el usuario en el concurso que esté
+    participando"""
+    concurso    = models.ForeignKey(Concurso)
+    problema    = models.ForeignKey(Problema)
+    usuario     = models.ForeignKey('usuarios.Usuario')
+    mensaje     = models.CharField(max_length=140)
+    respuesta   = models.TextField()
+    leido       = models.BooleanField(default=False)
+    hora        = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering    = ['concurso', 'problema']
+
+    def __unicode__(self):
+        return self.mensaje

@@ -7,7 +7,9 @@
     <p>A continuaci&oacute;n aparecen algunos concursos en los que puedes participar y obtener puntajes para etapas posteriores o simplemente para medirte en tiempo real con otros usuarios de este evaluador en l&iacute;nea.</p>
     {% for concurso in concursos %}
       <div class="well well-small">
-        <p class="lead">{{ concurso }}</p>
+        <p class="lead">
+          {{ concurso }}
+        </p>
         <p>{{ concurso.descripcion }}</p>
         <h4>
           Quedan {{ concurso.quedan_dias }}{{ concurso.quedan_horas }}{{ concurso.quedan_minutos }}{{ concurso.quedan_segundos }}
@@ -16,14 +18,21 @@
       </div>
     {% empty %}
       <div class="well well-small">
-        <p class="lead">No hay concursos activos en este momento</p>
+        <p class="lead">No hay concursos en los que puedas participar en este momento</p>
       </div>
     {% endfor %}
     {% if perms.evaluador.puede_ver_ranking %}
       <h3>Todos los concursos <small>Para ti que tienes permiso de verlos</small></h3>
       {% for concurso in concursos_todos %}
         <div class="well well-small">
-          <p class="lead">{{ concurso }} <small class="muted">Grupos: {{ concurso.lista_grupos }}</small></p>
+          <p class="lead">
+            {{ concurso }} <small class="muted">Grupos: {{ concurso.lista_grupos }}
+            {% if concurso.activo %}
+              <span class="text-success">activo</span>
+            {% else %}
+              <span class="text-error">desactivado</span>
+            {% endif %}</small>
+          </p>
           <p>{{ concurso.descripcion }} <strong><a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}">ranking</a></strong></p>
           <h4><small>Desde</small> {{ concurso.fecha_inicio}} <small>hasta</small> {{ concurso.fecha_fin }}</h4>
           <div class="white">

@@ -33,7 +33,12 @@
               <span class="text-error">desactivado</span>
             {% endif %}</small>
           </p>
-          <p>{{ concurso.descripcion }} <strong><a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}">ranking</a></strong></p>
+          <p>
+            {{ concurso.descripcion }}
+            <strong><a href="{% url 'apps.sitio.views.concurso_ver_ranking' concurso.id %}">ranking</a></strong>
+            /
+            <strong><a href="{% url 'apps.sitio.views.concurso_ver_consultas' concurso.id %}">preguntas</a></strong>
+          </p>
           <h4><small>Desde</small> {{ concurso.fecha_inicio}} <small>hasta</small> {{ concurso.fecha_fin }}</h4>
           <div class="white">
             <strong>Problemas</strong>

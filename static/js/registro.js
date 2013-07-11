@@ -60,7 +60,7 @@ $(document).ready(function(){
     });
     $("#id_ultima_omi").popover({
         'trigger': 'focus',
-        'title': '¿Cuál es el último año en que puedes participar?',
-        'content': 'Los alumnos pueden competir hasta cuarto semestre del bachillerato'
+        'title': '¿Cuál es el último año en que puedes participar en la olimpiada de informática?',
+        'content': 'Los alumnos pueden competir hasta cuarto semestre del bachillerato, si no sabes escoge 1512'
     });
 });

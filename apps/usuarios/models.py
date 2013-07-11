@@ -2,8 +2,9 @@
 from django.contrib.auth.models import AbstractBaseUser , BaseUserManager, PermissionsMixin, Group
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from apps.evaluador.models import Envio
+from apps.evaluador.models import Envio, Concurso
 from django.db.models import Min, Max
+from django.utils import timezone
 from modules.badges import badgify
 import datetime, hashlib
 
@@ -212,6 +213,14 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
             if envio.usuario not in lista_usuarios and envio.usuario not in usuarios_resueltos:
                 lista_usuarios.append(envio.usuario)
         return lista_usuarios
+
+    def concursos_activos(self):
+        return Concurso.objects.filter(grupos__in=self.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
+
+    def puede_hacer_consulta(self, concurso):
+        """determina si el usuario puede hacer una consulta en un examen
+        en el que participa"""
+        return concurso in self.concursos_activos() and concurso.fecha_inicio < timezone.now() and timezone.now() < (concurso.fecha_inicio + datetime.timedelta(minutes=concurso.duracion_preguntas))
 
     def lista_grupos(self):
         return ', '.join([str(g) for g in self.grupo.all()])

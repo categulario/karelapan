@@ -132,7 +132,7 @@ def concursos_view(request):
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
         'host'      : request.get_host(),
-        'concursos' : Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True),
+        'concursos' : request.user.concursos_activos(),
         'avisos'    : Aviso.objects.filter(mostrado=True),
         'concursos_todos': Concurso.objects.all()
     }
@@ -151,7 +151,7 @@ def concursos_view(request):
 def problema_concurso(request, id_concurso, id_problema):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     problema = get_object_or_404(Problema, pk=id_problema)
-    if problema in concurso.problemas.all() and concurso in Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True):
+    if problema in concurso.problemas.all() and concurso in request.user.concursos_activos():
         data = {
             'path'              : request.path,
             'host'              : request.get_host(),
@@ -162,9 +162,9 @@ def problema_concurso(request, id_concurso, id_problema):
             'primer_puntaje'    : request.user.primer_puntaje(problema, concurso),
             'intentos'          : request.user.intentos(problema, concurso),
             'mejor_tiempo'      : request.user.mejor_tiempo(problema, concurso),
-            'consultas'         : Consulta.objects.filter(usuario=request.user, problema=problema, concurso=concurso),
-            'permite_consultas' : True,
-            'js'                : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+            'consultas'         : Consulta.objects.filter(usuario=request.user, problema=problema, concurso=concurso, leido=True),
+            'permite_consultas' : request.user.puede_hacer_consulta(concurso),
+            'js'                : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js', 'js/problema_concurso.js']
         }
         if request.method == 'POST': #Recibimos un envío
             usuario = request.user
@@ -192,7 +192,7 @@ def problema_concurso(request, id_concurso, id_problema):
 @login_required
 def concurso_view(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
-    if concurso in Concurso.objects.filter(grupos__in=request.user.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True):
+    if concurso in request.user.concursos_activos():
         diferencia = concurso.fecha_fin - timezone.now()
         concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
         horas = diferencia.seconds/3600
@@ -244,6 +244,20 @@ def concurso_ver_ranking(request, id_concurso):
         'avisos'    : Aviso.objects.filter(mostrado=True)
     }
     return render_to_response('ranking.html', data, context_instance=RequestContext(request))
+
+@login_required
+def concurso_ver_consultas(request, id_concurso):
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    data = {
+        'GA'        : settings.GOOGLE_ANALYTHICS,
+        'CA'        : settings.ADMINS[0][1],
+        'FB'        : settings.FACEBOOK,
+        'path'      : request.path,
+        'host'      : request.get_host(),
+        'consultas' : Consulta.objects.filter(concurso=concurso),
+        'avisos'    : Aviso.objects.filter(mostrado=True)
+    }
+    return render_to_response('consultas.html', data, context_instance=RequestContext(request))
 
 def medallero_view(request):
     data = {

@@ -214,7 +214,9 @@ class Consulta(models.Model):
     mensaje     = models.CharField(max_length=140)
     respuesta   = models.TextField()
     leido       = models.BooleanField(default=False)
+    descartado  = models.BooleanField(default=False)
     hora        = models.DateTimeField(auto_now_add=True)
+    ip          = models.IPAddressField()
 
     class Meta:
         ordering    = ['hora']

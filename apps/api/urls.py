@@ -8,4 +8,5 @@ urlpatterns = patterns('apps.api.views',
     url(r'^descarga_codigo/(?P<id_envio>\d+)/$', 'descarga_codigo'),
     url(r'^envio/(?P<id_envio>\d+)/$', 'envio'),
     url(r'^envio/(?P<id_envio>\d+)/concurso/(?P<id_concurso>\d+)/$', 'envio'),
+    url(r'^hacer_consulta/$', 'hacer_consulta'),
 )

@@ -50,3 +50,16 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
 });
+
+var busca_consultas = function(){
+    $.ajax({
+        'url': 'http://'+$("#host").val()+'/api/busca_consultas/'+$("#id_concurso").val()+'/',
+        'type': 'get',
+        'success': function(msg){
+            var consultas = eval('('+msg+')');
+            console.log(consultas);
+        }
+    })
+}
+
+interval = setInterval(busca_consultas, 1000);

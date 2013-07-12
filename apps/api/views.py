@@ -101,3 +101,8 @@ def responde_consulta(request):
     consulta.respuesta = respuesta
     consulta.save()
     return HttpResponse('ok', content_type='text/plain')
+
+@permission_required('evaluador.puede_ver_ranking')
+def busca_consultas(request, id_concurso):
+    """Busca consultas sin revisar"""
+    return HttpResponse('[]', content_type='text/plain')

@@ -34,7 +34,7 @@ class ProblemaAdmin(admin.ModelAdmin):
     readonly_fields     = ('veces_resuelto', 'veces_intentado', 'mejor_tiempo', 'mejor_puntaje')
 
 class ConcursoAdmin(admin.ModelAdmin):
-    list_display    = ('nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'lista_grupos', 'activo')
+    list_display    = ('nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'lista_grupos', 'activo', 'ranking_publico')
     list_filter     = ('fecha_inicio',)
     actions         = [activar_concurso, desactivar_concurso]
 

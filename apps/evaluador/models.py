@@ -139,6 +139,7 @@ class Concurso(models.Model):
     problemas           = models.ManyToManyField(Problema)
     grupos              = models.ManyToManyField('usuarios.Grupo')
     duracion_preguntas  = models.IntegerField(default=90, help_text="La duración en minutos del periodo en que pueden hacer preguntas los concursantes a partir del inicio del concurso")
+    ranking_publico     = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.nombre

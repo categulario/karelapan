@@ -12,7 +12,7 @@
         </p>
         <p>{{ concurso.descripcion }}</p>
         <h4>
-          Quedan {{ concurso.quedan_dias }}{{ concurso.quedan_horas }}{{ concurso.quedan_minutos }}{{ concurso.quedan_segundos }}
+          Quedan {{ concurso.tiempo_restante }}
           <a href="{% url 'apps.sitio.views.concurso_view' concurso.id %}" class="btn btn-success">Participar</a>
         </h4>
       </div>
@@ -30,7 +30,7 @@
             {% if concurso.activo %}
               <span class="text-success">activo</span>
             {% else %}
-              <span class="text-error">desactivado</span>
+              <span class="text-error">inactivo</span>
             {% endif %}</small>
           </p>
           <p>

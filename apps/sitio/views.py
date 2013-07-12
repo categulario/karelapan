@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from modules.recaptcha import verifica
 from modules.badges import badgify
+from modules.fechas import diferencia_str
 import datetime
 import uuid
 
@@ -138,14 +139,7 @@ def concursos_view(request):
     if request.user.has_perm('evaluador.puede_ver_ranking'):
         data['concursos_todos'] = Concurso.objects.all()
     for concurso in data['concursos']:
-        diferencia = concurso.fecha_fin - timezone.now()
-        concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
-        horas = diferencia.seconds/3600
-        concurso.quedan_horas   = ['', " %d horas"%horas][horas!=0]
-        minutos = (diferencia.seconds/60)%60
-        concurso.quedan_minutos = ['', " %d minutos"%minutos][minutos!=0]
-        segundos = diferencia.seconds%60
-        concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
+        concurso.tiempo_restante = diferencia_str(concurso.fecha_fin)
     return render_to_response('concursos.html', data, context_instance=RequestContext(request))
 
 @login_required
@@ -164,6 +158,7 @@ def problema_concurso(request, id_concurso, id_problema):
             'intentos'          : request.user.intentos(problema, concurso),
             'mejor_tiempo'      : request.user.mejor_tiempo(problema, concurso),
             'consultas'         : Consulta.objects.filter(usuario=request.user, problema=problema, concurso=concurso, leido=True),
+            'tiempo_restante_consultas': diferencia_str(concurso.fecha_inicio + datetime.timedelta(minutes=concurso.duracion_preguntas)),
             'permite_consultas' : request.user.puede_hacer_consulta(concurso),
             'js'                : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js', 'js/problema_concurso.js']
         }

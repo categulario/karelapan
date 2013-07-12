@@ -11,4 +11,5 @@ urlpatterns = patterns('apps.api.views',
     url(r'^hacer_consulta/$', 'hacer_consulta'),
     url(r'^responde_consulta/$', 'responde_consulta'),
     url(r'^busca_consultas/(?P<id_concurso>\d+)/$', 'busca_consultas'),
+    url(r'^consultas/(?P<id_concurso>\d+)/problema/(?P<id_problema>\d+)/$', 'consultas'),
 )

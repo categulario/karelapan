@@ -22,17 +22,20 @@
         {% for consulta in consultas %}
           {% if consulta.descartado %}
             <div class="consulta-bad">
+              <input type="hidden" class="consulta-id" value="{{ consulta.id }}">
               <h5>{{ consulta.mensaje }}</h5>
               <span class="text-error">Rechazada</span>
             </div>
           {% else %}
             <div class="consulta">
+              <input type="hidden" class="consulta-id" value="{{ consulta.id }}">
               <h5>{{ consulta.mensaje }}</h5>
               {{ consulta.respuesta }}
             </div>
           {% endif %}
         {% endfor %}
-        {% if permite_consultas %}
+      </div>
+      {% if permite_consultas %}
           <form id="consulta-form" method="post">
             <textarea name="mensaje" class="mensaje-consulta" placeholder="¿Tienes dudas sobre este problema?"></textarea><br>
             <div id="mensajes" class="alert alert-error" style="display:none;"></div>
@@ -45,13 +48,16 @@
         {% else %}
           <h5>Ha terminado el periodo de consultas</h5>
         {% endif %}
-      </div>
     </div>
   </div>
   <div class="span8">
     <div id="problem_debug"></div>
     <div id="veredict"></div>
-    <h3>{{ problema.nombre }}<input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema"></h3>
+    <h3>
+      {{ problema.nombre }}
+      <input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema">
+      <input type="hidden" name="id_concurso" value="{{ concurso.id }}" id="id_concurso">
+    </h3>
     <small><a href="{% url 'apps.sitio.views.concurso_view' concurso.id %}">Volver a la lista de problemas</a></small><br><br>
     <p>{{ problema.descripcion }}</p>
     <h4>Problema</h4>

@@ -117,3 +117,19 @@ def busca_consultas(request, id_concurso):
             'hora': unicode(consulta.hora)
         })
     return HttpResponse(json.dumps(consultas_list), content_type='text/plain')
+
+def consultas(request, id_concurso, id_problema):
+    """Le da a un usuario sus consultas"""
+    concurso    = get_object_or_404(Concurso, pk=id_concurso)
+    problema    = get_object_or_404(Problema, pk=id_problema)
+    if concurso in request.user.concursos_activos() and problema in concurso.problemas.all():
+        consultas = Consulta.objects.filter(problema=problema, concurso=concurso, usuario=request.user, leido=True)
+        consulta_list = []
+        for consulta in consultas:
+            consulta_list.append({
+                'mensaje': consulta.mensaje,
+                'respuesta': consulta.respuesta,
+                'descartado': consulta.descartado,
+                'id': consulta.id
+            })
+    return HttpResponse(json.dumps(consulta_list), content_type='text/plain')

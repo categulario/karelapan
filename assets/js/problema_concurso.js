@@ -6,7 +6,6 @@ $(document).ready(function(){
             'type': 'post',
             'data': data,
             'success': function(msg){
-                console.log(msg);
                 if(msg === 'ok'){
                     $("#reset-form").click();
                     $("#mensajes")

@@ -49,9 +49,9 @@ class EnvioAdmin(admin.ModelAdmin):
     readonly_fields = ('usuario', 'problema', 'estatus', 'puntaje', 'codigo', 'codigo_archivo', 'tiempo_ejecucion', 'resultado', 'mensaje', 'concurso', 'ip', 'casos')
 
 class ConsultaAdmin(admin.ModelAdmin):
-    list_display    = ('mensaje', 'hora', 'concurso', 'problema', 'usuario', 'respuesta', 'leido')
+    list_display    = ('mensaje', 'hora', 'concurso', 'problema', 'usuario', 'respuesta', 'leido', 'descartado')
     list_filter     = ('concurso', 'problema', 'leido')
-    readonly_fields = ('concurso', 'problema', 'usuario', 'mensaje', 'leido', 'hora')
+    readonly_fields = ('concurso', 'problema', 'usuario', 'mensaje', 'hora')
     ordering        = ('concurso', 'problema', '-hora')
 
 admin.site.register(Nivel, NivelAdmin)

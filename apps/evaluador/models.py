@@ -219,7 +219,7 @@ class Consulta(models.Model):
     ip          = models.IPAddressField()
 
     class Meta:
-        ordering    = ['hora']
+        ordering    = ['-hora']
 
     def __unicode__(self):
         return self.mensaje

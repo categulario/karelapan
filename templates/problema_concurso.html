@@ -20,10 +20,17 @@
       <p class="lead">Consultas</p>
       <div id="consultas">
         {% for consulta in consultas %}
-          <div class="consulta">
-            <h5>{{ consulta.mensaje }}</h5>
-            {{ consulta.respuesta }}
-          </div>
+          {% if consulta.descartado %}
+            <div class="consulta-bad">
+              <h5>{{ consulta.mensaje }}</h5>
+              <span class="text-error">Rechazada</span>
+            </div>
+          {% else %}
+            <div class="consulta">
+              <h5>{{ consulta.mensaje }}</h5>
+              {{ consulta.respuesta }}
+            </div>
+          {% endif %}
         {% endfor %}
         {% if permite_consultas %}
           <form id="consulta-form" method="post">
@@ -71,41 +78,35 @@
     {% else %}
       <h4></h4>
     {% endif %}
-    {% if user.is_authenticated %}
-      <div class="well">
-        <strong>Env&iacute;a tu soluci&oacute;n</strong>
-        <div class="tabbable"> <!-- Only required for left/right tabs -->
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1" data-toggle="tab">Sube un archivo</a></li>
-            <li><a href="#tab2" data-toggle="tab">Copypega tu c&oacute;digo</a></li>
-            <li><a href="#tab3" data-toggle="tab">Resuelve en Karelécatl</a></li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab1">
-              <form method="post" action="" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="codigo">
-                <input type="submit" value="Evaluar" class="btn">
-              </form>
-            </div>
-            <div class="tab-pane" id="tab2">
-              <form method="post" action="">
-                {% csrf_token %}
-                <textarea name="codigo" rows="10" class="input-xxlarge"></textarea>
-                <input type="submit" value="Evaluar" class="btn">
-              </form>
-            </div>
-            <div class="tab-pane" id="tab3">
-                <a href="" class="btn btn-info btn-large">¡Vamos!</a>
-            </div>
+    <div class="well">
+      <strong>Env&iacute;a tu soluci&oacute;n</strong>
+      <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab1" data-toggle="tab">Sube un archivo</a></li>
+          <li><a href="#tab2" data-toggle="tab">Copypega tu c&oacute;digo</a></li>
+          <li><a href="#tab3" data-toggle="tab">Resuelve en Karelécatl</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab1">
+            <form method="post" action="" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="file" name="codigo">
+              <input type="submit" value="Evaluar" class="btn">
+            </form>
+          </div>
+          <div class="tab-pane" id="tab2">
+            <form method="post" action="">
+              {% csrf_token %}
+              <textarea name="codigo" rows="10" class="input-xxlarge"></textarea>
+              <input type="submit" value="Evaluar" class="btn">
+            </form>
+          </div>
+          <div class="tab-pane" id="tab3">
+              <a href="" class="btn btn-info btn-large">¡Vamos!</a>
           </div>
         </div>
       </div>
-    {% else %}
-      <div class="well">
-        <strong>Inicia sesión o <a href="/registro">regístrate</a> para enviar soluciones a este problema</strong>
-      </div>
-    {% endif %}
+    </div>
   </div>
   {% if envio %}
     <!--El problema se envió, así que buscamos por una respuesta-->

@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from apps.sitio.forms import RegistroForm, PerfilForm
 from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion, Consulta
@@ -134,8 +134,9 @@ def concursos_view(request):
         'host'      : request.get_host(),
         'concursos' : request.user.concursos_activos(),
         'avisos'    : Aviso.objects.filter(mostrado=True),
-        'concursos_todos': Concurso.objects.all()
     }
+    if request.user.has_perm('evaluador.puede_ver_ranking'):
+        data['concursos_todos'] = Concurso.objects.all()
     for concurso in data['concursos']:
         diferencia = concurso.fecha_fin - timezone.now()
         concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
@@ -222,7 +223,7 @@ def concurso_view(request, id_concurso):
         messages.error(request, 'Este concurso ya no está habilitado para ti')
         return HttpResponseRedirect('/concursos')
 
-@login_required
+@permission_required('evaluador.puede_ver_ranking')
 def concurso_ver_ranking(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     usuarios = []
@@ -245,7 +246,7 @@ def concurso_ver_ranking(request, id_concurso):
     }
     return render_to_response('ranking.html', data, context_instance=RequestContext(request))
 
-@login_required
+@permission_required('evaluador.puede_ver_ranking')
 def concurso_ver_consultas(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     data = {
@@ -255,7 +256,9 @@ def concurso_ver_consultas(request, id_concurso):
         'path'      : request.path,
         'host'      : request.get_host(),
         'consultas' : Consulta.objects.filter(concurso=concurso),
-        'avisos'    : Aviso.objects.filter(mostrado=True)
+        'concurso'  : concurso,
+        'avisos'    : Aviso.objects.filter(mostrado=True),
+        'js'        : ['js/consultas.js']
     }
     return render_to_response('consultas.html', data, context_instance=RequestContext(request))
 

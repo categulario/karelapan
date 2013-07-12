@@ -1,0 +1,35 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Consultas {% endblock %}
+{% block contenido %}
+  <div class="span12">
+    <h3>Preguntas que hacen los usuarios en el concurso <em>{{ concurso }}</em></h3>
+    <div id="consultas-admin">
+      <div id="mensajes" class="alert" style="display:none;"></div>
+      {% for consulta in consultas %}
+        {% if consulta.leido and not consulta.descartado %}
+          <div class="consulta">
+            <h5>{{ consulta.mensaje }} <span class="muted">Problema: {{ consulta.problema }}, Usuario: {{ consulta.usuario }}</span> {{ consulta.hora }}</h5> {{ consulta.respuesta }}
+          </div>
+        {% else %}{% if consulta.descartado %}
+          <div class="consulta-bad">
+            <h5>{{ consulta.mensaje }} <span class="muted">Problema: {{ consulta.problema }}, Usuario: {{ consulta.usuario }}</span> {{ consulta.hora }}</h5> <span class="text-error">Rechazada</span>
+          </div>
+        {% else %}
+          <div class="consulta-bad">
+            <h5>{{ consulta.mensaje }} <span class="muted">Problema: {{ consulta.problema }}, Usuario: {{ consulta.usuario }}</span> {{ consulta.hora }}</h5>
+            <form class="responde-consulta" method="post">
+              <div class="components">
+                <textarea class="input-xxlarge" rows="3" name="respuesta"></textarea>
+                <input type="hidden" name="consulta" value="{{ consulta.id }}">
+                <input type="hidden" name="rechazar" class="rechazar-hidden">
+                <input type="submit" value="Enviar" class="btn">
+                <input type="button" value="Rechazar" class="rechazar-consulta btn btn-danger">
+              </div>
+            </form>
+          </div>
+        {% endif %}{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

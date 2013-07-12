@@ -32,10 +32,17 @@ ul.errorlist > li{
     background-repeat:no-repeat;
     background-position: left bottom;
 }
-.consulta{
+.consulta-bad{
   background-color: #FFFBDC;
   border-top: 2px solid #FFBEBE;
   border-bottom: 2px solid #FFBEBE;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+}
+.consulta{
+  background-color: #E5FDEB;
+  border-top: 2px solid #8BB496;
+  border-bottom: 2px solid #8BB496;
   padding: 0px 10px;
   margin-bottom: 10px;
 }

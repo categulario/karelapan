@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    consultas_existentes = []
     $("#consulta-form").submit(function(event){
         var data = $(this).serialize();
         $.ajax({

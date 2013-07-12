@@ -105,4 +105,15 @@ def responde_consulta(request):
 @permission_required('evaluador.puede_ver_ranking')
 def busca_consultas(request, id_concurso):
     """Busca consultas sin revisar"""
-    return HttpResponse('[]', content_type='text/plain')
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    consultas = Consulta.objects.filter(concurso=concurso, leido=False)
+    consultas_list = []
+    for consulta in consultas:
+        consultas_list.append({
+            'id': consulta.id,
+            'mensaje': consulta.mensaje,
+            'usuario': unicode(consulta.usuario),
+            'problema': unicode(consulta.problema),
+            'hora': unicode(consulta.hora)
+        })
+    return HttpResponse(json.dumps(consultas_list), content_type='text/plain')

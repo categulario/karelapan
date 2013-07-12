@@ -10,22 +10,25 @@
       {% for consulta in consultas %}
         {% if consulta.leido and not consulta.descartado %}
           <div class="consulta">
+            <input type="hidden" class="consulta-id" value="{{ consulta.id }}">
             <h5>{{ consulta.mensaje }} <span class="muted">Problema: {{ consulta.problema }}, Usuario: {{ consulta.usuario }}</span> {{ consulta.hora }}</h5> {{ consulta.respuesta }}
           </div>
         {% else %}{% if consulta.descartado %}
           <div class="consulta-bad">
+            <input type="hidden" class="consulta-id" value="{{ consulta.id }}">
             <h5>{{ consulta.mensaje }} <span class="muted">Problema: {{ consulta.problema }}, Usuario: {{ consulta.usuario }}</span> {{ consulta.hora }}</h5> <span class="text-error">Rechazada</span>
           </div>
         {% else %}
           <div class="consulta-bad">
+            <input type="hidden" class="consulta-id" value="{{ consulta.id }}">
             <h5>{{ consulta.mensaje }} <span class="muted">Problema: {{ consulta.problema }}, Usuario: {{ consulta.usuario }}</span> {{ consulta.hora }}</h5>
-            <form class="responde-consulta" method="post">
+            <form class="responde-consulta" method="post" onsubmit="return envia_respuesta(this);">
               <div class="components">
                 <textarea class="input-xxlarge" rows="3" name="respuesta"></textarea>
                 <input type="hidden" name="consulta" value="{{ consulta.id }}">
                 <input type="hidden" name="rechazar" class="rechazar-hidden">
                 <input type="submit" value="Enviar" class="btn">
-                <input type="button" value="Rechazar" class="rechazar-consulta btn btn-danger">
+                <input type="button" value="Rechazar" class="rechazar-consulta btn btn-danger" onclick="rechaza_respuesta(this);">
               </div>
             </form>
           </div>

@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from apps.evaluador.models import Problema, Envio, Concurso, Consulta
+from apps.evaluador.models import Problema, Envio, Concurso, Consulta, Participacion
 from apps.usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -8,6 +8,7 @@ import django.contrib.auth as auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 import json
+import csv
 
 def index(request):
     return HttpResponse("Bienvenido a la API de Karelapan. Ejecute un comando.", content_type="text/plain")
@@ -135,3 +136,28 @@ def consultas(request, id_concurso, id_problema):
                 'id': consulta.id
             })
     return HttpResponse(json.dumps(consulta_list), content_type='text/plain')
+
+def ranking_pdf(request, id_concurso):
+    """Genera el PDF a partir del ranking de un concurso"""
+    return HttpResponse('ok', content_type='text/plain')
+
+@permission_required('evaluador.puede_ver_ranking')
+def ranking_csv(request, id_concurso):
+    """Genera el PDF a partir del ranking de un concurso"""
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="ranking_%s.csv"'%concurso.nombre
+
+    writer = csv.writer(response)
+    writer.writerow(['Lugar', 'Usuario', 'Puntos'] + [problema.nombre.encode('utf-8') for problema in concurso.problemas.all()])
+
+    i = 1
+    for participacion in Participacion.objects.filter(concurso=concurso).order_by('-puntaje'):
+        writer.writerow([i, participacion.usuario, participacion.puntaje] + [participacion.usuario.mejor_puntaje(problema, concurso) for problema in concurso.problemas.all()])
+        i += 1
+
+    return response
+
+def ranking_calc(request, id_concurso):
+    """Genera el PDF a partir del ranking de un concurso"""
+    return HttpResponse('ok', content_type='text/plain')

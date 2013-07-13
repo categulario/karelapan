@@ -31,7 +31,9 @@ def nombres_escuela(request):
 def descarga_codigo(request, id_envio):
     envio = get_object_or_404(Envio, pk=id_envio)
     if envio.usuario == request.user and request.user.concursos_activos().count() == 0:
-        return HttpResponse(envio.codigo, content_type='text/plain')
+        response = HttpResponse(envio.codigo, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="%s.karel"'%envio.problema.nombre_administrativo
+        return response
     else:
         return HttpResponse('Forbidden', content_type='text/plain')
 

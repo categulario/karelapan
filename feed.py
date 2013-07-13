@@ -44,3 +44,6 @@ class UltimosProblemas(Feed):
 
     def categories(self):
         return [nivel.nombre for nivel in Nivel.objects.all()]
+
+    def item_guid(self, obj):
+        return str(obj.id)

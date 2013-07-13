@@ -137,10 +137,6 @@ def consultas(request, id_concurso, id_problema):
             })
     return HttpResponse(json.dumps(consulta_list), content_type='text/plain')
 
-def ranking_pdf(request, id_concurso):
-    """Genera el PDF a partir del ranking de un concurso"""
-    return HttpResponse('ok', content_type='text/plain')
-
 @permission_required('evaluador.puede_ver_ranking')
 def ranking_csv(request, id_concurso):
     """Genera el PDF a partir del ranking de un concurso"""
@@ -157,7 +153,3 @@ def ranking_csv(request, id_concurso):
         i += 1
 
     return response
-
-def ranking_calc(request, id_concurso):
-    """Genera el PDF a partir del ranking de un concurso"""
-    return HttpResponse('ok', content_type='text/plain')

@@ -4,7 +4,7 @@
 {% block contenido %}
   <div class="span12">
     <h3>Ranking para el concurso <em>{{ concurso }}</em></h3>
-    <h5><a href="{% url 'apps.sitio.views.concursos_view' %}">Volver</a> <span class="muted">|</span> <a href="{% url 'apps.api.views.ranking_pdf' concurso.id %}">PDF</a> <span class="muted">-</span> <a href="{% url 'apps.api.views.ranking_csv' concurso.id %}">CSV</a> <span class="muted">-</span> <a href="{% url 'apps.api.views.ranking_calc' concurso.id %}">Hoja de cálculo</a></h5>
+    <h5><a href="{% url 'apps.sitio.views.concursos_view' %}">Volver</a> <span class="muted">|</span> <a href="{% url 'apps.api.views.ranking_csv' concurso.id %}">descargar CSV</a></h5>
     <table class="table table-stripped">
       <thead>
         <tr>

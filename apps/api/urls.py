@@ -12,7 +12,5 @@ urlpatterns = patterns('apps.api.views',
     url(r'^responde_consulta/$', 'responde_consulta'),
     url(r'^busca_consultas/(?P<id_concurso>\d+)/$', 'busca_consultas'),
     url(r'^consultas/(?P<id_concurso>\d+)/problema/(?P<id_problema>\d+)/$', 'consultas'),
-    url(r'^ranking_pdf/(?P<id_concurso>\d+)/$', 'ranking_pdf'),
     url(r'^ranking_csv/(?P<id_concurso>\d+)/$', 'ranking_csv'),
-    url(r'^ranking_calc/(?P<id_concurso>\d+)/$', 'ranking_calc'),
 )

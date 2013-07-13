@@ -217,6 +217,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     def concursos_activos(self):
         return Concurso.objects.filter(grupos__in=self.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
 
+    def participa_en_concurso(self):
+        return self.concursos_activos().count() > 0
+
     def puede_hacer_consulta(self, concurso):
         """determina si el usuario puede hacer una consulta en un examen
         en el que participa"""

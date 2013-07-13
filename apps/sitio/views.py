@@ -68,25 +68,28 @@ def problema_detalle(request, nombre_administrativo):
     problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
     if request.method == 'POST': #Recibimos un envío
         if request.user.is_authenticated():
-            usuario = request.user
-            archivo_codigo = settings.RAIZ_CODIGOS
-            if 'codigo' in request.FILES:
-                if request.FILES['codigo'].size < 22528:
-                    archivo_codigo += sube_archivo_codigo(request.FILES['codigo'])
+            if not request.user.participa_en_concurso():
+                usuario = request.user
+                archivo_codigo = settings.RAIZ_CODIGOS
+                if 'codigo' in request.FILES:
+                    if request.FILES['codigo'].size < 22528:
+                        archivo_codigo += sube_archivo_codigo(request.FILES['codigo'])
+                    else:
+                        messages.warning(request, 'El archivo pesa demasiado, lo siento')
+                        return HttpResponseRedirect('/problema/'+nombre_administrativo)
                 else:
-                    messages.warning(request, 'El archivo pesa demasiado, lo siento')
-                    return HttpResponseRedirect('/problema/'+nombre_administrativo)
+                    archivo_codigo += str(uuid.uuid1())+'.karel'
+                    f = open(archivo_codigo, 'w')
+                    f.write(request.POST['codigo'].encode("utf-8"))
+                    f.close()
+                envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
+                problema.veces_intentado += 1
+                problema.save()
+                envio.save()
+                messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos (o espera a que se cargue el veredicto)')
+                data['envio'] = envio.id
             else:
-                archivo_codigo += str(uuid.uuid1())+'.karel'
-                f = open(archivo_codigo, 'w')
-                f.write(request.POST['codigo'].encode("utf-8"))
-                f.close()
-            envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
-            problema.veces_intentado += 1
-            problema.save()
-            envio.save()
-            messages.success(request, 'Problema enviado, consulta tu calificación en la sección envíos (o espera a que se cargue el veredicto)')
-            data['envio'] = envio.id
+                messages.warning(request, 'No puedes enviar soluciones al problemario mientras estás en un concurso')
         else:
             messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
     data['problema'] = problema

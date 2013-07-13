@@ -54,6 +54,23 @@
           No hay concursos viejos o así.
         </div>
       {% endfor %}
+      <div class="pagination pagination-centered">
+        <ul>
+          <li><a href="{% url 'apps.sitio.views.concursos_view' %}">Últimos</a></li>
+          {% if concursos_todos.has_previous %}
+            <li><a href="{% url 'apps.sitio.views.concursos_view' %}?pagina={{ concursos.previous_page_number }}">Más recientes</a></li>
+          {% else %}
+            <li class="disabled"><a>Más recientes</a></li>
+          {% endif %}
+          <li class="active"><a>{{ concursos_todos.number }}</a></li>
+          {% if concursos_todos.has_next %}
+            <li><a href="{% url 'apps.sitio.views.concursos_view' %}?pagina={{ concursos_todos.next_page_number }}">Más viejos</a></li>
+          {% else %}
+            <li class="disabled"><a>Más viejos</a></li>
+          {% endif %}
+          <li><a href="{% url 'apps.sitio.views.concursos_view' %}?pagina={{ concursos_todos.paginator.num_pages }}">Primeros</a></li>
+        </ul>
+      </div>
     {% endif %}
   </div>
 {% endblock %}

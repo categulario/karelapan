@@ -130,6 +130,16 @@ def envios_view(request):
 
 @login_required
 def concursos_view(request):
+    lista_concursos = Concurso.objects.all()
+    paginator = Paginator(lista_concursos, 5)
+
+    page = request.GET.get('pagina')
+    try:
+        concursos = paginator.page(page)
+    except PageNotAnInteger:
+        concursos = paginator.page(1)
+    except EmptyPage:
+        concursos = paginator.page(paginator.num_pages)
     data = {
         'GA'        : settings.GOOGLE_ANALYTHICS,
         'CA'        : settings.ADMINS[0][1],
@@ -140,7 +150,7 @@ def concursos_view(request):
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     if request.user.has_perm('evaluador.puede_ver_ranking'):
-        data['concursos_todos'] = Concurso.objects.all()
+        data['concursos_todos'] = concursos
     for concurso in data['concursos']:
         concurso.tiempo_restante = diferencia_str(concurso.fecha_fin)
     return render_to_response('concursos.html', data, context_instance=RequestContext(request))

@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import os
 import logging
 # Django settings for karelapan project.
@@ -182,3 +183,12 @@ LOG_FORMAT = '[%(asctime)s] %(levelname)s %(message)s'
 LOG_LEVEL = logging.DEBUG
 #Archivo de bloqueo para kareld
 LOCKFILE = '/tmp/kareld.lock'
+
+#Cosas relativas el envío de correos
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = '500Leymoon'
+EMAIL_HOST_USER = 'karelapan@gmail.com'
+EMAIL_PORT = 587
+EMAIL_SUBJECT_PREFIX = '[Karelapan] '
+EMAIL_USE_TLS = True

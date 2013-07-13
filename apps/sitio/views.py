@@ -15,6 +15,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from modules.recaptcha import verifica
 from modules.badges import badgify
 from modules.fechas import diferencia_str
+from django.core.mail import send_mail
+
 import datetime
 import uuid
 
@@ -378,6 +380,7 @@ def registro_view(request):
                 messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
             data['formulario'] = formulario
             return render_to_response('registro.html', data, context_instance=RequestContext(request))
+
         else:
             data['formulario'] = RegistroForm()
             return render_to_response('registro.html', data, context_instance=RequestContext(request))
@@ -458,7 +461,7 @@ def login(request):
                     messages.success(request, '¡¡Hola de vuelta!!')
                     return HttpResponseRedirect(request.POST['redirect'])
                 else:
-                    messages.error(request, 'Por razones que trascienden la escolástica, tu cuenta está desactivada')
+                    messages.error(request, 'Por razones que trascienden la escolástica, tu cuenta está desactivad. ¿Verificaste tu correo electrónico?')
             else:
                 messages.error(request, 'Nadie registrado con ese correo, ¿Y si verificas?')
             return HttpResponseRedirect(request.POST['redirect'])

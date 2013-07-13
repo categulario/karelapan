@@ -6,6 +6,23 @@
     <h3>Preguntas que hacen los usuarios en el concurso <em>{{ concurso }}</em></h3>
     <input type="hidden" id="id_concurso" value="{{ concurso.id }}">
     <div id="consultas-admin">
+      <div class="consulta">
+        <form id="aclaracion-general" method="post">
+          <h5>
+            Hacer aclaración general para el problema:
+            <select name="problema">
+              {% for problema in concurso.problemas.all %}
+                <option value="{{ problema.id }}">{{ problema }}</option>
+              {% endfor %}
+            </select><br>
+            <input type="text" name="mensaje" placeholder="Título">
+            <input type="hidden" name="concurso" value="{{ concurso.id }}"><br>
+            <textarea name="respuesta" class="input-xxlarge" placeholder="Detalle"></textarea><br>
+            <input type="submit" value="Enviar" class="btn btn-info">
+            <input type="reset" id="reset-aclaracion" style="display:none;">
+          </h5>
+        </form>
+      </div>
       <div id="mensajes" class="alert" style="display:none;"></div>
       {% for consulta in consultas %}
         {% if consulta.leido and not consulta.descartado %}

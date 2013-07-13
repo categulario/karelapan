@@ -43,6 +43,36 @@ $(document).ready(function(){
     $(".consulta-id").each(function(i, elem){
         consultas_existentes.push(parseInt($(elem).val()));
     });
+    $("#aclaracion-general").submit(function(event){
+        data = $(this).serialize();
+        $.ajax({
+            'url': 'http://'+$("#host").val()+'/api/aclaracion/'+$("#id_concurso").val()+'/',
+            'type': 'post',
+            'data': data,
+            'success': function(msg){
+                if(msg==='ok'){
+                    $("#reset-aclaracion").click();
+                    $("#mensajes")
+                        .removeClass('alert-error')
+                        .addClass('alert-success')
+                        .text('Aclaración enviada a todos los alumnos')
+                        .slideDown('slow')
+                        .delay(2000)
+                        .slideUp('slow');
+                    history.go(0);
+                } else {
+                    $("#mensajes")
+                        .removeClass('alert-success')
+                        .addClass('alert-error')
+                        .text(msg)
+                        .slideDown('slow')
+                        .delay(2000)
+                        .slideUp('slow');
+                }
+            }
+        });
+        return false;
+    });
 });
 
 var busca_consultas = function(){

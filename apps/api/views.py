@@ -135,6 +135,14 @@ def consultas(request, id_concurso, id_problema):
                 'descartado': consulta.descartado,
                 'id': consulta.id
             })
+        consultas = Consulta.objects.filter(problema=problema, concurso=concurso, usuario=None, leido=True) #Las aclaraciones
+        for consulta in consultas:
+            consulta_list.append({
+                'mensaje': consulta.mensaje,
+                'respuesta': consulta.respuesta,
+                'descartado': consulta.descartado,
+                'id': consulta.id
+            })
     return HttpResponse(json.dumps(consulta_list), content_type='text/plain')
 
 @permission_required('evaluador.puede_ver_ranking')
@@ -153,3 +161,16 @@ def ranking_csv(request, id_concurso):
         i += 1
 
     return response
+
+@csrf_exempt
+@permission_required('evaluador.puede_ver_ranking')
+def aclaracion(request, id_concurso):
+    concurso = get_object_or_404(Concurso, pk=id_concurso)
+    id_problema = request.POST.get('problema')
+    problema = get_object_or_404(Problema, pk=id_problema)
+    if request.POST.get('mensaje') != '' and request.POST.get('respuesta') != '':
+        consulta = Consulta(concurso=concurso, problema=problema, mensaje=request.POST.get('mensaje'), respuesta=request.POST.get('respuesta'), leido=True, ip='127.0.0.1')
+        consulta.save()
+        return HttpResponse('ok', content_type='text/plain')
+    else:
+        return HttpResponse('Hay campos importantes vacíos', content_type='text/plain')

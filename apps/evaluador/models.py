@@ -211,7 +211,7 @@ class Consulta(models.Model):
     participando"""
     concurso    = models.ForeignKey(Concurso)
     problema    = models.ForeignKey(Problema)
-    usuario     = models.ForeignKey('usuarios.Usuario')
+    usuario     = models.ForeignKey('usuarios.Usuario', null=True)
     mensaje     = models.CharField(max_length=140)
     respuesta   = models.TextField()
     leido       = models.BooleanField(default=False)

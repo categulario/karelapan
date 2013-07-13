@@ -53,3 +53,10 @@ ul.errorlist > li{
 .mensaje-consulta{
 	width: 90%;
 }
+.chico{
+	font-size: 14px;
+}
+#kworld, #ksolution{
+	height:400px;
+	background-color:#7F4646;
+}

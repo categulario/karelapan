@@ -1,11 +1,8 @@
 $(document).ready(function(){
     //Creamos los canvas para dibujar
-    $("#kworld").css({height:'400px', backgroundColor:'#7F4646'});
-    var canvas1         = document.createElement('canvas');
+    var canvas1         = $("#mundo_ejemplo")[0];
     canvas1.width       = $("#kworld").width();
     canvas1.height      = $("#kworld").height();
-    canvas1.id          = 'mundo_ejemplo';
-    $("#kworld").html(canvas1);
     var context         = canvas1.getContext('2d');
     var wRender         = new WorldRender(context);
     mundo_ejemplo   = {}
@@ -68,12 +65,9 @@ $(document).ready(function(){
         return false;
     };
     //SOLUCION DEL MUNDO------------------------------------------------
-    $("#ksolution").css({height:'400px', backgroundColor:'#7F4646'});
-    var canvas2         = document.createElement('canvas');
-    canvas2.width       = $("#ksolution").width();
-    canvas2.height      = $("#ksolution").height();
-    canvas2.id          = 'mundo_ejemplo_solucion';
-    $("#ksolution").html(canvas2);
+    var canvas2         = $("#mundo_ejemplo_solucion")[0];
+    canvas2.width       = $("#kworld").width();
+    canvas2.height      = $("#kworld").height();
     var context2         = canvas2.getContext('2d');
     var wRender2         = new WorldRender(context2);
     mundo_ejemplo_solucion   = {}

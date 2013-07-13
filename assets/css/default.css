@@ -56,3 +56,7 @@ ul.errorlist > li{
 .chico{
 	font-size: 14px;
 }
+#kworld, #ksolution{
+	height:400px;
+	background-color:#7F4646;
+}

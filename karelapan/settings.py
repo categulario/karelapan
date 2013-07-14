@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'apps.evaluador',
     'apps.usuarios',
     'apps.sitio',
+    'gunicorn',
 )
 
 # A sample logging configuration. The only tangible logging

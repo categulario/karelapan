@@ -4,5 +4,7 @@
 local_settings.py
 *.geany
 codigos/*
+media/*
+static/*
 karel
 *~

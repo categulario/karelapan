@@ -1,6 +1,7 @@
 *.log
 *.pot
-*.pyc
+*.py[oc]
+*.pid
 local_settings.py
 *.geany
 codigos/*

@@ -194,3 +194,9 @@ EMAIL_HOST_USER = 'karelapan@gmail.com'
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[Karelapan] '
 EMAIL_USE_TLS = True
+
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "table,spellchecker,paste,searchreplace",
+    'theme': "advanced",
+    'relative_urls': False
+}

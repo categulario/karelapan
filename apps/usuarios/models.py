@@ -31,7 +31,7 @@ def default_group():
 
 def default_omi():
     try:
-        return Olimpiada.objects.get_or_create(anio=1512)
+        return Olimpiada.objects.get_or_create(anio=1512)[0]
     except ObjectDoesNotExist:
         o = Olimpiada(anio=datetime.date.today().year)
         o.save()
@@ -145,7 +145,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_active           = models.BooleanField(default=True)
     is_admin            = models.BooleanField(default=False)
     fecha_registro      = models.DateTimeField(auto_now_add=True)
-    problemas           = models.ManyToManyField('evaluador.Problema', through='evaluador.Envio', blank=True, editable=False)
+    problemas           = models.ManyToManyField('evaluador.Problema', through='evaluador.Envio', blank=True, editable=False, null=True)
 
     USERNAME_FIELD = 'correo'
     objects = UsuarioManager()

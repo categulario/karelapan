@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib import messages
@@ -16,6 +17,7 @@ from modules.recaptcha import verifica
 from modules.badges import badgify
 from modules.fechas import diferencia_str
 from django.core.mail import send_mail
+from uuid import uuid1
 
 import datetime
 import uuid
@@ -369,8 +371,11 @@ def registro_view(request):
                         nuevo_usario.set_password(request.POST['contrasenia'])
                         nuevo_usario.save()
                         nuevo_usario.grupo = request.POST.getlist('grupo')
+                        token_confirmacion = str(uuid1())
+                        nuevo_usario.confirm_token = token_confirmacion
                         nuevo_usario.save()
-                        messages.success(request, 'Te has registrado correctamente')
+                        send_mail('Confirma tu correo electrónico', render_to_string('mail/confirma.html'), 'karelapan@gmail.com', [nuevo_usario.correo], fail_silently=False)
+                        messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
                         return HttpResponseRedirect('/')
                     else:
                         messages.error(request, 'Las contraseñas no coinciden')

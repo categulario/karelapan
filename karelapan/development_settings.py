@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'apps.usuarios',
     'apps.sitio',
     'gunicorn',
+    'tinymce',
 )
 
 # A sample logging configuration. The only tangible logging

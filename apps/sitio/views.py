@@ -34,7 +34,7 @@ def index_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
         'noticias'  : Noticia.objects.all()
     }
@@ -46,7 +46,7 @@ def problemas_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True)
     }
     niveles = Nivel.objects.all()
@@ -64,7 +64,7 @@ def problema_detalle(request, nombre_administrativo):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
@@ -123,7 +123,7 @@ def envios_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     data['envios'] = envios
@@ -147,7 +147,7 @@ def concursos_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'concursos' : request.user.concursos_activos(),
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
@@ -164,7 +164,7 @@ def problema_concurso(request, id_concurso, id_problema):
     if problema in concurso.problemas.all() and concurso in request.user.concursos_activos():
         data = {
             'path'              : request.path,
-            'host'              : request.get_host(),
+            'host'              : settings.BASE_URL,
             'concurso'          : concurso,
             'problema'          : problema,
             'avisos'            : Aviso.objects.filter(mostrado=True),
@@ -224,7 +224,7 @@ def concurso_view(request, id_concurso):
 
         data = {
             'path'      : request.path,
-            'host'      : request.get_host(),
+            'host'      : settings.BASE_URL,
             'concurso'  : concurso,
             'avisos'    : Aviso.objects.filter(mostrado=True)
         }
@@ -249,7 +249,7 @@ def concurso_ver_ranking(request, id_concurso):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'concurso'  : concurso,
         'usuarios'  : usuarios,
         'avisos'    : Aviso.objects.filter(mostrado=True)
@@ -264,7 +264,7 @@ def concurso_ver_consultas(request, id_concurso):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'consultas' : Consulta.objects.filter(concurso=concurso),
         'concurso'  : concurso,
         'avisos'    : Aviso.objects.filter(mostrado=True),
@@ -278,11 +278,11 @@ def medallero_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     data['path'] = request.path
-    data['host'] = request.get_host()
+    data['host'] = settings.BASE_URL
     data['avisos'] = Aviso.objects.filter(mostrado=True)
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
@@ -292,7 +292,7 @@ def usuarios_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'usuarios'  : Usuario.objects.all().order_by('-puntaje'),
         'avisos'    : Aviso.objects.filter(mostrado=True)
     }
@@ -307,7 +307,7 @@ def usuario_view(request, id_usuario):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     data['usuario'] = Usuario.objects.get(pk=id_usuario)
@@ -319,7 +319,7 @@ def wiki_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     return render_to_response('wiki.html', data, context_instance=RequestContext(request))
@@ -330,7 +330,7 @@ def ayuda_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     return render_to_response('ayuda.html', data, context_instance=RequestContext(request))
@@ -341,7 +341,7 @@ def privacidad_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     return render_to_response('privacidad.html', data, context_instance=RequestContext(request))
@@ -353,7 +353,7 @@ def registro_view(request):
             'CA'        : settings.ADMINS[0][1],
             'FB'        : settings.FACEBOOK,
             'path'      : request.path,
-            'host'      : request.get_host(),
+            'host'      : settings.BASE_URL,
             'avisos'    : Aviso.objects.filter(mostrado=True)
         }
         data['js'] = ['js/jquery-ui.js', 'js/registro.js']
@@ -395,7 +395,7 @@ def perfil_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     data['usuario'] = request.user
@@ -430,7 +430,7 @@ def mis_soluciones_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     data['envios'] = envios
@@ -443,7 +443,7 @@ def faqs_view(request):
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK,
         'path'      : request.path,
-        'host'      : request.get_host(),
+        'host'      : settings.BASE_URL,
         'avisos'    : Aviso.objects.filter(mostrado=True),
     }
     data['preguntas'] = PreguntaFrecuente.objects.filter(mostrado=True)

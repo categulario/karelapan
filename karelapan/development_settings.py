@@ -163,6 +163,7 @@ LOGGING = {
 
 GOOGLE_ANALYTHICS = False
 FACEBOOK = False
+BASE_URL = 'http://karelapan.covi.org.mx'
 
 MESSAGE_TAGS = {
     50: 'problem_debug'

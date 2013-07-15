@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from django.db import models
 from django.core.exceptions import ValidationError
+from tinymce.models import HTMLField
 import json
 import os
 
@@ -80,8 +81,8 @@ class Problema(models.Model):
     karel"""
     nombre                  = models.CharField(max_length=140, unique=True)
     nombre_administrativo   = models.CharField(max_length=140, unique=True)
-    descripcion             = models.TextField()
-    problema                = models.TextField()
+    descripcion             = HTMLField()
+    problema                = HTMLField()
     agradecimiento          = models.TextField(blank=True)
     veces_resuelto          = models.IntegerField(default=0)
     veces_intentado         = models.IntegerField(default=0)

@@ -11,4 +11,5 @@ karel
 manage.py
 gconfig.py
 settings.py
+assets/tiny_mce/*
 *~

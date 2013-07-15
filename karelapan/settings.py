@@ -173,7 +173,7 @@ LOGIN_URL = '/usuarios'
 RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
 RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
 
-RAIZ_CODIGOS = os.path.normpath(os.path.join(os.path.dirname(__file__),'../codigos/'))
+RAIZ_CODIGOS = os.path.normpath(os.path.join(os.path.dirname(__file__),'../codigos/'))+'/'
 
 #Cosas del demonio evaluador de karel
 #Ruta absoluta al archivo del registro

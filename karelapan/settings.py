@@ -109,7 +109,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'karelapan.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'karelapan.wsgi.application'
+WSGI_APPLICATION = 'wsgi.app'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__),'../templates'),

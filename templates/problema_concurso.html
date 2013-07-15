@@ -64,9 +64,17 @@
       <input type="hidden" name="id_concurso" value="{{ concurso.id }}" id="id_concurso">
     </h3>
     <small><a href="{% url 'apps.sitio.views.concurso_view' concurso.id %}">Volver a la lista de problemas</a></small><br><br>
-    <p>{{ problema.descripcion }}</p>
+    <p>
+      {% autoescape off %}
+        {{ problema.descripcion }}
+      {% endautoescape %}
+    </p>
     <h4>Problema</h4>
-    <p>{{ problema.problema }}</p>
+    <p>
+      {% autoescape off %}
+        {{ problema.problema }}
+      {% endautoescape %}
+    </p>
     <h4>Consideraciones</h4>
     <p>
       <ul>

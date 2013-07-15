@@ -110,9 +110,17 @@
     </div>
     <h3>{{ problema.nombre }}<input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema"></h3>
     <small><a href="/problemas">Volver a la lista de problemas</a></small><br><br>
-    <p>{{ problema.descripcion }}</p>
+    <p>
+      {% autoescape off %}
+        {{ problema.descripcion }}
+      {% endautoescape %}
+    </p>
     <h4>Problema</h4>
-    <p>{{ problema.problema }}</p>
+    <p>
+      {% autoescape off %}
+        {{ problema.problema }}
+      {% endautoescape %}
+    </p>
     <h4>Consideraciones</h4>
     <p>
       <ul>

@@ -9,4 +9,6 @@ media/*
 static/*
 karel
 manage.py
+gconfig.py
+settings.py
 *~

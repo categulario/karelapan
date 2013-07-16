@@ -142,8 +142,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     grupo               = models.ManyToManyField(Grupo, default=default_group)
     ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi)
 
-    is_active           = models.BooleanField(default=True)
+    is_active           = models.BooleanField(default=False)
     is_admin            = models.BooleanField(default=False)
+    confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
     fecha_registro      = models.DateTimeField(auto_now_add=True)
     problemas           = models.ManyToManyField('evaluador.Problema', through='evaluador.Envio', blank=True, editable=False, null=True)
 

@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.contrib import messages
@@ -15,7 +16,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from modules.recaptcha import verifica
 from modules.badges import badgify
 from modules.fechas import diferencia_str
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+from uuid import uuid1
 
 import datetime
 import uuid
@@ -30,25 +32,12 @@ def sube_archivo_codigo(archivo_subido):
 
 def index_view(request):
     data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
         'noticias'  : Noticia.objects.all()
     }
     return render_to_response('inicio.html', data, context_instance=RequestContext(request))
 
 def problemas_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True)
-    }
+    data = {}
     niveles = Nivel.objects.all()
     for nivel in niveles:
         nivel.problemas = nivel.problema_set.all()
@@ -59,14 +48,7 @@ def problemas_view(request):
     return render_to_response('problemas.html', data, context_instance=RequestContext(request))
 
 def problema_detalle(request, nombre_administrativo):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
     if request.method == 'POST': #Recibimos un envío
         if request.user.is_authenticated():
@@ -118,14 +100,7 @@ def envios_view(request):
     except EmptyPage:
         envios = paginator.page(paginator.num_pages)
 
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     data['envios'] = envios
     data['js'] = ['js/envios.js']
     return render_to_response('envios.html', data, context_instance=RequestContext(request))
@@ -143,13 +118,7 @@ def concursos_view(request):
     except EmptyPage:
         concursos = paginator.page(paginator.num_pages)
     data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'concursos' : request.user.concursos_activos(),
-        'avisos'    : Aviso.objects.filter(mostrado=True),
+        'concursos' : request.user.concursos_activos()
     }
     if request.user.has_perm('evaluador.puede_ver_ranking'):
         data['concursos_todos'] = concursos
@@ -163,11 +132,8 @@ def problema_concurso(request, id_concurso, id_problema):
     problema = get_object_or_404(Problema, pk=id_problema)
     if problema in concurso.problemas.all() and concurso in request.user.concursos_activos():
         data = {
-            'path'              : request.path,
-            'host'              : settings.BASE_URL,
             'concurso'          : concurso,
             'problema'          : problema,
-            'avisos'            : Aviso.objects.filter(mostrado=True),
             'mejor_puntaje'     : request.user.mejor_puntaje(problema, concurso),
             'primer_puntaje'    : request.user.primer_puntaje(problema, concurso),
             'intentos'          : request.user.intentos(problema, concurso),
@@ -223,10 +189,7 @@ def concurso_view(request, id_concurso):
             concurso.lista_problemas.append(problema)
 
         data = {
-            'path'      : request.path,
-            'host'      : settings.BASE_URL,
-            'concurso'  : concurso,
-            'avisos'    : Aviso.objects.filter(mostrado=True)
+            'concurso'  : concurso
         }
         return render_to_response('concurso.html', data, context_instance=RequestContext(request))
     else:
@@ -245,14 +208,8 @@ def concurso_ver_ranking(request, id_concurso):
             usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
         usuarios.append(usuario)
     data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
         'concurso'  : concurso,
-        'usuarios'  : usuarios,
-        'avisos'    : Aviso.objects.filter(mostrado=True)
+        'usuarios'  : usuarios
     }
     return render_to_response('ranking.html', data, context_instance=RequestContext(request))
 
@@ -260,41 +217,19 @@ def concurso_ver_ranking(request, id_concurso):
 def concurso_ver_consultas(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
         'consultas' : Consulta.objects.filter(concurso=concurso),
         'concurso'  : concurso,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
         'js'        : ['js/consultas.js']
     }
     return render_to_response('consultas.html', data, context_instance=RequestContext(request))
 
 def medallero_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
-    data['path'] = request.path
-    data['host'] = settings.BASE_URL
-    data['avisos'] = Aviso.objects.filter(mostrado=True)
+    data = {}
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
 def usuarios_view(request):
     data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'usuarios'  : Usuario.objects.all().order_by('-puntaje'),
-        'avisos'    : Aviso.objects.filter(mostrado=True)
+        'usuarios'  : Usuario.objects.all().order_by('-puntaje')
     }
     if 'next' in request.GET:
         data['next'] = request.GET['next']
@@ -302,60 +237,25 @@ def usuarios_view(request):
 
 @login_required
 def usuario_view(request, id_usuario):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     data['usuario'] = Usuario.objects.get(pk=id_usuario)
     return render_to_response('usuario_ver.html', data, context_instance=RequestContext(request))
 
 def wiki_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     return render_to_response('wiki.html', data, context_instance=RequestContext(request))
 
 def ayuda_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     return render_to_response('ayuda.html', data, context_instance=RequestContext(request))
 
 def privacidad_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     return render_to_response('privacidad.html', data, context_instance=RequestContext(request))
 
 def registro_view(request):
     if not request.user.is_authenticated():
-        data = {
-            'GA'        : settings.GOOGLE_ANALYTHICS,
-            'CA'        : settings.ADMINS[0][1],
-            'FB'        : settings.FACEBOOK,
-            'path'      : request.path,
-            'host'      : settings.BASE_URL,
-            'avisos'    : Aviso.objects.filter(mostrado=True)
-        }
+        data = {}
         data['js'] = ['js/jquery-ui.js', 'js/registro.js']
         data['css'] = ['css/ui/jquery-ui.css']
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
@@ -369,8 +269,22 @@ def registro_view(request):
                         nuevo_usario.set_password(request.POST['contrasenia'])
                         nuevo_usario.save()
                         nuevo_usario.grupo = request.POST.getlist('grupo')
+                        token_confirmacion = str(uuid1())
+                        nuevo_usario.confirm_token = token_confirmacion
                         nuevo_usario.save()
-                        messages.success(request, 'Te has registrado correctamente')
+                        data = {
+                            'token': token_confirmacion,
+                            'correo': nuevo_usario.correo
+                        }
+                        msg = EmailMessage(
+                            'Confirma tu correo electrónico',
+                            render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
+                            'Karelapan <karelapan@gmail.com>',
+                            [nuevo_usario.correo]
+                        )
+                        msg.content_subtype = "html"  # Main content is now text/html
+                        msg.send()
+                        messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
                         return HttpResponseRedirect('/')
                     else:
                         messages.error(request, 'Las contraseñas no coinciden')
@@ -390,14 +304,7 @@ def registro_view(request):
 
 @login_required
 def perfil_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     data['usuario'] = request.user
     data['asesorados'] = Usuario.objects.filter(asesor=request.user)
     if request.method == 'POST':
@@ -425,27 +332,13 @@ def mis_soluciones_view(request):
     except EmptyPage:
         envios = paginator.page(paginator.num_pages)
 
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     data['envios'] = envios
     data['js'] = ['js/envios.js']
     return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
 
 def faqs_view(request):
-    data = {
-        'GA'        : settings.GOOGLE_ANALYTHICS,
-        'CA'        : settings.ADMINS[0][1],
-        'FB'        : settings.FACEBOOK,
-        'path'      : request.path,
-        'host'      : settings.BASE_URL,
-        'avisos'    : Aviso.objects.filter(mostrado=True),
-    }
+    data = {}
     data['preguntas'] = PreguntaFrecuente.objects.filter(mostrado=True)
     return render_to_response('faqs.html', data, context_instance=RequestContext(request))
 
@@ -520,3 +413,23 @@ def baja(request):
     request.user.delete()
     messages.warning(request, 'Chau, esperamos verte pronto')
     return HttpResponseRedirect('/')
+
+def confirma_correo(request, correo, token):
+    """Confirma el correo electrónico de un usuario"""
+    usuario = get_object_or_404(Usuario, correo=correo, confirm_token=token)
+    usuario.is_active = True
+    usuario.confirm_token = None
+    usuario.save()
+    data = {
+        'usuario': usuario,
+        'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
+    }
+    messages.success(request, 'Has verificado tu correo electrónico con éxito')
+    return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
+
+def test(request):
+    """Confirma el correo electrónico de un usuario"""
+    data = {
+        'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
+    }
+    return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))

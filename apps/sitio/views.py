@@ -16,7 +16,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from modules.recaptcha import verifica
 from modules.badges import badgify
 from modules.fechas import diferencia_str
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from uuid import uuid1
 
 import datetime
@@ -272,7 +272,18 @@ def registro_view(request):
                         token_confirmacion = str(uuid1())
                         nuevo_usario.confirm_token = token_confirmacion
                         nuevo_usario.save()
-                        send_mail('Confirma tu correo electrónico', render_to_string('mail/confirma.html'), 'karelapan@gmail.com', [nuevo_usario.correo], fail_silently=False)
+                        data = {
+                            'token': token_confirmacion,
+                            'correo': nuevo_usario.correo
+                        }
+                        msg = EmailMessage(
+                            'Confirma tu correo electrónico',
+                            render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
+                            'Karelapan <karelapan@gmail.com>',
+                            [nuevo_usario.correo]
+                        )
+                        msg.content_subtype = "html"  # Main content is now text/html
+                        msg.send()
                         messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
                         return HttpResponseRedirect('/')
                     else:
@@ -402,3 +413,23 @@ def baja(request):
     request.user.delete()
     messages.warning(request, 'Chau, esperamos verte pronto')
     return HttpResponseRedirect('/')
+
+def confirma_correo(request, correo, token):
+    """Confirma el correo electrónico de un usuario"""
+    usuario = get_object_or_404(Usuario, correo=correo, confirm_token=token)
+    usuario.is_active = True
+    usuario.confirm_token = None
+    usuario.save()
+    data = {
+        'usuario': usuario,
+        'js': ['js/mundo.js', 'js/bienvenida.js']
+    }
+    messages.success(request, 'Has verificado tu correo electrónico con éxito')
+    return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
+
+def test(request):
+    """Confirma el correo electrónico de un usuario"""
+    data = {
+        'js': ['js/mundo.js', 'js/bienvenida.js']
+    }
+    return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))

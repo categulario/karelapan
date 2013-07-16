@@ -27,4 +27,6 @@ urlpatterns = patterns('apps.sitio.views',
     url(r'^auth/change_pass_internal/$', 'internal_change_pass'),
     url(r'^baja/$', 'baja'),
     url(r'^problemas/feed/$', UltimosProblemas()),
+    url(r'^verifica/(?P<correo>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})/token/(?P<token>[a-z0-9-]+)/', 'confirma_correo'),
+    url(r'^test/', 'test')
 )

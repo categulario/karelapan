@@ -2,13 +2,13 @@
 {% block titulo %}Registro en Karelapan{% endblock %}
 {% block contenido %}
   <td class="w580" width="580">
-    <p class="article-title" align=
-    "left">Debes confirmar tu dirección de correo electrónico<br></p>
+    <p class="article-title" align="left">
+      Debes confirmar tu dirección de correo electrónico
+    </p>
 
-    <div class="article-content"
-    align="left">
+    <div class="article-content" align="left">
       <p>Por favor has click en el siguiente enlace para confirmar tu correo electrónico, o copia y pega la dirección en el navegador</p>
-      <p><a href="{{ url_confirm }}"></a></p>
+      <p><a href="http://{{ host }}{% url 'apps.sitio.views.confirma_correo' correo token %}">http://{{ host }}{% url 'apps.sitio.views.confirma_correo' correo token %}</a></p>
     </div>
   </td>
 {% endblock %}

@@ -422,7 +422,7 @@ def confirma_correo(request, correo, token):
     usuario.save()
     data = {
         'usuario': usuario,
-        'js': ['js/mundo.js', 'js/bienvenida.js']
+        'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
     }
     messages.success(request, 'Has verificado tu correo electrónico con éxito')
     return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
@@ -430,6 +430,6 @@ def confirma_correo(request, correo, token):
 def test(request):
     """Confirma el correo electrónico de un usuario"""
     data = {
-        'js': ['js/mundo.js', 'js/bienvenida.js']
+        'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
     }
     return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))

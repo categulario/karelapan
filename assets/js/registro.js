@@ -34,7 +34,8 @@ $(document).ready(function(){
     });
     $("#id_grado_actual").popover({
         'trigger': 'focus',
-        'content': '¿Que nivel estás estudiando actualmente?'
+        'title': '¿Que nivel estás estudiando actualmente?',
+        'content': 'O a qué nivel estás por pasar si es el caso'
     });
     $("#id_subsistema").popover({
         'trigger': 'focus',

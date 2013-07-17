@@ -27,7 +27,7 @@ class Olimpiada(models.Model):
         ordering = ['anio']
 
 def default_group():
-    return [Grupo.objects.get_or_create(nombre='usuarios', descripcion='Usuarios generales del sistema', elegible=True)[0]]
+    return [Grupo.objects.get_or_create(nombre='usuarios', elegible=True)[0]]
 
 def default_omi():
     try:

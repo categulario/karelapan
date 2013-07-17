@@ -1,0 +1,46 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span3"></div>
+  <div class="span6">
+    <h4>&iexcl;Diantres! &iquest;Olvidaste tu contrase&ntilde;a eh?</h4>
+    <p>Descuida, para eso hay gente perdiendo valiosas horas de sue&ntilde;o, dise&ntilde;ando un sistema que te permita recuperarla con un par de clicks, pero por favor, que no se repita... no perder&eacute; todas mis horas de sue&ntilde;o</p>
+    <form class="form-horizontal" method="post" action="./">
+      {% csrf_token %}
+      <div class="control-group">
+        <label class="control-label" for="correo">Correo *</label>
+        <div class="controls">
+          <input type="text" id="correo" name="correo" placeholder="tu@correo.com">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="captcha">&iquest;Eres un robot? *</label>
+        <div class="controls">
+            <script type="text/javascript">
+            var RecaptchaOptions = {
+              theme : 'clean'
+            };
+            </script>
+          <script type="text/javascript"
+             src="http://www.google.com/recaptcha/api/challenge?k={{ RECAPTCHA_PUBLIC_KEY }}">
+          </script>
+          <noscript>
+             <iframe src="http://www.google.com/recaptcha/api/noscript?k={{ RECAPTCHA_PUBLIC_KEY }}"
+                 height="300" width="500" frameborder="0"></iframe><br>
+             <textarea name="recaptcha_challenge_field" rows="3" cols="40">
+             </textarea>
+             <input type="hidden" name="recaptcha_response_field"
+                 value="manual_challenge">
+          </noscript>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-large btn-info">Recuperar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="span3"></div>
+{% endblock %}

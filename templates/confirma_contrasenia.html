@@ -1,0 +1,31 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span2"></div>
+  <div class="span8">
+    <h3>Hola {{ usuario.nombre }}</h3>
+    <p>A continuación puedes escribir una nueva contraseña que usarás para iniciar sesión en Karelapan</p>
+    <form class="form-horizontal" method="post" action="./">
+      {% csrf_token %}
+      <div class="control-group">
+        <label class="control-label" for="pass">Nueva contraseña *</label>
+        <div class="controls">
+          <input type="password" id="pass" name="pass" placeholder="123pase">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="pass-repeat">Escribir de nuevo *</label>
+        <div class="controls">
+          <input type="password" id="pass-repeat" name="pass-repeat" placeholder="123pase">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-large btn-info">Establecer</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="span2"></div>
+{% endblock %}

@@ -429,6 +429,61 @@ def confirma_correo(request, correo, token):
     messages.success(request, 'Has verificado tu correo electrónico con éxito')
     return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
 
+def recuperar_contrasenia(request):
+    """Muestra la pantalla de recuperación de contraseña"""
+    if not request.user.is_authenticated():
+        data = {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY}
+        if request.method == 'POST':
+            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
+            if respuesta == True:
+                usuario = get_object_or_404(Usuario, correo=request.POST.get('correo'))
+                token_confirmacion = str(uuid1())
+                usuario.confirm_token = token_confirmacion
+                usuario.save()
+                dat = {
+                    'token': token_confirmacion,
+                    'correo': usuario.correo
+                }
+                msg = EmailMessage(
+                    'Recuperación de contraseña',
+                    render_to_string('mail/recupera.html', dat, context_instance=RequestContext(request)),
+                    'Karelapan <karelapan@gmail.com>',
+                    [usuario.correo]
+                )
+                msg.content_subtype = "html"  # Main content is now text/html
+                msg.send()
+                messages.success(request, 'Se ha enviado un enlace a tu correo electrónico para recuperar la contraseña')
+            else:
+                messages.error(request, 'Recaptcha dice que eres un robot: %s'%(respuesta))
+            return render_to_response('recuperar_contrasenia.html', data, context_instance=RequestContext(request))
+        else:
+            return render_to_response('recuperar_contrasenia.html', data, context_instance=RequestContext(request))
+    else:
+        messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo perdiste tu contraseña?')
+        return HttpResponseRedirect('/')
+
+def confirma_recuperacion(request, correo, token):
+    """Muestra el diálogo de recuperar contraseña"""
+    if not request.user.is_authenticated():
+        data = {
+            'usuario': get_object_or_404(Usuario, correo=correo, confirm_token=token)
+        }
+        if request.method == 'POST':
+            contrasenia = request.POST.get('pass')
+            contrasenia_confirmar = request.POST.get('pass-repeat')
+            if contrasenia == contrasenia_confirmar and contrasenia != '':
+                data['usuario'].set_password(contrasenia)
+                data['usuario'].confirm_token = None
+                data['usuario'].save()
+                messages.success(request, '¡Ya tienes nueva contraseña!')
+                return HttpResponseRedirect('/')
+            else:
+                messages.error(request, 'Las contraseñas no coinciden o están vacías')
+        return render_to_response('confirma_contrasenia.html', data, context_instance=RequestContext(request))
+    else:
+        messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo perdiste tu contraseña?')
+        return HttpResponseRedirect('/')
+
 def test(request):
     """Confirma el correo electrónico de un usuario"""
     data = {

@@ -138,7 +138,8 @@ class Concurso(models.Model):
     activo              = models.BooleanField(default=True)
     autor               = models.ForeignKey('usuarios.Usuario')
     problemas           = models.ManyToManyField(Problema)
-    grupos              = models.ManyToManyField('usuarios.Grupo')
+    grupos              = models.ManyToManyField('usuarios.Grupo', related_name='+')
+    administradores     = models.ForeignKey('usuarios.Grupo', related_name='+')
     duracion_preguntas  = models.IntegerField(default=90, help_text="La duración en minutos del periodo en que pueden hacer preguntas los concursantes a partir del inicio del concurso")
     ranking_publico     = models.BooleanField(default=False)
 
@@ -157,9 +158,10 @@ class Concurso(models.Model):
 
 class Participacion(models.Model):
     """Maneja la participación de un usuario en un concurso"""
-    usuario     = models.ForeignKey('usuarios.Usuario')
-    concurso    = models.ForeignKey(Concurso)
-    puntaje     = models.IntegerField(default=0)
+    usuario         = models.ForeignKey('usuarios.Usuario')
+    concurso        = models.ForeignKey(Concurso)
+    puntaje         = models.IntegerField(default=0)
+    hora_entrada    = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'participaciones'

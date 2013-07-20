@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
 from django.db import models
-from apps.usuarios.models import Usuario
 
 class Noticia(models.Model):
     titulo      = models.CharField(max_length=140)
     contenido   = models.TextField()
-    autor       = models.ForeignKey(Usuario)
+    autor       = models.ForeignKey('usuarios.Usuario')
     fecha       = models.DateTimeField(auto_now_add=True)
     pegajoso    = models.BooleanField(default=False)
 

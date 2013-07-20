@@ -306,7 +306,7 @@ def registro_view(request):
 def perfil_view(request):
     data = {}
     data['usuario'] = request.user
-    data['asesorados'] = Usuario.objects.filter(asesor=request.user)
+    data['asesorados'] = Usuario.objects.filter(perfilusuario__asesor=request.user)
     if request.method == 'POST':
         formulario = PerfilForm(request.POST, instance=request.user)
         if formulario.is_valid():

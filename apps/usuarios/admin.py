@@ -16,5 +16,5 @@ class GrupoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Grupo, GrupoAdmin)
-admin.site.register(Usuario, UsuarioAdmin)
+#admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Olimpiada)

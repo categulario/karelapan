@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from django.contrib.auth.models import AbstractBaseUser , BaseUserManager, PermissionsMixin, Group
+from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from apps.evaluador.models import Envio, Concurso
@@ -37,27 +37,9 @@ def default_omi():
         o.save()
         return o
 
-class UsuarioManager(BaseUserManager):
-    def create_user(self, correo, password=None):
-        if not correo or type(correo) != str:
-            raise ValueError('Es necesario el correo')
 
-        user = self.model(correo=correo)
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, correo, password):
-        user = self.create_user(correo, password=password)
-        user.is_admin = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
-
-
-class Usuario(AbstractBaseUser, PermissionsMixin):
-    correo              = models.EmailField(max_length=254, unique=True, db_index=True)
+class PerfilUsuario(models.Model):
+    usuario             = models.OneToOneField(User)
     nombre              = models.CharField(max_length=120)
     appat               = models.CharField(max_length=120, verbose_name='apellido paterno')
     apmat               = models.CharField(max_length=120, verbose_name='apellido materno')
@@ -134,22 +116,20 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         ('otro', 'otro')
     ), default='2 bachillerato')
     fecha_nacimiento    = models.DateField(null=True)
-    asesor              = models.ForeignKey('self', null=True, blank=True)
+    asesor              = models.ForeignKey('usuarios.Usuario', null=True, blank=True, related_name='asesorados')
     nombre_escuela      = models.CharField(max_length='140', blank=True)
     problemas_resueltos = models.IntegerField(default=0)
     puntaje             = models.IntegerField(default=0)
     descripcion         = models.TextField()
-    grupo               = models.ManyToManyField(Grupo, default=default_group)
+    grupos              = models.ManyToManyField(Grupo, default=default_group)
     ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi)
 
-    is_active           = models.BooleanField(default=False)
-    is_admin            = models.BooleanField(default=False)
     confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
-    fecha_registro      = models.DateTimeField(auto_now_add=True)
-    problemas           = models.ManyToManyField('evaluador.Problema', through='evaluador.Envio', blank=True, editable=False, null=True)
 
-    USERNAME_FIELD = 'correo'
-    objects = UsuarioManager()
+class Usuario(User):
+    class Meta:
+        proxy = True
+        ordering = ('perfilusuario__nombre', 'perfilusuario__appat', 'perfilusuario__apmat')
 
     def gravatar(self):
         return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.correo).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
@@ -230,17 +210,11 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return ', '.join([str(g) for g in self.grupo.all()])
 
     def get_full_name(self):
-        return "%s %s %s"%(self.nombre, self.appat, self.apmat)
+        return "%s %s %s"%(self.perfil_usuario.nombre, self.perfil_usuario.appat, self.perfil_usuario.apmat)
 
     def get_short_name(self):
-        return self.nombre
-
-    @property
-    def is_staff(self):
-        return self.is_admin
+        return self.perfil_usuario.nombre
 
     def __unicode__(self):
-        return "%s %s %s"%(self.nombre, self.appat, self.apmat)
+        return "%s %s %s"%(self.perfil_usuario.nombre, self.perfil_usuario.appat, self.perfil_usuario.apmat)
 
-    class Meta:
-        ordering = ('nombre', 'appat', 'apmat')

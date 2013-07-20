@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="990"
+   height="765"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="aviso_migracion.svg"
+   inkscape:export-filename="/home/abraham/Desarrollo/django/KarelapanDjango/src/aviso_migracion.png"
+   inkscape:export-xdpi="120"
+   inkscape:export-ydpi="120">
+  <defs
+     id="defs4">
+    <filter
+       height="1.3466884"
+       y="-0.17334418"
+       width="1.3028961"
+       x="-0.15144807"
+       id="filter3913"
+       inkscape:collect="always"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3915"
+         stdDeviation="1.0414379"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       id="filter3909"
+       inkscape:collect="always"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3911"
+         stdDeviation="0.55681314"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       id="filter3852"
+       inkscape:collect="always"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3854"
+         stdDeviation="0.78812968"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3848">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="11.458868"
+         id="feGaussianBlur3850" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="410.92444"
+     inkscape:cy="348.57143"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="694"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-287.36218)">
+    <path
+       style="fill:#666666;fill-opacity:1;stroke:none;filter:url(#filter3848)"
+       d="m 60.60601,312.93547 c -21.26573,0 -38.375,17.10927 -38.375,38.375 l 0,642.46874 c 0,21.26569 17.10927,38.37499 38.375,38.37499 l 860.65625,0 c 21.26573,0 38.375,-17.1093 38.375,-38.37499 l 0,-642.46874 c 0,-21.26573 -17.10927,-38.375 -38.375,-38.375 l -860.65625,0 z m 36.40625,34.3125 796,0 c 21.26573,0 38.375,17.14052 38.375,38.40625 l 0,575.78124 c 0,21.26573 -17.10927,38.375 -38.375,38.375 l -796,0 c -21.26573,0 -38.375,-17.10927 -38.375,-38.375 l 0,-575.78124 c 0,-21.26573 17.10927,-38.40625 38.375,-38.40625 z"
+       id="rect3027-0"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ececec;fill-opacity:1;stroke:none"
+       d="m 62.58439,312.95435 c -21.26573,0 -38.375,17.10927 -38.375,38.375 l 0,642.46875 c 0,21.2657 17.10927,38.375 38.375,38.375 l 860.65625,0 c 21.26573,0 38.375,-17.1093 38.375,-38.375 l 0,-642.46875 c 0,-21.26573 -17.10927,-38.375 -38.375,-38.375 l -860.65625,0 z m 36.40625,34.3125 796,0 c 21.26573,0 38.375,17.14052 38.375,38.40625 l 0,575.78125 c 0,21.26573 -17.10927,38.375 -38.375,38.375 l -796,0 c -21.26573,0 -38.375,-17.10927 -38.375,-38.375 l 0,-575.78125 c 0,-21.26573 17.10927,-38.40625 38.375,-38.40625 z"
+       id="rect3027"
+       inkscape:connector-curvature="0" />
+    <g
+       transform="matrix(0.62843519,0,0,0.62843519,271.07229,-202.47552)"
+       id="layer1-9"
+       inkscape:label="Capa 1">
+      <g
+         transform="matrix(2.9374726,0,0,2.9374726,-256.41188,-1636.1654)"
+         id="g3662">
+        <text
+           xml:space="preserve"
+           style="font-size:73.063591px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu Mono;-inkscape-font-specification:Ubuntu Mono Bold"
+           x="87.986526"
+           y="913.32257"
+           id="text4457"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4459"
+             x="87.986526"
+             y="913.32257">K</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-size:73.063591px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.41947566;fill:#dad9db;fill-opacity:1;stroke:none;filter:url(#filter3852);font-family:Ubuntu Mono;-inkscape-font-specification:Ubuntu Mono Bold"
+           x="87.672897"
+           y="913.50012"
+           id="text4457-6"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4459-8"
+             x="87.672897"
+             y="913.50012">K</tspan></text>
+      </g>
+      <g
+         transform="matrix(2.4042685,0,0,2.4042685,367.7922,-1018.2994)"
+         id="g3668">
+        <path
+           style="fill:#336c9c;fill-opacity:1;stroke:none"
+           d="m 156.02889,809.92616 5.47987,0.4376 0.66976,19.8323 1.69629,16.55287 5.2251,-0.4155 0.6009,-21.06747 0.0557,-14.2462 5.47988,0.4375 c -2.40158,-3.9167 -5.30212,-7.2123 -8.94614,-9.5822 -4.24793,1.2557 -7.30325,4.5697 -10.26138,8.0511 z"
+           id="rect5347-1-0-89-1"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccccccccc" />
+        <path
+           sodipodi:type="arc"
+           style="fill:#336c9c;fill-opacity:1;stroke:none"
+           id="path2993"
+           sodipodi:cx="50.292801"
+           sodipodi:cy="61.481018"
+           sodipodi:rx="8.2518415"
+           sodipodi:ry="7.2095032"
+           d="m 58.544642,61.481018 c 0,3.981699 -3.694475,7.209503 -8.251841,7.209503 -4.557366,0 -8.251842,-3.227804 -8.251842,-7.209503 0,-3.981699 3.694476,-7.209503 8.251842,-7.209503 4.557366,0 8.251841,3.227804 8.251841,7.209503 z"
+           transform="matrix(0.5157895,0,0,0.55421686,141.09514,820.04626)" />
+        <path
+           style="opacity:0.32835209;fill:#f4f8f8;fill-opacity:1;stroke:none;filter:url(#filter3909)"
+           d="m 156.05699,810.03496 5.47987,0.4376 0.66977,19.8323 1.69629,16.55287 5.2251,-0.4155 0.6009,-21.06747 0.0557,-14.2462 5.47987,0.4375 c -2.40158,-3.9168 -5.30212,-7.2123 -8.94614,-9.5822 -4.24792,1.2556 -7.30324,4.5696 -10.26138,8.0511 z"
+           id="rect5347-1-0-89-1-8"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccccccccc" />
+        <path
+           sodipodi:type="arc"
+           style="opacity:0.32835209;fill:#f4f8f8;fill-opacity:1;stroke:none;filter:url(#filter3913)"
+           id="path2993-5"
+           sodipodi:cx="50.292801"
+           sodipodi:cy="61.481018"
+           sodipodi:rx="8.2518415"
+           sodipodi:ry="7.2095032"
+           d="m 58.544642,61.481018 c 0,3.981699 -3.694475,7.209503 -8.251841,7.209503 -4.557366,0 -8.251842,-3.227804 -8.251842,-7.209503 0,-3.981699 3.694476,-7.209503 8.251842,-7.209503 4.557366,0 8.251841,3.227804 8.251841,7.209503 z"
+           transform="matrix(0.5157895,0,0,0.55421686,141.12324,820.15506)" />
+      </g>
+      <text
+         sodipodi:linespacing="125%"
+         id="text4457-7"
+         y="1021.4556"
+         x="101.70937"
+         style="font-size:159.36853027px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;opacity:0.86142321;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu Mono;-inkscape-font-specification:Ubuntu Mono"
+         xml:space="preserve"><tspan
+           y="1021.4556"
+           x="101.70937"
+           id="tspan4459-7"
+           sodipodi:role="line">arelapan</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:41.0714035px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+       x="88.924149"
+       y="513.93903"
+       id="text3852"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3854"
+         x="88.924149"
+         y="513.93903">Karelapan está siendo migrado a una nueva</tspan><tspan
+         sodipodi:role="line"
+         x="88.924149"
+         y="565.27826"
+         id="tspan3858">plataforma, esto será cosa de un par de días.</tspan><tspan
+         sodipodi:role="line"
+         x="88.924149"
+         y="616.61755"
+         id="tspan3862" /><tspan
+         sodipodi:role="line"
+         x="88.924149"
+         y="667.95679"
+         id="tspan3868">Mientras puedes salir a caminar.</tspan></text>
+    <path
+       sodipodi:nodetypes="cccccccc"
+       inkscape:connector-curvature="0"
+       id="rect5347-4"
+       d="m 498.09513,909.38512 0.0443,-63.89442 -125.17453,-1.00926 0.0405,-96.17658 125.23243,1.02032 0.0443,-63.89442 102.66452,112.58694 z"
+       style="fill:#7199ba;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu Mono;-inkscape-font-specification:Ubuntu Mono Italic"
+       x="94.954353"
+       y="965.48907"
+       id="text3902"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3904"
+         x="94.954353"
+         y="965.48907">Atte: Karel</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:27.47451591px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none;font-family:Sans"
+       x="499.76761"
+       y="970.11475"
+       id="text3906"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3908"
+         x="499.76761"
+         y="970.11475"
+         style="fill:#000080">a.wonderful.code@gmail.com</tspan></text>
+  </g>
+</svg>

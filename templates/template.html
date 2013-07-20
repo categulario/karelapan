@@ -88,9 +88,9 @@
                     </li>
                   </ul>
                   {% if not user.is_authenticated %}
-                    <form class="navbar-form pull-right" method="post" action="/auth/login/">
+                    <form class="navbar-form pull-right" method="post" action="{% url 'apps.sitio.views.login' %}">
                       {% csrf_token %}
-                      <input type="text" class="span2" placeholder="tu@correo.com" name="correo">
+                      <input type="text" class="span2" placeholder="usuario" name="correo">
                       <input type="password" class="span2" placeholder="123pase" name="pass">
                       <input type="hidden" class="span2" name="redirect" value="{{ path }}">
                       <div class="btn-group">
@@ -108,7 +108,7 @@
                     <ul class="nav pull-right">
                       <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                          <strong>Hola {{ user.nombre }}</strong>
+                          <strong>Hola {{ user.perfil.nombre }}</strong>
                           <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">

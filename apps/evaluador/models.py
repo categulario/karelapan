@@ -118,7 +118,7 @@ class Problema(models.Model):
 class Consideracion(models.Model):
     """Cada problema de karel tiene consideraciones que limitan el mundo
     """
-    problema    = models.ForeignKey(Problema)
+    problema    = models.ForeignKey(Problema, related_name='consideraciones')
     texto       = models.CharField(max_length=254)
 
     def __unicode__(self):
@@ -136,7 +136,7 @@ class Concurso(models.Model):
     nombre              = models.CharField(max_length=140)
     descripcion         = models.TextField()
     activo              = models.BooleanField(default=True)
-    autor               = models.ForeignKey('usuarios.Usuario')
+    autor               = models.ForeignKey('usuarios.Usuario', related_name='concursos')
     problemas           = models.ManyToManyField(Problema)
     grupos              = models.ManyToManyField('usuarios.Grupo', related_name='+')
     administradores     = models.ForeignKey('usuarios.Grupo', related_name='+')
@@ -158,10 +158,11 @@ class Concurso(models.Model):
 
 class Participacion(models.Model):
     """Maneja la participación de un usuario en un concurso"""
-    usuario         = models.ForeignKey('usuarios.Usuario')
-    concurso        = models.ForeignKey(Concurso)
+    usuario         = models.ForeignKey('usuarios.Usuario', related_name='participaciones')
+    concurso        = models.ForeignKey(Concurso, related_name='participaciones')
     puntaje         = models.IntegerField(default=0)
     hora_entrada    = models.DateTimeField(auto_now_add=True)
+    primera_ip      = models.IPAddressField()
 
     class Meta:
         verbose_name_plural = 'participaciones'
@@ -170,8 +171,8 @@ class Participacion(models.Model):
 
 class Envio(models.Model):
     """Describe un envío que se va a la cola de evaluación"""
-    usuario             = models.ForeignKey('usuarios.Usuario')
-    problema            = models.ForeignKey(Problema)
+    usuario             = models.ForeignKey('usuarios.Usuario', related_name='envios')
+    problema            = models.ForeignKey(Problema, related_name='+')
     hora                = models.DateTimeField(auto_now_add=True)
     estatus             = models.CharField(max_length=1, choices=(
         ('E', 'Evaluado'),
@@ -188,7 +189,7 @@ class Envio(models.Model):
         ('CASOS_INCOMPLETOS', 'Casos incompletos')
     ), default='OK')
     mensaje             = models.CharField(max_length=250, blank=True)
-    concurso            = models.ForeignKey(Concurso, null=True, blank=True)
+    concurso            = models.ForeignKey(Concurso, null=True, blank=True, related_name='envios')
     ip                  = models.IPAddressField(blank=True, null=True, default='0.0.0.0')
     casos               = models.TextField(validators=[valida_json], blank=True)
 
@@ -212,9 +213,9 @@ class Envio(models.Model):
 class Consulta(models.Model):
     """Un mensaje de aclaración para el usuario en el concurso que esté
     participando"""
-    concurso    = models.ForeignKey(Concurso)
-    problema    = models.ForeignKey(Problema)
-    usuario     = models.ForeignKey('usuarios.Usuario', null=True)
+    concurso    = models.ForeignKey(Concurso, related_name='consultas')
+    problema    = models.ForeignKey(Problema, related_name='consultas')
+    usuario     = models.ForeignKey('usuarios.Usuario', null=True, related_name='consultas')
     mensaje     = models.CharField(max_length=140)
     respuesta   = models.TextField()
     leido       = models.BooleanField(default=False)

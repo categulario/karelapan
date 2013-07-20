@@ -30,8 +30,11 @@ def nombres_escuela(request):
         return HttpResponse('[]', content_type='text/plain')
 
 def descarga_codigo(request, id_envio):
+    """Le ofrece a un usuario la posibilidad de descargar uno de sus
+    códigos enviados"""
     envio = get_object_or_404(Envio, pk=id_envio)
-    if envio.usuario == request.user and request.user.concursos_activos().count() == 0:
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if envio.usuario == usuario and usuario.concursos_activos().count() == 0:
         response = HttpResponse(envio.codigo, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="%s.karel"'%envio.problema.nombre_administrativo
         return response
@@ -39,13 +42,14 @@ def descarga_codigo(request, id_envio):
         return HttpResponse('Forbidden', content_type='text/plain')
 
 def envio(request, id_envio, id_concurso=None):
+    """Ofrece el veredicto de un envío a un usuario"""
     envio = get_object_or_404(Envio, pk=id_envio)
     if id_concurso:
         concurso = get_object_or_404(Concurso, pk=id_concurso)
     else:
         concurso = None
     if envio.usuario == request.user and envio.concurso == concurso:
-        if not concurso and request.user.participa_en_concurso():
+        if not concurso and request.user.participa_en_concurso():#No se cargan veredictos durante el concurso
             return HttpResponse('Forbidden', content_type='text/plain')
         if envio.estatus == 'E':
             resultado = {
@@ -69,11 +73,12 @@ def hacer_consulta(request):
     id_problema = request.POST.get('problema')
     problema    = get_object_or_404(Problema, pk=id_problema)
     mensaje     = request.POST.get('mensaje')
-    if concurso in request.user.concursos_activos() and problema in concurso.problemas.all():
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
         if mensaje != '':
-            if request.user.puede_hacer_consulta(concurso):
-                if Consulta.objects.filter(concurso=concurso, problema=problema, usuario=request.user, leido=False).count() == 0:
-                    consulta = Consulta(concurso=concurso, problema=problema, usuario=request.user, mensaje=request.POST.get('mensaje'), ip=request.META['REMOTE_ADDR'])
+            if usuario.puede_hacer_consulta(concurso):
+                if Consulta.objects.filter(concurso=concurso, problema=problema, usuario=usuario, leido=False).count() == 0:
+                    consulta = Consulta(concurso=concurso, problema=problema, usuario=usuario, mensaje=request.POST.get('mensaje'), ip=request.META['REMOTE_ADDR'])
                     consulta.save()
                     return HttpResponse('ok', content_type='text/plain')
                 else:
@@ -125,8 +130,9 @@ def consultas(request, id_concurso, id_problema):
     """Le da a un usuario sus consultas"""
     concurso    = get_object_or_404(Concurso, pk=id_concurso)
     problema    = get_object_or_404(Problema, pk=id_problema)
-    if concurso in request.user.concursos_activos() and problema in concurso.problemas.all():
-        consultas = Consulta.objects.filter(problema=problema, concurso=concurso, usuario=request.user, leido=True)
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+        consultas = Consulta.objects.filter(problema=problema, concurso=concurso, usuario=usuario, leido=True)
         consulta_list = []
         for consulta in consultas:
             consulta_list.append({
@@ -165,11 +171,12 @@ def ranking_csv(request, id_concurso):
 @csrf_exempt
 @permission_required('evaluador.puede_ver_ranking')
 def aclaracion(request, id_concurso):
+    """Permite hacer una aclaración general"""
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     id_problema = request.POST.get('problema')
     problema = get_object_or_404(Problema, pk=id_problema)
-    if request.POST.get('mensaje') != '' and request.POST.get('respuesta') != '':
-        consulta = Consulta(concurso=concurso, problema=problema, mensaje=request.POST.get('mensaje'), respuesta=request.POST.get('respuesta'), leido=True, ip='127.0.0.1')
+    if request.POST.get('respuesta') != '':
+        consulta = Consulta(concurso=concurso, problema=problema, mensaje='[Aclaración]', respuesta=request.POST.get('respuesta'), leido=True, ip='127.0.0.1')
         consulta.save()
         return HttpResponse('ok', content_type='text/plain')
     else:

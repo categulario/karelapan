@@ -20,7 +20,7 @@
         {% for envio in envios %}
           <tr class="{% ifnotequal envio.estatus 'E' %}info{% else %}{% ifequal envio.resultado 'OK' %}success{% endifequal %}{% ifequal envio.resultado 'CASOS_INCOMPLETOS' %}warning caso-incompleto{% endifequal %}{% ifequal envio.resultado 'ERROR_COMPILACION' %}error{% endifequal %}{% endifnotequal %}">
             <td>{% ifequal envio.estatus 'E' %}<i class="icon-ok" title="Código evaluado"></i>{% else %}{% ifequal envio.estatus 'P' %}<i class="icon-pause" title="Pendiente de evaluación"></i>{% else %}<i class="icon-eye-open" title="Código en evaluación"></i>{% endifequal %}{% endifequal %}</td>
-            <td><a href="{% url 'apps.sitio.views.usuario_view' envio.usuario.id %}" class="preventpropagation">{{ envio.usuario.nombre }}</a></td>
+            <td><a href="{% url 'apps.sitio.views.usuario_view' envio.usuario.username %}" class="preventpropagation">{{ envio.usuario.username }}</a></td>
             <td><a href="{% url 'apps.sitio.views.problema_detalle' envio.problema.nombre_administrativo %}" class="preventpropagation">{{ envio.problema }}</a></td>
             <td>{% ifequal envio.estatus 'E' %}{{ envio.puntaje }}{% endifequal %}</td>
             <td>{% ifequal envio.estatus 'E' %}{{ envio.tiempo_ejecucion }}{% endifequal %}</td>

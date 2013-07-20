@@ -81,35 +81,11 @@
   </div>
   <div class="span8">
     <div id="problem_debug">
-      {% if problem_debug %}
-        <div class="alert alert-info">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          {{ problem_debug }}
-        </div>
-      {% endif %}
     </div>
     <div id="veredict">
-      {% if veredict %}
-        <div class="well well-small">
-          <table class="table">
-            <tr>
-              <th>#</th><th>Terminaci&oacute;n</th><th>Mensaje</th><th>Puntos</th>
-            </tr>
-            {% for caso in veredict %}
-              <tr>
-                <td>{{ forloop.counter }}</td><td>{{ caso.terminacion }}</td><td>{{ caso.mensaje }}</td><td>{{ caso.obtenidos }}/{{ caso.puntos }}</td>
-              </tr>
-            {% endfor %}
-            <tr>
-              <td colspan="3"></td>
-              <td><strong>Total: {{ puntaje }}/{{ total }}</strong></td>
-            </tr>
-          </table>
-        </div>
-      {% endif %}
     </div>
     <h3>{{ problema.nombre }}<input type="hidden" name="id_problema" value="{{ problema.id }}" id="id_problema"></h3>
-    <small><a href="/problemas">Volver a la lista de problemas</a></small><br><br>
+    <small><a href="{% url 'apps.sitio.views.problemas_view' %}">Volver a la lista de problemas</a></small><br><br>
     <p>
       {% autoescape off %}
         {{ problema.descripcion }}
@@ -144,6 +120,8 @@
     {% if problema.agradecimiento %}
       <h4>Agradecimiento</h4>
       <p>{{ problema.agradecimiento }}</p>
+    {% else %}
+      <h4></h4>
     {% endif %}
     {% if user.is_authenticated %}
       <div class="well">
@@ -177,7 +155,7 @@
       </div>
     {% else %}
       <div class="well">
-        <strong>Inicia sesión o <a href="/registro">regístrate</a> para enviar soluciones a este problema</strong>
+        <strong>Inicia sesión o <a href="{% url 'apps.sitio.views.registro_view' %}">regístrate</a> para enviar soluciones a este problema</strong>
       </div>
     {% endif %}
   </div>

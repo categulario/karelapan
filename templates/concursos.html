@@ -44,7 +44,7 @@
             <strong>Problemas</strong>
             <ul>
               {% for problema in concurso.problemas.all %}
-                <li><a href="">{{ problema }}</a></li>
+                <li><a href="{% url 'apps.sitio.views.problema_detalle' problema.nombre_administrativo %}">{{ problema }}</a></li>
               {% endfor %}
             </ul>
           </div>

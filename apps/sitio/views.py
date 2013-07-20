@@ -43,7 +43,7 @@ def problemas_view(request):
         nivel.problemas = nivel.problema_set.all()
         if request.user.is_authenticated():
             for problema in nivel.problemas:
-                problema.mejor_puntaje_usuario = badgify(request.user.mejor_puntaje(problema))
+                problema.mejor_puntaje_usuario = badgify(Usuario.objects.get(pk=request.user.id).mejor_puntaje(problema))
     data['niveles'] = niveles
     return render_to_response('problemas.html', data, context_instance=RequestContext(request))
 
@@ -52,8 +52,8 @@ def problema_detalle(request, nombre_administrativo):
     problema = get_object_or_404(Problema, nombre_administrativo=nombre_administrativo, publico=True)
     if request.method == 'POST': #Recibimos un envío
         if request.user.is_authenticated():
-            if not request.user.participa_en_concurso():
-                usuario = request.user
+            usuario = Usuario.objects.get(pk=request.user.id)
+            if not usuario.participa_en_concurso():
                 archivo_codigo = settings.RAIZ_CODIGOS
                 if 'codigo' in request.FILES:
                     if request.FILES['codigo'].size < 22528:
@@ -79,12 +79,13 @@ def problema_detalle(request, nombre_administrativo):
     data['problema'] = problema
     data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
     if request.user.is_authenticated():
-        data['mejor_puntaje'] = request.user.mejor_puntaje(problema)
-        data['primer_puntaje'] = request.user.primer_puntaje(problema)
-        data['intentos'] = request.user.intentos(problema)
-        data['mejor_tiempo'] = request.user.mejor_tiempo(problema)
-        data['usuarios_resuelto'] = request.user.usuarios_resuelto(problema)
-        data['usuarios_intentado'] = request.user.usuarios_intentado(problema)
+        usuario = Usuario.objects.get(pk=request.user.id)
+        data['mejor_puntaje'] = usuario.mejor_puntaje(problema)
+        data['primer_puntaje'] = usuario.primer_puntaje(problema)
+        data['intentos'] = usuario.intentos(problema)
+        data['mejor_tiempo'] = usuario.mejor_tiempo(problema)
+        data['usuarios_resuelto'] = usuario.usuarios_resuelto(problema)
+        data['usuarios_intentado'] = usuario.usuarios_intentado(problema)
     return render_to_response('problema_detalle.html', data, context_instance=RequestContext(request))
 
 @login_required
@@ -118,7 +119,7 @@ def concursos_view(request):
     except EmptyPage:
         concursos = paginator.page(paginator.num_pages)
     data = {
-        'concursos' : request.user.concursos_activos()
+        'concursos' : Usuario.objects.get(pk=request.user.id).concursos_activos()
     }
     if request.user.has_perm('evaluador.puede_ver_ranking'):
         data['concursos_todos'] = concursos
@@ -130,21 +131,21 @@ def concursos_view(request):
 def problema_concurso(request, id_concurso, id_problema):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     problema = get_object_or_404(Problema, pk=id_problema)
-    if problema in concurso.problemas.all() and concurso in request.user.concursos_activos():
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if problema in concurso.problemas.all() and concurso in usuario.concursos_activos():
         data = {
             'concurso'          : concurso,
             'problema'          : problema,
-            'mejor_puntaje'     : request.user.mejor_puntaje(problema, concurso),
-            'primer_puntaje'    : request.user.primer_puntaje(problema, concurso),
-            'intentos'          : request.user.intentos(problema, concurso),
-            'mejor_tiempo'      : request.user.mejor_tiempo(problema, concurso),
-            'consultas'         : Consulta.objects.filter(usuario=request.user, problema=problema, concurso=concurso, leido=True),
+            'mejor_puntaje'     : usuario.mejor_puntaje(problema, concurso),
+            'primer_puntaje'    : usuario.primer_puntaje(problema, concurso),
+            'intentos'          : usuario.intentos(problema, concurso),
+            'mejor_tiempo'      : usuario.mejor_tiempo(problema, concurso),
+            'consultas'         : Consulta.objects.filter(usuario=usuario, problema=problema, concurso=concurso, leido=True),
             'tiempo_restante_consultas': diferencia_str(concurso.fecha_inicio + datetime.timedelta(minutes=concurso.duracion_preguntas)),
-            'permite_consultas' : request.user.puede_hacer_consulta(concurso),
+            'permite_consultas' : usuario.puede_hacer_consulta(concurso),
             'js'                : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js', 'js/problema_concurso.js']
         }
         if request.method == 'POST': #Recibimos un envío
-            usuario = request.user
             archivo_codigo = settings.RAIZ_CODIGOS
             if 'codigo' in request.FILES:
                 if request.FILES['codigo'].size < 22528:
@@ -169,7 +170,8 @@ def problema_concurso(request, id_concurso, id_problema):
 @login_required
 def concurso_view(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
-    if concurso in request.user.concursos_activos():
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if concurso in usuario.concursos_activos():
         diferencia = concurso.fecha_fin - timezone.now()
         concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
         horas = diferencia.seconds/3600
@@ -179,13 +181,13 @@ def concurso_view(request, id_concurso):
         segundos = diferencia.seconds%60
         concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
 
-        participacion, creado = Participacion.objects.get_or_create(usuario=request.user, concurso=concurso)
+        participacion, creado = Participacion.objects.get_or_create(usuario=usuario, concurso=concurso, primera_ip=request.META['REMOTE_ADDR'])
         if creado:
             messages.success(request, 'Ahora estás participando en este concurso, ¡A darle!')
 
         concurso.lista_problemas = []
         for problema in concurso.problemas.all():
-            problema.mejor_puntaje_usuario = badgify(request.user.mejor_puntaje(problema, concurso))
+            problema.mejor_puntaje_usuario = badgify(usuario.mejor_puntaje(problema, concurso))
             concurso.lista_problemas.append(problema)
 
         data = {
@@ -229,16 +231,16 @@ def medallero_view(request):
 
 def usuarios_view(request):
     data = {
-        'usuarios'  : Usuario.objects.all().order_by('-puntaje')
+        'usuarios'  : Usuario.objects.all().order_by('-perfil__puntaje')
     }
     if 'next' in request.GET:
         data['next'] = request.GET['next']
     return render_to_response('usuarios.html', data, context_instance=RequestContext(request))
 
 @login_required
-def usuario_view(request, id_usuario):
+def usuario_view(request, nombre_usuario):
     data = {}
-    data['usuario'] = Usuario.objects.get(pk=id_usuario)
+    data['usuario'] = get_object_or_404(Usuario, username=nombre_usuario)
     return render_to_response('usuario_ver.html', data, context_instance=RequestContext(request))
 
 def wiki_view(request):
@@ -304,11 +306,13 @@ def registro_view(request):
 
 @login_required
 def perfil_view(request):
-    data = {}
-    data['usuario'] = request.user
-    data['asesorados'] = Usuario.objects.filter(perfilusuario__asesor=request.user)
+    usuario = Usuario.objects.get(pk=request.user.id)
+    data = {
+        'usuario': usuario,
+        'asesorados': Usuario.objects.filter(perfil__asesor=usuario)
+    }
     if request.method == 'POST':
-        formulario = PerfilForm(request.POST, instance=request.user)
+        formulario = PerfilForm(request.POST, instance=usuario)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tus datos han sido actualizados')
@@ -316,7 +320,7 @@ def perfil_view(request):
             messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
         data['formulario'] = formulario
         return render_to_response('perfil.html', data, context_instance=RequestContext(request))
-    data['formulario'] = PerfilForm(instance=request.user)
+    data['formulario'] = PerfilForm(instance=usuario)
     return render_to_response('perfil.html', data, context_instance=RequestContext(request))
 
 @login_required

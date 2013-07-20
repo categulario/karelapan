@@ -10,10 +10,10 @@
         <small><a href="http://es.gravatar.com" target="_blank">cambiar</a></small>
       </div>
       <div class="span10">
-        <h3>{{ usuario }} <small>De {{ usuario.estado }}</small></h3>
-        <p><em><a href="mailto:{{ usuario.correo }}">{{ usuario.correo }}</a></em></p>
-        <p>{{ usuario.descripcion }}</p>
-        <p><small>{% if usuario.asesor %}{% ifequal usuario.asesor.sexo 'M' %}Asesor{% else %}Asesora{% endifequal %}: <a href="{% url 'apps.sitio.views.usuario_view' usuario.asesor.id %}">{{ usuario.asesor }}</a>{% endif %}</small></p>
+        <h3>{{ usuario }} [<em class="text-info">{{ usuario.username }}</em>]<small>De {{ usuario.perfil.estado }}</small></h3>
+        <p><em><a href="mailto:{{ usuario.email }}">{{ usuario.email }}</a></em></p>
+        <p>{{ usuario.perfil.descripcion }}</p>
+        <p><small>{% if usuario.perfil.asesor %}{% ifequal usuario.perfil.asesor.perfil.sexo 'M' %}Asesor{% else %}Asesora{% endifequal %}: <a href="{% url 'apps.sitio.views.usuario_view' usuario.perfil.asesor.username %}">{{ usuario.perfil.asesor }}</a>{% endif %}</small></p>
       </div>
     </div>
 
@@ -162,7 +162,7 @@
               <tbody>
                 {% for alumno in asesorados %}
                   <tr>
-                    <td><a href="{% url 'apps.sitio.views.usuario_view' alumno.id %}"><img src="{{ alumno.gravatar_pequenio }}"> {{ alumno }}</a></td>
+                    <td><a href="{% url 'apps.sitio.views.usuario_view' alumno.username %}"><img src="{{ alumno.gravatar_pequenio }}"> {{ alumno }}</a></td>
                     <td><a href="mailto:{{ alumno.correo }}">{{ alumno.correo }}</a></td>
                     <td>{{ alumno.puntaje }}</td>
                     <td>{{ alumno.problemas_resueltos }}</td>

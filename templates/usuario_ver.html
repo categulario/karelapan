@@ -9,18 +9,18 @@
         <img src="{{ usuario.gravatar }}">
       </div>
       <div class="span10">
-        <h3>{{ usuario }} <small>De {{ usuario.estado }}</small></h3>
-        <p><em><a href="mailto:{{ usuario.correo }}">{{ usuario.correo }}</a></em></p>
-        <p>{{ usuario.descripcion }}</p>
-        <p><small>{% if usuario.asesor %}{% ifequal usuario.asesor.sexo 'M' %}Asesor{% else %}Asesora{% endifequal %}: <a href="{% url 'apps.sitio.views.usuario_view' usuario.asesor.id %}">{{ usuario.asesor }}</a>{% endif %}</small></p>
+        <h3>{{ usuario }} [<em class="text-info">{{ usuario.username }}</em>]<small>De {{ usuario.perfil.estado }}</small></h3>
+        <p><em><a href="mailto:{{ usuario.email }}">{{ usuario.email }}</a></em></p>
+        <p>{{ usuario.perfil.descripcion }}</p>
+        <p><small>{% if usuario.perfil.asesor %}{% ifequal usuario.perfil.asesor.perfil.sexo 'M' %}Asesor{% else %}Asesora{% endifequal %}: <a href="{% url 'apps.sitio.views.usuario_view' usuario.perfil.asesor.username %}">{{ usuario.perfil.asesor }}</a>{% endif %}</small></p>
       </div>
     </div>
 
     <div class="tabbable">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#sobre_mi" data-toggle="tab">Sobre {% ifequal usuario.sexo 'M' %}él{% else %}ella{% endifequal %}</a></li>
+        <li class="active"><a href="#sobre_mi" data-toggle="tab">Sobre {% ifequal usuario.perfil.sexo 'M' %}él{% else %}ella{% endifequal %}</a></li>
         <li><a href="#problemas" data-toggle="tab">Problemas</a></li>
-        {% if perms.usuarios.can_change_usuario %}
+        {% if perms.auth.can_change_user %}
           <li><a href="#cambia_pass" data-toggle="tab">Cambiar contraseña</a></li>
         {% endif %}
       </ul>
@@ -28,12 +28,12 @@
         <div class="tab-pane active" id="sobre_mi">
           <p><strong>Pertenece a los grupos</strong> {{ usuario.lista_grupos }}</p>
           <p>
-            Ha obtenido {{ usuario.puntaje }} puntos en este evaluador desde el <em>{{ usuario.fecha_registro }}</em><br>
-            Resolvi&oacute; {{ usuario.problemas_resueltos }} {% ifequal usuario.problemas_resueltos 1 %}problema{% else %}problemas{% endifequal %} desde entonces.
+            Ha obtenido {{ usuario.perfil.puntaje }} puntos en este evaluador desde el <em>{{ usuario.date_joined }}</em><br>
+            Resolvi&oacute; {{ usuario.perfil.problemas_resueltos }} {% ifequal usuario.problemas_resueltos 1 %}problema{% else %}problemas{% endifequal %} desde entonces.
           </p>
         </div>
         <div class="tab-pane" id="problemas">
-          <h4>Problemas resueltos por {% ifequal usuario.sexo 'M' %}él{% else %}ella{% endifequal %}</h4>
+          <h4>Problemas resueltos por {% ifequal usuario.perfil.sexo 'M' %}él{% else %}ella{% endifequal %}</h4>
           <table class="table table-striped table-hover">
             <thead>
               <tr>
@@ -59,7 +59,7 @@
             </tbody>
           </table>
 
-          <h4>Problemas intentados por {% ifequal usuario.sexo 'M' %}él{% else %}ella{% endifequal %}</h4>
+          <h4>Problemas intentados por {% ifequal usuario.perfil.sexo 'M' %}él{% else %}ella{% endifequal %}</h4>
           <table class="table table-striped table-hover">
             <thead>
               <tr>
@@ -83,7 +83,7 @@
             </tbody>
           </table>
         </div>
-        {% if perms.usuarios.can_change_usuario %}
+        {% if perms.auth.can_change_user %}
           <div class="tab-pane" id="cambia_pass">
             <p>Úsese con responsabilidad</p>
             <form method="post" action="{% url 'apps.sitio.views.external_change_pass' %}">

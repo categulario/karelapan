@@ -14,10 +14,9 @@
               {% for problema in concurso.problemas.all %}
                 <option value="{{ problema.id }}">{{ problema }}</option>
               {% endfor %}
-            </select><br>
-            <input type="text" name="mensaje" placeholder="Título">
+            </select>
             <input type="hidden" name="concurso" value="{{ concurso.id }}"><br>
-            <textarea name="respuesta" class="input-xxlarge" placeholder="Detalle"></textarea><br>
+            <textarea name="respuesta" class="input-xxlarge" placeholder="Detalle de la aclaración"></textarea>
             <input type="submit" value="Enviar" class="btn btn-info">
             <input type="reset" id="reset-aclaracion" style="display:none;">
           </h5>

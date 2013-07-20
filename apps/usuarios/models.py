@@ -38,7 +38,7 @@ def default_omi():
         return o
 
 
-class PerfilUsuario(models.Model):
+class Perfil(models.Model):
     usuario             = models.OneToOneField(User)
     nombre              = models.CharField(max_length=120)
     appat               = models.CharField(max_length=120, verbose_name='apellido paterno')
@@ -123,19 +123,33 @@ class PerfilUsuario(models.Model):
     descripcion         = models.TextField()
     grupos              = models.ManyToManyField(Grupo, default=default_group)
     ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi)
-
     confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
+
+    def get_full_name(self):
+        return "%s %s %s"%(self.nombre, self.appat, self.apmat)
+
+    def correo(self):
+        return self.usuario.email
+
+    def lista_grupos(self):
+        return ', '.join([str(g) for g in self.grupos.all()])
+
+    def __unicode__(self):
+        return self.get_full_name()
+
+    class Meta:
+        verbose_name_plural = 'perfiles'
 
 class Usuario(User):
     class Meta:
         proxy = True
-        ordering = ('perfilusuario__nombre', 'perfilusuario__appat', 'perfilusuario__apmat')
+        ordering = ('perfil__nombre', 'perfil__appat', 'perfil__apmat')
 
     def gravatar(self):
-        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.correo).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
+        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.email).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
 
     def gravatar_pequenio(self):
-        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.correo).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
+        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
 
     def lista_problemas_intentados(self):
         problemas_resueltos = self.lista_problemas_resueltos()
@@ -182,7 +196,7 @@ class Usuario(User):
 
     def usuarios_resuelto(self, problema):
         lista_usuarios = []
-        for envio in Envio.objects.filter(puntaje=100, problema=problema, concurso=None).order_by('usuario__puntaje'):
+        for envio in Envio.objects.filter(puntaje=100, problema=problema, concurso=None).order_by('usuario__perfil__puntaje'):
             if envio.usuario not in lista_usuarios:
                 lista_usuarios.append(envio.usuario)
         return lista_usuarios
@@ -196,7 +210,7 @@ class Usuario(User):
         return lista_usuarios
 
     def concursos_activos(self):
-        return Concurso.objects.filter(grupos__in=self.grupo.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
+        return Concurso.objects.filter(grupos__in=self.perfil.grupos.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
 
     def participa_en_concurso(self):
         return self.concursos_activos().count() > 0
@@ -207,14 +221,14 @@ class Usuario(User):
         return concurso in self.concursos_activos() and concurso.fecha_inicio < timezone.now() and timezone.now() < (concurso.fecha_inicio + datetime.timedelta(minutes=concurso.duracion_preguntas))
 
     def lista_grupos(self):
-        return ', '.join([str(g) for g in self.grupo.all()])
+        return ', '.join([str(g) for g in self.perfil.grupos.all()])
 
     def get_full_name(self):
-        return "%s %s %s"%(self.perfil_usuario.nombre, self.perfil_usuario.appat, self.perfil_usuario.apmat)
+        return "%s %s %s"%(self.perfil.nombre, self.perfil.appat, self.perfil.apmat)
 
     def get_short_name(self):
-        return self.perfil_usuario.nombre
+        return self.perfil.nombre
 
     def __unicode__(self):
-        return "%s %s %s"%(self.perfil_usuario.nombre, self.perfil_usuario.appat, self.perfil_usuario.apmat)
+        return "%s %s %s"%(self.perfil.nombre, self.perfil.appat, self.perfil.apmat)
 

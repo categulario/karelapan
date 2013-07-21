@@ -275,11 +275,12 @@ def registro_view(request):
                         token_confirmacion = str(uuid1())
                         perfil.confirm_token = token_confirmacion
                         try:
-                            id_asesor = int(request.POST.get('id_asesor'))
+                            id_asesor = int(request.POST.get('asesor'))
                             perfil.asesor = Usuario.objects.get(pk=id_asesor)
                         except ValueError:
                             perfil.asesor = None
                         perfil.usuario = nuevo_usuario
+                        perfil.nombre_completo = "%s %s %s"%(request.POST.get('nombre'),request.POST.get('appat'),request.POST.get('apmat'))
                         perfil.save()
                         perfil.grupos = [Grupo.objects.get_or_create(nombre='usuarios')[0], Grupo.objects.get_or_create(nombre=request.POST.get('subsistema'))[0]]
                         perfil.save()

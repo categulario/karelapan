@@ -11,10 +11,10 @@ class RegistroForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Perfil
-        exclude = ('usuario', 'problemas_resueltos', 'puntaje', 'grupos', 'nombre_completo', 'asesor')
+        exclude = ('usuario', 'problemas_resueltos', 'puntaje', 'grupos', 'nombre_completo', 'asesor', 'inscripciones')
 
 class PerfilForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Perfil
-        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi')
+        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi', 'inscripciones')

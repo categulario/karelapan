@@ -122,9 +122,10 @@ class Perfil(models.Model):
     puntaje             = models.IntegerField(default=0)
     descripcion         = models.TextField()
     grupos              = models.ManyToManyField(Grupo)
-    ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi)
+    ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi, related_name='+')
     confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
     nombre_completo     = models.CharField(max_length=200, blank=True, null=True)
+    inscripciones       = models.ManyToManyField(Olimpiada, null=True, blank=True, related_name='inscritos')
 
     def get_full_name(self):
         return "%s %s %s"%(self.nombre, self.appat, self.apmat)

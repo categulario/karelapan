@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
@@ -88,7 +89,7 @@ class Problema(models.Model):
     veces_intentado         = models.IntegerField(default=0)
     mejor_tiempo            = models.IntegerField(default=-1)
     mejor_puntaje           = models.IntegerField(default=-1)
-    autor                   = models.ForeignKey('usuarios.Usuario')
+    autor                   = models.ForeignKey(User)
     fecha_publicacion       = models.DateField(auto_now_add=True)
     nivel                   = models.ForeignKey(Nivel)
     publico                 = models.BooleanField(default=True)
@@ -136,7 +137,7 @@ class Concurso(models.Model):
     nombre              = models.CharField(max_length=140)
     descripcion         = models.TextField()
     activo              = models.BooleanField(default=True)
-    autor               = models.ForeignKey('usuarios.Usuario', related_name='concursos')
+    autor               = models.ForeignKey(User, related_name='concursos')
     problemas           = models.ManyToManyField(Problema)
     grupos              = models.ManyToManyField('usuarios.Grupo', related_name='+')
     administradores     = models.ForeignKey('usuarios.Grupo', related_name='+')
@@ -158,7 +159,7 @@ class Concurso(models.Model):
 
 class Participacion(models.Model):
     """Maneja la participación de un usuario en un concurso"""
-    usuario         = models.ForeignKey('usuarios.Usuario', related_name='participaciones')
+    usuario         = models.ForeignKey(User, related_name='participaciones')
     concurso        = models.ForeignKey(Concurso, related_name='participaciones')
     puntaje         = models.IntegerField(default=0)
     hora_entrada    = models.DateTimeField(auto_now_add=True)
@@ -171,7 +172,7 @@ class Participacion(models.Model):
 
 class Envio(models.Model):
     """Describe un envío que se va a la cola de evaluación"""
-    usuario             = models.ForeignKey('usuarios.Usuario', related_name='envios')
+    usuario             = models.ForeignKey(User, related_name='envios')
     problema            = models.ForeignKey(Problema, related_name='+')
     hora                = models.DateTimeField(auto_now_add=True)
     estatus             = models.CharField(max_length=1, choices=(
@@ -215,7 +216,7 @@ class Consulta(models.Model):
     participando"""
     concurso    = models.ForeignKey(Concurso, related_name='consultas')
     problema    = models.ForeignKey(Problema, related_name='consultas')
-    usuario     = models.ForeignKey('usuarios.Usuario', null=True, related_name='consultas')
+    usuario     = models.ForeignKey(User, null=True, related_name='consultas')
     mensaje     = models.CharField(max_length=140)
     respuesta   = models.TextField()
     leido       = models.BooleanField(default=False)

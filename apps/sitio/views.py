@@ -231,7 +231,7 @@ def medallero_view(request):
 
 def usuarios_view(request):
     data = {
-        'usuarios'  : Usuario.objects.all().order_by('-perfil__puntaje')
+        'usuarios'  : Usuario.objects.all().order_by('perfil__nombre_completo')
     }
     if 'next' in request.GET:
         data['next'] = request.GET['next']

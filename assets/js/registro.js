@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    nombres_dict = {};
+    $("#id_asesor").closest('.control-group').hide();
     $("#id_fecha_nacimiento").datepicker({
         changeMonth: true,
         changeYear: true,
@@ -8,6 +10,7 @@ $(document).ready(function(){
     $("#id_descripcion").attr('placeholder', 'Cuéntanos un poco sobre ti');
     $("#id_nombre_escuela").attr('data-provide', "typeahead");
     $("#id_nombre_escuela").attr('autocomplete', "off");
+    $("#id_nombre_asesor").attr('autocomplete', "off");
     $('#id_nombre_escuela').typeahead({
         source: function(q, p){
             $.ajax({
@@ -23,7 +26,7 @@ $(document).ready(function(){
             });
         }
     });
-    $('#id_asesor').typeahead({
+    $('#id_nombre_asesor').typeahead({
         source: function(query, process){
             $.ajax({
                 'url': 'http://'+$("#host").val()+'/api/nombres_asesores',
@@ -44,8 +47,13 @@ $(document).ready(function(){
             });
         },
         updater: function(item){
-            $("#id_id_asesor").val(nombres_dict[item]);
+            $("#id_asesor").val(nombres_dict[item]);
             return item;
+        }
+    });
+    $('#id_nombre_asesor').keyup(function(event){
+        if($(this).val() == ''){
+            $("#id_asesor").val('');
         }
     });
     $('#id_nombre_de_usuario').keyup(function(event){
@@ -70,6 +78,10 @@ $(document).ready(function(){
         'trigger': 'focus',
         'content': 'Indica una dirección de correo electrónico'
     });
+    $("#id_nombre_de_usuario").popover({
+        'trigger': 'focus',
+        'content': 'Un nombre de usuario bonito, como "developingo"'
+    });
     $("#id_nivel_estudios").popover({
         'trigger': 'focus',
         'content': '¿Que nivel de estudios concluidos tienes?'
@@ -87,7 +99,7 @@ $(document).ready(function(){
         'trigger': 'focus',
         'content': '¿Te identificas con alguno de estos grupos? Si no, simplemente elige "usuarios". Puedes elegir más de uno usando la tecla Ctrl del teclado'
     });
-    $("#id_asesor").popover({
+    $("#id_nombre_asesor").popover({
         'trigger': 'focus',
         'title': '¿Alguien te asesora?',
         'content': 'Es necesario que tu asesor se haya registrado antes, aunque también lo puedes indicar posteriormente'

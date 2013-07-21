@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from apps.sitio.forms import RegistroForm, PerfilForm
 from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion, Consulta
-from apps.usuarios.models import Usuario
+from apps.usuarios.models import Usuario, Grupo
 from django.contrib import auth
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -267,22 +267,31 @@ def registro_view(request):
                 respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
                 if respuesta == True:
                     if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
-                        nuevo_usario = formulario.save(commit=False)
-                        nuevo_usario.set_password(request.POST['contrasenia'])
-                        nuevo_usario.save()
-                        nuevo_usario.grupo = request.POST.getlist('grupo')
+                        nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'))
+                        nuevo_usuario.set_password(request.POST.get('contrasenia'))
+                        nuevo_usuario.save()
+
+                        perfil = formulario.save(commit=False)
                         token_confirmacion = str(uuid1())
-                        nuevo_usario.confirm_token = token_confirmacion
-                        nuevo_usario.save()
+                        perfil.confirm_token = token_confirmacion
+                        try:
+                            id_asesor = int(request.POST.get('id_asesor'))
+                            perfil.asesor = Usuario.objects.get(pk=id_asesor)
+                        except ValueError:
+                            perfil.asesor = None
+                        perfil.usuario = nuevo_usuario
+                        perfil.save()
+                        perfil.grupos = [Grupo.objects.get_or_create(nombre='usuarios')[0], Grupo.objects.get_or_create(nombre=request.POST.get('subsistema'))[0]]
+                        perfil.save()
                         data = {
                             'token': token_confirmacion,
-                            'correo': nuevo_usario.correo
+                            'correo': nuevo_usuario.email
                         }
                         msg = EmailMessage(
                             'Confirma tu correo electrónico',
                             render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
                             'Karelapan <karelapan@gmail.com>',
-                            [nuevo_usario.correo]
+                            [nuevo_usuario.email]
                         )
                         msg.content_subtype = "html"  # Main content is now text/html
                         msg.send()

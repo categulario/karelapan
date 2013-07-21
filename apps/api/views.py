@@ -32,7 +32,7 @@ def nombres_escuela(request):
 
 def nombres_asesores(request):
     if 'q' in request.GET:
-        usuarios = Usuario.objects.filter(Q(perfil__nombre__icontains=request.GET['q']) | Q(perfil__appat__icontains=request.GET['q']) | Q(perfil__apmat__icontains=request.GET['q']))
+        usuarios = Usuario.objects.filter(perfil__nombre_completo__icontains=request.GET['q'])
         nombres = [{'nombre': str(usuario.get_full_name()), 'id':usuario.id} for usuario in usuarios]
         return HttpResponse(json.dumps(nombres), content_type='text/plain')
     else:

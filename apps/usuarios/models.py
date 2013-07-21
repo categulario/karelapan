@@ -121,9 +121,10 @@ class Perfil(models.Model):
     problemas_resueltos = models.IntegerField(default=0)
     puntaje             = models.IntegerField(default=0)
     descripcion         = models.TextField()
-    grupos              = models.ManyToManyField(Grupo, default=default_group)
+    grupos              = models.ManyToManyField(Grupo)
     ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi)
     confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
+    nombre_completo     = models.CharField(max_length=200, blank=True, null=True)
 
     def get_full_name(self):
         return "%s %s %s"%(self.nombre, self.appat, self.apmat)

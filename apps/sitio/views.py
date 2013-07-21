@@ -430,13 +430,10 @@ def baja(request):
 
 def confirma_correo(request, correo, token):
     """Confirma el correo electrónico de un usuario"""
-    try:
-        usuario = get_object_or_404(Usuario, correo=correo, confirm_token=token)
-        usuario.is_active = True
-        usuario.confirm_token = None
-        usuario.save()
-    except ObjectDoesNotExist:
-        return HttpResponseRedirect('/')
+    usuario = get_object_or_404(Usuario, email=correo, perfil__confirm_token=token)
+    usuario.is_active = True
+    usuario.confirm_token = None
+    usuario.save()
     data = {
         'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
     }

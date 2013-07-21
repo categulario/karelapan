@@ -54,6 +54,8 @@ def main():
             connection.commit()#Nos aseguramos de marcar este envio y evitar que otra llamada del evaluador lo revise
             cursor.execute("SELECT * FROM evaluador_problema WHERE id='%d'"%envio['problema_id'])
             problema = cursor.fetchone() #El problema
+            cursor.execute("SELECT * FROM usuarios_perfil WHERE usuario_id='%d'"%envio['usuario_id'])
+            perfil = cursor.fetchone() #El problema
             resultado = { #Almacena el resultado de esta ejecución
                 "resultado": "OK", #puede ser ERROR_COMPILACION Ó CASOS_INCOMPLETOS
                 "mensaje": "Ejecución terminada",
@@ -156,7 +158,7 @@ def main():
                     resultado['tiempo_ejecucion'] = int((t_fin-t_inicio)*1000)
             if resultado['resultado'] == 'OK' and not envio['concurso_id']: #La evaluación es buena, el usuario incremeta problemas resueltos y el problema veces resuelto.
                 #Si se trata de un concurso se trata distinto
-                cursor.execute('UPDATE usuarios_usuario SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (envio['usuario_id'], ))
+                cursor.execute('UPDATE usuarios_perfil SET problemas_resueltos=problemas_resueltos+1 WHERE id=%s', (perfil['id'], ))
                 connection.commit()
                 if problema['mejor_tiempo'] == -1 or resultado['tiempo_ejecucion'] < problema['mejor_tiempo']:
                     cursor.execute('UPDATE evaluador_problema SET veces_resuelto=veces_resuelto+1, mejor_tiempo = %s WHERE id=%s', (resultado['tiempo_ejecucion'], envio['problema_id']))

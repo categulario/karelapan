@@ -23,6 +23,48 @@ $(document).ready(function(){
             });
         }
     });
+    $('#id_asesor').typeahead({
+        source: function(query, process){
+            $.ajax({
+                'url': 'http://'+$("#host").val()+'/api/nombres_asesores',
+                'type': 'get',
+                'data': {
+                    'q': query
+                },
+                'success': function(msg){
+                    var arr = eval('('+msg+')');
+                    var nombres = [];
+                    nombres_dict={};
+                    for(var i=0;i<arr.length;i++){
+                        nombres_dict[arr[i].nombre] = arr[i].id;
+                        nombres.push(arr[i].nombre);
+                    }
+                    process(nombres);
+                }
+            });
+        },
+        updater: function(item){
+            $("#id_id_asesor").val(nombres_dict[item]);
+            return item;
+        }
+    });
+    $('#id_nombre_de_usuario').keyup(function(event){
+        var nombre = $(this).val();
+        var texto = this;
+        if(nombre != ''){
+            $.ajax({
+                'url': 'http://'+$("#host").val()+'/api/existe_usuario/'+nombre,
+                'type': 'get',
+                'success': function(msg){
+                    if(msg == 'sip') {
+                        $(texto).closest('.control-group').addClass('error');
+                    } else {
+                        $(texto).closest('.control-group').removeClass('error');
+                    }
+                }
+            });
+        }
+    });
     $("#id_fecha_nacimiento").attr("placeholder", 'dd/mm/yyyy');
     $("#id_correo").popover({
         'trigger': 'focus',

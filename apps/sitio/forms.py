@@ -1,18 +1,19 @@
 from django import forms
-from apps.usuarios.models import Usuario, Grupo
+from apps.usuarios.models import Perfil, Grupo
 
 class RegistroForm(forms.ModelForm):
-    contrasenia = forms.CharField(widget=forms.PasswordInput)
+    nombre_de_usuario   = forms.CharField()
+    contrasenia         = forms.CharField(widget=forms.PasswordInput)
     repetir_contrasenia = forms.CharField(widget=forms.PasswordInput)
+    nombre_asesor       = forms.CharField()
+    asesor              = forms.CharField()
     required_css_class = 'required'
     class Meta:
-        model = Usuario
-        exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions', 'problemas_resueltos', 'puntaje', 'is_active', 'is_admin', 'grupo')
+        model = Perfil
+        exclude = ('usuario', 'problemas_resueltos', 'puntaje', 'grupos')
 
 class PerfilForm(forms.ModelForm):
-    grupo = forms.ModelMultipleChoiceField(queryset=Grupo.objects.filter(elegible=True))
-
     required_css_class = 'required'
     class Meta:
-        model = Usuario
-        exclude = ('password', 'last_login', 'is_superuser', 'groups', 'user_permissions', 'problemas_resueltos', 'puntaje', 'is_active', 'is_admin', 'sexo', 'fecha_nacimiento', 'ultima_omi')
+        model = Perfil
+        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi')

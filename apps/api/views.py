@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 import django.contrib.auth as auth
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
+from django.db.models import Q
 import json
 import csv
 
@@ -23,11 +24,26 @@ def mundo_ejemplo_solucion(request, id_problema):
 
 def nombres_escuela(request):
     if 'q' in request.GET:
-        usuarios = Usuario.objects.filter(nombre_escuela__icontains=request.GET['q']).order_by('nombre_escuela').distinct('nombre_escuela')
-        escuelas = [str(usuario.nombre_escuela) for usuario in usuarios]
+        usuarios = Usuario.objects.filter(perfil__nombre_escuela__icontains=request.GET['q']).order_by('perfil__nombre_escuela').distinct('perfil__nombre_escuela')
+        escuelas = [str(usuario.perfil.nombre_escuela) for usuario in usuarios]
         return HttpResponse(json.dumps(escuelas), content_type='text/plain')
     else:
         return HttpResponse('[]', content_type='text/plain')
+
+def nombres_asesores(request):
+    if 'q' in request.GET:
+        usuarios = Usuario.objects.filter(Q(perfil__nombre__icontains=request.GET['q']) | Q(perfil__appat__icontains=request.GET['q']) | Q(perfil__apmat__icontains=request.GET['q']))
+        nombres = [{'nombre': str(usuario.get_full_name()), 'id':usuario.id} for usuario in usuarios]
+        return HttpResponse(json.dumps(nombres), content_type='text/plain')
+    else:
+        return HttpResponse('[]', content_type='text/plain')
+
+def existe_usuario(request, nombre_usuario):
+    try:
+        Usuario.objects.get(username=nombre_usuario)
+        return HttpResponse('sip', content_type='text/plain')
+    except Usuario.DoesNotExist:
+        return HttpResponse('nope', content_type='text/plain')
 
 def descarga_codigo(request, id_envio):
     """Le ofrece a un usuario la posibilidad de descargar uno de sus

@@ -312,7 +312,7 @@ def perfil_view(request):
         'asesorados': Usuario.objects.filter(perfil__asesor=usuario)
     }
     if request.method == 'POST':
-        formulario = PerfilForm(request.POST, instance=usuario)
+        formulario = PerfilForm(request.POST, instance=usuario.perfil)
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Tus datos han sido actualizados')
@@ -320,7 +320,7 @@ def perfil_view(request):
             messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
         data['formulario'] = formulario
         return render_to_response('perfil.html', data, context_instance=RequestContext(request))
-    data['formulario'] = PerfilForm(instance=usuario)
+    data['formulario'] = PerfilForm(instance=usuario.perfil)
     return render_to_response('perfil.html', data, context_instance=RequestContext(request))
 
 @login_required
@@ -381,7 +381,7 @@ def internal_change_pass(request):
     pass1       = request.POST['pass1']
     pass2       = request.POST['pass2']
     if pass1==pass2:
-        if auth.authenticate(username=request.user.correo, password=oldpass):
+        if auth.authenticate(username=request.user.username, password=oldpass):
             request.user.set_password(pass1)
             request.user.save()
             messages.success(request, 'Password cambiado')

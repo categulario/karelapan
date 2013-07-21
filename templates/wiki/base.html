@@ -1,4 +1,4 @@
-{% load sekizai_tags i18n wiki_tags %}{% load url from future %}<!DOCTYPE html>
+{% load sekizai_tags i18n wiki_tags staticfiles %}{% load url from future %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="www.django-wiki.org">
-
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}wiki/bootstrap/css/wiki-bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}wiki/bootstrap/css/wiki-bootstrap-responsive.min.css" rel="stylesheet">
@@ -50,12 +50,6 @@
                   <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="{% url 'wiki:logout' %}">
-                      <i class="icon-off"></i>
-                      {% trans "Log out" %}
-                    </a>
-                  </li>
                   {% include "wiki/plugins/notifications/menubaritem.html" %}
                 </ul>
               </li>

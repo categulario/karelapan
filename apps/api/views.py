@@ -33,10 +33,15 @@ def nombres_escuela(request):
 def nombres_asesores(request):
     if 'q' in request.GET:
         usuarios = Usuario.objects.filter(perfil__nombre_completo__icontains=request.GET['q'])
-        nombres = [{'nombre': str(usuario.get_full_name()), 'id':usuario.id} for usuario in usuarios]
+        nombres = [{'nombre': str(usuario.get_full_name().encode('utf-8')), 'id':usuario.id} for usuario in usuarios]
         return HttpResponse(json.dumps(nombres), content_type='text/plain')
     else:
         return HttpResponse('[]', content_type='text/plain')
+
+@login_required
+def obten_nombre_asesor(request, id_asesor):
+    asesor = get_object_or_404(Usuario, pk=id_asesor)
+    return HttpResponse(asesor.perfil.nombre_completo, content_type='text/plain')
 
 def existe_usuario(request, nombre_usuario):
     try:

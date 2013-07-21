@@ -324,13 +324,22 @@ def perfil_view(request):
     if request.method == 'POST':
         formulario = PerfilForm(request.POST, instance=usuario.perfil)
         if formulario.is_valid():
-            formulario.save()
+            perfil = formulario.save(commit=False)
+            perfil.nombre_completo = "%s %s %s"%(request.POST.get('nombre'), request.POST.get('appat'), request.POST.get('apmat'))
+            try:
+                id_asesor = int(request.POST.get('asesor'))
+                perfil.asesor = Usuario.objects.get(pk=id_asesor)
+            except ValueError:
+                perfil.asesor = None
+            perfil.save()
             messages.success(request, 'Tus datos han sido actualizados')
         else:
             messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
+        data['js'] = ['js/perfil.js']
         data['formulario'] = formulario
         return render_to_response('perfil.html', data, context_instance=RequestContext(request))
     data['formulario'] = PerfilForm(instance=usuario.perfil)
+    data['js'] = ['js/perfil.js']
     return render_to_response('perfil.html', data, context_instance=RequestContext(request))
 
 @login_required
@@ -436,8 +445,9 @@ def confirma_correo(request, correo, token):
     """Confirma el correo electrónico de un usuario"""
     usuario = get_object_or_404(Usuario, email=correo, perfil__confirm_token=token)
     usuario.is_active = True
-    usuario.confirm_token = None
+    usuario.perfil.confirm_token = None
     usuario.save()
+    usuario.perfil.save()
     data = {
         'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
     }

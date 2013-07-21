@@ -17,4 +17,4 @@ class PerfilForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Perfil
-        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi', 'inscripciones')
+        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi', 'inscripciones', 'nombre_completo')

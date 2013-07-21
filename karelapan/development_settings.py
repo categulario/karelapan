@@ -27,9 +27,6 @@ DATABASES = {
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
-# Backend de autenticacion para pruebas
-AUTH_USER_MODEL = 'usuarios.Usuario'
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -122,15 +119,24 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
-    'apps.evaluador',
     'apps.usuarios',
+    'apps.evaluador',
     'apps.sitio',
     'gunicorn',
     'tinymce',
+    'django.contrib.humanize',
+    'south',
+    'django_notify',
+    'mptt',
+    'sekizai',
+    'sorl.thumbnail',
+    'wiki',
+    'wiki.plugins.attachments',
+    'wiki.plugins.notifications',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -208,8 +214,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.static",
+    "django.core.context_processors.request",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
+    "sekizai.context_processors.sekizai",
     "apps.sitio.processors.settings_processor",
     "apps.sitio.processors.path_processor",
     "apps.sitio.processors.avisos_processor",

@@ -352,9 +352,13 @@ def mis_soluciones_view(request):
     return render_to_response('mis_soluciones.html', data, context_instance=RequestContext(request))
 
 def faqs_view(request):
-    data = {}
-    data['preguntas'] = PreguntaFrecuente.objects.filter(mostrado=True)
+    data = {
+        'preguntas': PreguntaFrecuente.objects.filter(mostrado=True)
+    }
     return render_to_response('faqs.html', data, context_instance=RequestContext(request))
+
+def soporte(request):
+    return render_to_response('soporte.html', context_instance=RequestContext(request))
 
 def login(request):
     if not request.user.is_authenticated():

@@ -13,7 +13,11 @@ class PerfilAdmin(admin.ModelAdmin):
 class GrupoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'descripcion', 'elegible')
 
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'is_staff', 'last_login', 'date_joined')
 
 admin.site.register(Grupo, GrupoAdmin)
 admin.site.register(Perfil, PerfilAdmin)
 admin.site.register(Olimpiada)
+admin.site.unregister(auth.models.User)
+admin.site.register(auth.models.User, UserAdmin)

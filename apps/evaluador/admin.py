@@ -31,7 +31,7 @@ class ProblemaAdmin(admin.ModelAdmin):
     inlines             = [ConsideracionInline]
     actions             = [ocultar_problema, mostrar_problema]
     prepopulated_fields = {"nombre_administrativo": ("nombre",)}
-    readonly_fields     = ('veces_resuelto', 'veces_intentado', 'mejor_tiempo', 'mejor_puntaje')
+    readonly_fields     = ('veces_resuelto', 'veces_intentado', 'mejor_tiempo')
 
 class ConcursoAdmin(admin.ModelAdmin):
     list_display    = ('nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'lista_grupos', 'activo', 'ranking_publico')

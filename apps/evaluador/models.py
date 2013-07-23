@@ -88,7 +88,6 @@ class Problema(models.Model):
     veces_resuelto          = models.IntegerField(default=0)
     veces_intentado         = models.IntegerField(default=0)
     mejor_tiempo            = models.IntegerField(default=-1)
-    mejor_puntaje           = models.IntegerField(default=-1)
     autor                   = models.ForeignKey(User)
     fecha_publicacion       = models.DateField(auto_now_add=True)
     nivel                   = models.ForeignKey(Nivel)
@@ -182,7 +181,8 @@ class Envio(models.Model):
     ), default='P')
     puntaje             = models.IntegerField(default=0)
     codigo              = models.TextField(blank=True, null=True)
-    codigo_archivo      = models.FilePathField(path='/home/abraham/Desarrollo/django/KarelapanDjango/codigos')
+    #codigo_archivo      = models.FilePathField(path='/home/abraham/Desarrollo/django/KarelapanDjango/codigos')
+    codigo_archivo      = models.CharField(max_length=140)
     tiempo_ejecucion    = models.IntegerField(default=0)
     resultado           = models.CharField(max_length=17, choices=(
         ('OK', 'Ok'),

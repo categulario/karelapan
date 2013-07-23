@@ -119,7 +119,7 @@ class Consideracion(models.Model):
     """Cada problema de karel tiene consideraciones que limitan el mundo
     """
     problema    = models.ForeignKey(Problema, related_name='consideraciones')
-    texto       = models.CharField(max_length=254)
+    texto       = models.CharField(max_length=300)
 
     def __unicode__(self):
         return self.texto

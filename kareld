@@ -65,7 +65,7 @@ def main():
                 "efectividad": 0.0,
                 "tiempo_ejecucion": 0
             }
-            archivomundo = settings.MEDIA_ROOT+'/'+problema['casos_de_evaluacion']
+            archivomundo = settings.MEDIA_ROOT+'/casos/'+problema['casos_de_evaluacion']
             f = file(archivomundo)
             kec = json.load(f) #Tenemos el archivo de condiciones de evaluacion cargado.
             arch = envio['codigo_archivo'] #Programa a evaluar

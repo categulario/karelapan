@@ -46,7 +46,7 @@
             <tbody>
               {% for usuario in usuarios_resuelto %}
                 <tr>
-                  <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.id %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }}</a></td>
+                  <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }}</a></td>
                 </tr>
               {% empty %}
                 <tr>
@@ -66,7 +66,7 @@
             <tbody>
               {% for usuario in usuarios_intentado %}
                 <tr>
-                  <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.id %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }}</a></td>
+                  <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }}</a></td>
                 </tr>
               {% empty %}
                 <tr>
@@ -100,7 +100,7 @@
     <h4>Consideraciones</h4>
     <p>
       <ul>
-        {% for consideracion in problema.consideracion_set.all %}
+        {% for consideracion in problema.consideraciones.all %}
           <li>{{ consideracion }}</li>
         {% endfor %}
       </ul>

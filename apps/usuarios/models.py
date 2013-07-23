@@ -200,15 +200,15 @@ class Usuario(User):
         lista_usuarios = []
         for envio in Envio.objects.filter(puntaje=100, problema=problema, concurso=None).order_by('usuario__perfil__puntaje'):
             if envio.usuario not in lista_usuarios:
-                lista_usuarios.append(envio.usuario)
+                lista_usuarios.append(Usuario.objects.get(pk=envio.usuario.id))
         return lista_usuarios
 
     def usuarios_intentado(self, problema):
         usuarios_resueltos = self.usuarios_resuelto(problema)
         lista_usuarios = []
         for envio in Envio.objects.filter(puntaje__lt=100, problema=problema, concurso=None):
-            if envio.usuario not in lista_usuarios and envio.usuario not in usuarios_resueltos:
-                lista_usuarios.append(envio.usuario)
+            if Usuario.objects.get(pk=envio.usuario.id) not in lista_usuarios and Usuario.objects.get(pk=envio.usuario.id) not in usuarios_resueltos:
+                lista_usuarios.append(Usuario.objects.get(pk=envio.usuario.id))
         return lista_usuarios
 
     def concursos_activos(self):

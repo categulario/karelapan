@@ -70,7 +70,8 @@ def envio(request, id_envio, id_concurso=None):
     else:
         concurso = None
     if envio.usuario == request.user and envio.concurso == concurso:
-        if not concurso and request.user.participa_en_concurso():#No se cargan veredictos durante el concurso
+        usuario = Usuario.objects.get(pk=request.user.id)
+        if not concurso and usuario.participa_en_concurso():#No se cargan veredictos durante el concurso
             return HttpResponse('Forbidden', content_type='text/plain')
         if envio.estatus == 'E':
             resultado = {

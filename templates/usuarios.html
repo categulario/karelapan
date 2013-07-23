@@ -16,7 +16,6 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Lugar</th>
             <th>Nombre</th>
             <th>Estado</th>
             <th>Puntos</th>
@@ -25,7 +24,6 @@
         <tbody>
           {% for usuario in usuarios %}
             <tr>
-              <td>{{ forloop.counter }}</td>
               <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }} [<span class="muted">{{ usuario.username }}</span>]</a></td>
               <td>{{ usuario.perfil.estado }}</td>
               <td>{{ usuario.perfil.puntaje }}</td>

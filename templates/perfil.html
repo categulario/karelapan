@@ -163,9 +163,9 @@
                 {% for alumno in asesorados %}
                   <tr>
                     <td><a href="{% url 'apps.sitio.views.usuario_view' alumno.username %}"><img src="{{ alumno.gravatar_pequenio }}"> {{ alumno }}</a></td>
-                    <td><a href="mailto:{{ alumno.correo }}">{{ alumno.correo }}</a></td>
-                    <td>{{ alumno.puntaje }}</td>
-                    <td>{{ alumno.problemas_resueltos }}</td>
+                    <td><a href="mailto:{{ alumno.correo }}">{{ alumno.email }}</a></td>
+                    <td>{{ alumno.perfil.puntaje }}</td>
+                    <td>{{ alumno.perfil.problemas_resueltos }}</td>
                   </tr>
                 {% empty %}
                   <tr>

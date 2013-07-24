@@ -495,15 +495,16 @@ def confirma_recuperacion(request, correo, token):
     """Muestra el diálogo de recuperar contraseña"""
     if not request.user.is_authenticated():
         data = {
-            'usuario': get_object_or_404(Usuario, correo=correo, confirm_token=token)
+            'usuario': get_object_or_404(Usuario, email=correo, perfil__confirm_token=token)
         }
         if request.method == 'POST':
             contrasenia = request.POST.get('pass')
             contrasenia_confirmar = request.POST.get('pass-repeat')
             if contrasenia == contrasenia_confirmar and contrasenia != '':
                 data['usuario'].set_password(contrasenia)
-                data['usuario'].confirm_token = None
                 data['usuario'].save()
+                data['usuario'].perfil.confirm_token = None
+                data['usuario'].perfil.save()
                 messages.success(request, '¡Ya tienes nueva contraseña!')
                 return HttpResponseRedirect('/')
             else:

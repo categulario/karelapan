@@ -462,13 +462,14 @@ def recuperar_contrasenia(request):
         if request.method == 'POST':
             respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
             if respuesta == True:
-                usuario = get_object_or_404(Usuario, correo=request.POST.get('correo'))
+                usuario = get_object_or_404(Usuario, email=request.POST.get('correo'))
                 token_confirmacion = str(uuid1())
-                usuario.confirm_token = token_confirmacion
-                usuario.save()
+                usuario.perfil.confirm_token = token_confirmacion
+                usuario.perfil.save()
                 dat = {
                     'token': token_confirmacion,
-                    'correo': usuario.correo
+                    'nombre_usuario': usuario.username
+                    'correo': usuario.email
                 }
                 msg = EmailMessage(
                     'Recuperación de contraseña',

@@ -378,6 +378,8 @@ def login(request):
             if user is not None:
                 if user.is_active:
                     auth.login(request, user)
+                    user.perfil.confirm_token = None
+                    user.perfil.save()
                     messages.success(request, '¡¡Hola de vuelta!!')
                     return HttpResponseRedirect(request.POST['redirect'])
                 else:
@@ -468,14 +470,14 @@ def recuperar_contrasenia(request):
                 usuario.perfil.save()
                 dat = {
                     'token': token_confirmacion,
-                    'nombre_usuario': usuario.username
+                    'nombre_usuario': usuario.username,
                     'correo': usuario.email
                 }
                 msg = EmailMessage(
                     'Recuperación de contraseña',
                     render_to_string('mail/recupera.html', dat, context_instance=RequestContext(request)),
                     'Karelapan <karelapan@gmail.com>',
-                    [usuario.correo]
+                    [usuario.email]
                 )
                 msg.content_subtype = "html"  # Main content is now text/html
                 msg.send()

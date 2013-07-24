@@ -7,7 +7,7 @@ $(document).ready(function(){
     var wRender         = new WorldRender(context);
     mundo_ejemplo   = {}
     $.ajax({
-        'url': 'http://'+$("#host").val()+'/api/mundo_ejemplo/'+$("#id_problema").val(),
+        'url': 'http://'+$("#host").val()+'/api/mundo_ejemplo/'+$("#id_problema").val()+'/',
         'type': 'get',
         'success': function(msg){
             mundo_ejemplo = eval('('+msg+')');
@@ -72,7 +72,7 @@ $(document).ready(function(){
     var wRender2         = new WorldRender(context2);
     mundo_ejemplo_solucion   = {}
     $.ajax({
-        'url': 'http://'+$("#host").val()+'/api/mundo_ejemplo_solucion/'+$("#id_problema").val(),
+        'url': 'http://'+$("#host").val()+'/api/mundo_ejemplo_solucion/'+$("#id_problema").val()+'/',
         'type': 'get',
         'success': function(msg){
             mundo_ejemplo_solucion = eval('('+msg+')');

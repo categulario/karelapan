@@ -31,7 +31,7 @@ class UltimosProblemas(Feed):
         return item.autor
 
     def item_author_email(self, obj):
-        obj.autor.correo
+        obj.autor.email
 
     def item_author_link(self, obj):
         return reverse('apps.sitio.views.usuario_view', args=[obj.autor.id])

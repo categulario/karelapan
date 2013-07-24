@@ -259,7 +259,7 @@ def registro_view(request):
     if not request.user.is_authenticated():
         data = {}
         data['js'] = ['js/jquery-ui.js', 'js/registro.js']
-        data['css'] = ['css/ui/jquery-ui.css']
+        data['css'] = ['css/ui/jquery-ui.css', 'css/recaptcha.css']
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         if request.method == 'POST':
             formulario = RegistroForm(request.POST)
@@ -456,8 +456,9 @@ def confirma_correo(request, correo, token):
 
 def recuperar_contrasenia(request):
     """Muestra la pantalla de recuperación de contraseña"""
+    data = {'css':  ['css/recaptcha.css']}
     if not request.user.is_authenticated():
-        data = {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY}
+        data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         if request.method == 'POST':
             respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
             if respuesta == True:

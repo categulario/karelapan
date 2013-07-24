@@ -34,7 +34,7 @@
             <span class="icon-bar"></span>
           </a>
           {% block wiki_header_branding %}
-          <a class="brand" href="{% url 'wiki:root' %}">Karelapan Wiki</a>
+          <a class="brand" href="{% url 'wiki:root' %}"><img src="{% static 'img/cover800x150.mini.png' %}" width="100"> Wiki</a>
           {% endblock %}
           <form class="navbar-search pull-right" id="navbar_wiki_search" method="GET" action="{% url 'wiki:search' %}">
             <span class="icon-search"></span>

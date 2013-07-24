@@ -25,7 +25,7 @@ def mundo_ejemplo_solucion(request, id_problema):
 def nombres_escuela(request):
     if 'q' in request.GET:
         usuarios = Usuario.objects.filter(perfil__nombre_escuela__icontains=request.GET['q']).order_by('perfil__nombre_escuela').distinct('perfil__nombre_escuela')
-        escuelas = [str(usuario.perfil.nombre_escuela) for usuario in usuarios]
+        escuelas = [str(usuario.perfil.nombre_escuela.encode('utf-8')) for usuario in usuarios]
         return HttpResponse(json.dumps(escuelas), content_type='text/plain')
     else:
         return HttpResponse('[]', content_type='text/plain')

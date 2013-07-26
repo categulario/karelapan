@@ -66,7 +66,11 @@ def main():
                 "tiempo_ejecucion": 0
             }
             archivomundo = settings.MEDIA_ROOT+'casos/'+problema['casos_de_evaluacion']
-            f = file(archivomundo)
+            try:
+                f = file(archivomundo)
+            except IOError:
+                logging.error('El archivo %s de casos no se encontró'%archivomundo)
+                break
             kec = json.load(f) #Tenemos el archivo de condiciones de evaluacion cargado.
             arch = envio['codigo_archivo'] #Programa a evaluar
             try:

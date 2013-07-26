@@ -57,7 +57,7 @@ def descarga_codigo(request, id_envio):
     usuario = Usuario.objects.get(pk=request.user.id)
     if envio.usuario.id == usuario.id and usuario.concursos_activos().count() == 0:
         response = HttpResponse(envio.codigo, content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="%s.karel"'%envio.problema.nombre_administrativo
+        response['Content-Disposition'] = 'attachment; filename="%s_%s.karel"'%(envio.problema.nombre_administrativo, envio.id)
         return response
     else:
         return HttpResponse('Forbidden', content_type='text/plain')

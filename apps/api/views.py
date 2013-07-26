@@ -55,7 +55,7 @@ def descarga_codigo(request, id_envio):
     códigos enviados"""
     envio = get_object_or_404(Envio, pk=id_envio)
     usuario = Usuario.objects.get(pk=request.user.id)
-    if envio.usuario == usuario and usuario.concursos_activos().count() == 0:
+    if envio.usuario.id == usuario.id and usuario.concursos_activos().count() == 0:
         response = HttpResponse(envio.codigo, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="%s.karel"'%envio.problema.nombre_administrativo
         return response

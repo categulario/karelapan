@@ -34,6 +34,9 @@
                 <tr>
                   <td>
                     <a href="/problema/{{ problema.nombre_administrativo }}">{{ problema.nombre }}</a>
+                    {% if problema.es_reciente %}
+                      <span class="badge pull-right">nuevo!</span>
+                    {% endif %}
                   </td>
                   <td>{{ problema.veces_resuelto }}</td>
                   <td>{{ problema.veces_intentado }}</td>

@@ -2,9 +2,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from tinymce.models import HTMLField
 import json
 import os
+import datetime
 
 def valida_mundos(str_mundo):
     """valida que 'str_mundo' sea un documento JSON que representa un
@@ -113,6 +115,14 @@ class Problema(models.Model):
             return -1
         else:
             return resultado['puntaje']
+
+    def es_reciente(self):
+        """Un problema es reciente durante 15 días después de su publicación"""
+        publicacion = datetime.datetime(self.fecha_publicacion.year, self.fecha_publicacion.month, self.fecha_publicacion.day, tzinfo=timezone.now().tzinfo)
+        return publicacion >= (timezone.now() - datetime.timedelta(days=15))
+
+    class Meta:
+        ordering = ['nombre']
 
 
 class Consideracion(models.Model):

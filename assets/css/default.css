@@ -60,3 +60,11 @@ ul.errorlist > li{
 	height:400px;
 	background-color:#7F4646;
 }
+#bg-anim{
+	background-image: url('../img/bg-inicio.png');
+	background-repeat: repeat-x;
+}
+#bg-anim > .span12{
+	background-image: url('../img/bg-inicio2.png');
+	background-repeat: repeat-x;
+}

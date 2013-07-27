@@ -140,7 +140,7 @@
             <strong>&iexcl;Mira!</strong> {% autoescape off %}{{ aviso }}{% endautoescape %}
           </div>
         {% endfor %}
-      <div class="row">
+      <div class="row" id="bg-anim">
         {% block contenido %}
           <div class="span12"><h3>Karelapan</h3></div>
         {% endblock %}
@@ -213,6 +213,7 @@
     <script type="text/javascript" language="javascript" src="{% static 'js/jquery.js' %}" ></script>
     <script type="text/javascript" language="javascript" src="{% static 'js/bootstrap.js' %}" ></script>
     <script type="text/javascript" language="javascript" src="{% static 'js/default.js' %}" ></script>
+    <script type="text/javascript" language="javascript" src="{% static 'js/spritely.js' %}" ></script>
     {% for script in js %}
       <script type="text/javascript" language="javascript" src="{% static script %}" ></script>
     {% endfor %}

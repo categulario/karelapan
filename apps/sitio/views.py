@@ -29,6 +29,8 @@ def sube_archivo_codigo(archivo_subido):
             destino.write(chunk)
     return nuevo_nombre
 
+def channel(request):
+    return HttpResponse('<script src="//connect.facebook.net/en_US/all.js"></script>')
 
 def index_view(request):
     data = {

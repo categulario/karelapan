@@ -79,7 +79,7 @@ def problema_detalle(request, nombre_administrativo):
         else:
             messages.warning(request, 'Necesitas estar registrado para enviar soluciones')
     data['problema'] = problema
-    data['js'] = ['js/excanvas.js', 'js/mundo.js', 'js/problema.js']
+    data['js'] = ['js/mundo.js', 'js/problema.js']
     if request.user.is_authenticated():
         usuario = Usuario.objects.get(pk=request.user.id)
         data['mejor_puntaje'] = usuario.mejor_puntaje(problema)

@@ -1,7 +1,12 @@
 {% extends 'template.html' %}
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 {% block titulo %} {{ problema }} {% endblock %}
 {% block contenido %}
+  {% addtoblock 'jshead' %}
+    <!--[if IE]>
+      <script type="text/javascript" language="javascript" src="{% static 'js/excanvas.js' %}"></script>
+    <![endif]-->
+  {% endaddtoblock %}
   <div class="span4">
     <div class="well">
       <strong>Datos sobre el problema:</strong>

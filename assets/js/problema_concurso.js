@@ -1,6 +1,6 @@
 var busca_consultas = function(){
     $.ajax({
-        'url': 'http://'+$("#host").val()+'/api/consultas/'+$("#id_concurso").val()+'/problema/'+$("#id_problema").val()+'/',
+        'url': '/api/consultas/'+$("#id_concurso").val()+'/problema/'+$("#id_problema").val()+'/',
         'type': 'get',
         'success': function(msg){
             var consultas = eval('('+msg+')');
@@ -27,7 +27,7 @@ $(document).ready(function(){
     $("#consulta-form").submit(function(event){
         var data = $(this).serialize();
         $.ajax({
-            'url': 'http://'+$("#host").val()+'/api/hacer_consulta/',
+            'url': '/api/hacer_consulta/',
             'type': 'post',
             'data': data,
             'success': function(msg){

@@ -1,7 +1,7 @@
 $(document).ready(function(){
     nombres_dict = {};
     $.ajax({
-        'url': 'http://'+$("#host").val()+'/api/obten_nombre_asesor/'+$("#id_asesor").val(),
+        'url': '/api/obten_nombre_asesor/'+$("#id_asesor").val()+'/',
         'type': 'get',
         'success': function(msg){
             nombres_dict[msg] = $("#id_asesor").val();
@@ -13,7 +13,7 @@ $(document).ready(function(){
     $('#id_nombre_asesor').typeahead({
         source: function(query, process){
             $.ajax({
-                'url': 'http://'+$("#host").val()+'/api/nombres_asesores',
+                'url': '/api/nombres_asesores/',
                 'type': 'get',
                 'data': {
                     'q': query

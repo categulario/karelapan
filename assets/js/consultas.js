@@ -4,7 +4,7 @@ envia_respuesta = function(self){
     respuesta = $(self).closest('.consulta-bad').find('textarea').val();
     componentes = $(self).closest('.consulta-bad').find('.components');
     $.ajax({
-        'url': 'http://'+$("#host").val()+'/api/responde_consulta/',
+        'url': '/api/responde_consulta/',
         'type': 'post',
         'data': data,
         'success': function(msg) {
@@ -46,7 +46,7 @@ $(document).ready(function(){
     $("#aclaracion-general").submit(function(event){
         data = $(this).serialize();
         $.ajax({
-            'url': 'http://'+$("#host").val()+'/api/aclaracion/'+$("#id_concurso").val()+'/',
+            'url': '/api/aclaracion/'+$("#id_concurso").val()+'/',
             'type': 'post',
             'data': data,
             'success': function(msg){
@@ -77,7 +77,7 @@ $(document).ready(function(){
 
 var busca_consultas = function(){
     $.ajax({
-        'url': 'http://'+$("#host").val()+'/api/busca_consultas/'+$("#id_concurso").val()+'/',
+        'url': '/api/busca_consultas/'+$("#id_concurso").val()+'/',
         'type': 'get',
         'success': function(msg){
             var consultas = eval('('+msg+')');

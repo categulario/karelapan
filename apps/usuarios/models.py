@@ -30,12 +30,7 @@ def default_group():
     return [Grupo.objects.get_or_create(nombre='usuarios', elegible=True)[0]]
 
 def default_omi():
-    try:
-        return Olimpiada.objects.get_or_create(anio=1512)[0]
-    except ObjectDoesNotExist:
-        o = Olimpiada(anio=datetime.date.today().year)
-        o.save()
-        return o
+    return Olimpiada.objects.get_or_create(anio=1512)[0]
 
 
 class Perfil(models.Model):

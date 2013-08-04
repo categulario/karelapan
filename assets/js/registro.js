@@ -29,7 +29,7 @@ $(document).ready(function(){
     $('#id_nombre_asesor').typeahead({
         source: function(query, process){
             $.ajax({
-                'url': 'http://'+$("#host").val()+'/api/nombres_asesores/',
+                'url': '/api/nombres_asesores/',
                 'type': 'get',
                 'data': {
                     'q': query
@@ -61,7 +61,7 @@ $(document).ready(function(){
         var texto = this;
         if(nombre != ''){
             $.ajax({
-                'url': 'http://'+$("#host").val()+'/api/existe_usuario/'+nombre+'/',
+                'url': '/api/existe_usuario/'+nombre+'/',
                 'type': 'get',
                 'success': function(msg){
                     if(msg == 'sip') {

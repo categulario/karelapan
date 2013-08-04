@@ -8,7 +8,7 @@ from modules.recaptcha import verifica
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail, EmailMessage
-from apps.sitio.forms import RegistroForm, PerfilForm
+from apps.usuarios.forms import RegistroForm, PerfilForm
 from django.template import RequestContext
 from modules.badges import badgify
 from django.contrib import messages

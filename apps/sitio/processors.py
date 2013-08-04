@@ -5,6 +5,7 @@ from apps.sitio.models import Aviso
 
 def settings_processor(request):
     return {
+        'host'      : settings.BASE_URL,
         'GA'        : settings.GOOGLE_ANALYTHICS,
         'CA'        : settings.ADMINS[0][1],
         'FB'        : settings.FACEBOOK

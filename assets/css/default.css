@@ -1,28 +1,28 @@
 body{
-  background-image: url('../img/bg.png');
-  background-position: right top;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+    background-image: url('../img/bg.png');
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 textarea{
-  font-family: monospace;
+    font-family: monospace;
 }
 dd.faq{
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 i.question{
-        background-image: url('../img/question.png');
-        background-repeat: no-repeat;
-        width: 20px;
-        height: 20px;
-        display: inline-block;
+    background-image: url('../img/question.png');
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
 }
 ul.errorlist > li{
-        font-size: 10px;
-        color: red;
+    font-size: 10px;
+    color: red;
 }
 .tabla-casos{
-        font-size: 12px;
+    font-size: 12px;
 }
 .center{
     text-align:center !important;
@@ -33,38 +33,38 @@ ul.errorlist > li{
     background-position: left bottom;
 }
 .consulta-bad{
-  background-color: #FFFBDC;
-  border-top: 2px solid #FFBEBE;
-  border-bottom: 2px solid #FFBEBE;
-  padding: 0px 10px;
-  margin-bottom: 10px;
+    background-color: #FFFBDC;
+    border-top: 2px solid #FFBEBE;
+    border-bottom: 2px solid #FFBEBE;
+    padding: 0px 10px;
+    margin-bottom: 10px;
 }
 .consulta{
-  background-color: #E5FDEB;
-  border-top: 2px solid #8BB496;
-  border-bottom: 2px solid #8BB496;
-  padding: 0px 10px;
-  margin-bottom: 10px;
+    background-color: #E5FDEB;
+    border-top: 2px solid #8BB496;
+    border-bottom: 2px solid #8BB496;
+    padding: 0px 10px;
+    margin-bottom: 10px;
 }
 #consultas{
-	overflow: auto;
-	max-height: 300px;
+    overflow: auto;
+    max-height: 300px;
 }
 .mensaje-consulta{
-	width: 90%;
+    width: 90%;
 }
 .chico{
-	font-size: 14px;
+    font-size: 14px;
 }
 #kworld, #ksolution{
-	height:400px;
-	background-color:#7F4646;
+    height:400px;
+    background-color:#7F4646;
 }
 #bg-anim{
-	background-image: url('../img/bg-inicio.png');
-	background-repeat: repeat-x;
+    background-image: url('../img/bg-inicio.png');
+    background-repeat: repeat-x;
 }
 #bg-anim > .span12{
-	background-image: url('../img/bg-inicio2.png');
-	background-repeat: repeat-x;
+    background-image: url('../img/bg-inicio2.png');
+    background-repeat: repeat-x;
 }

@@ -18,9 +18,29 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from uuid import uuid1
+from functools import wraps
 
 import datetime
 import uuid
+
+### wrappers
+def permiso_o_grupo_concurso(permiso):
+    """forza una vista a requerir un permiso o pertenecer a un grupo"""
+    def envoltura(vista):
+        @wraps(vista)
+        def wrapper(*args, **kwds):
+            request = args[0]
+            if request.user.is_authenticated():
+                concurso = Concurso.objects.get(pk=kwds['id_concurso'])
+                grupo = concurso.administradores
+                if grupo in request.user.groups.all() or user.has_perm(permiso):
+                    return vista(*args, **kwds)
+            response =  HttpResponse('No tienes permitida esta acción', content_type='text/plain')
+            response.status_code=403
+            return response
+        return wrapper
+    return envoltura
+### endwrappers
 
 def sube_archivo_codigo(archivo_subido):
     nuevo_nombre = str(uuid.uuid1())+'.karel'
@@ -200,7 +220,7 @@ def concurso_view(request, id_concurso):
         messages.error(request, 'Este concurso ya no está habilitado para ti')
         return HttpResponseRedirect('/concursos')
 
-@permission_required('evaluador.puede_ver_ranking')
+@permiso_o_grupo_concurso('evaluador.administrar_todos_concursos')
 def concurso_ver_ranking(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     usuarios = []
@@ -217,8 +237,9 @@ def concurso_ver_ranking(request, id_concurso):
     }
     return render_to_response('ranking.html', data, context_instance=RequestContext(request))
 
-@permission_required('evaluador.puede_ver_ranking')
+@permiso_o_grupo_concurso('evaluador.administrar_todos_concursos')
 def concurso_ver_consultas(request, id_concurso):
+    """Muesta las consultas hechas por los usuarios"""
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     data = {
         'consultas' : Consulta.objects.filter(concurso=concurso),

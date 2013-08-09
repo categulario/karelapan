@@ -149,7 +149,8 @@ class Concurso(models.Model):
     autor               = models.ForeignKey(User, related_name='concursos')
     problemas           = models.ManyToManyField(Problema)
     grupos              = models.ManyToManyField('usuarios.Grupo', related_name='+')
-    administradores     = models.ForeignKey('usuarios.Grupo', related_name='+')
+    administradores     = models.ForeignKey('auth.Group', related_name='+')
+    olimpiada           = models.ForeignKey('usuarios.Olimpiada', blank=True, null=True)
     duracion_preguntas  = models.IntegerField(default=90, help_text="La duración en minutos del periodo en que pueden hacer preguntas los concursantes a partir del inicio del concurso")
     ranking_publico     = models.BooleanField(default=False)
 
@@ -162,6 +163,7 @@ class Concurso(models.Model):
     class Meta:
         permissions = (
             ("puede_ver_ranking", "Puede ver ranking"),
+            ("administrar_todos_concursos", "Puede administrar todos los concursos"),
         )
         ordering    = ['-fecha_inicio']
 

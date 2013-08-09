@@ -21,8 +21,8 @@ class RegistroForm(forms.ModelForm):
     correo              = forms.EmailField()
     nombre_asesor       = forms.CharField(required=False)
     nombre_de_usuario   = forms.CharField(validators=[valida_nombre_de_usuario])
-    contrasenia         = forms.CharField(widget=forms.PasswordInput, label="contraseña")
-    repetir_contrasenia = forms.CharField(widget=forms.PasswordInput, label="repetir contraseña")
+    contrasenia         = forms.CharField(widget=forms.PasswordInput, label="Contraseña")
+    repetir_contrasenia = forms.CharField(widget=forms.PasswordInput, label="Repetir contraseña")
     asesor              = forms.CharField(widget=forms.HiddenInput, required=False)
     required_css_class = 'required'
     class Meta:

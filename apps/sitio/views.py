@@ -237,6 +237,23 @@ def concurso_ver_ranking(request, id_concurso):
     }
     return render_to_response('ranking.html', data, context_instance=RequestContext(request))
 
+@login_required
+def concurso_ver_ranking_publico(request, id_concurso):
+    concurso = get_object_or_404(Concurso, pk=id_concurso, ranking_publico=True)
+    usuarios = []
+    for participacion in Participacion.objects.filter(concurso=concurso).order_by('-puntaje'):
+        usuario = participacion.usuario
+        usuario.score = participacion.puntaje
+        usuario.resultados = []
+        for problema in concurso.problemas.all():
+            usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
+        usuarios.append(usuario)
+    data = {
+        'concurso'  : concurso,
+        'usuarios'  : usuarios
+    }
+    return render_to_response('ranking.html', data, context_instance=RequestContext(request))
+
 @permiso_o_grupo_concurso('evaluador.administrar_todos_concursos')
 def concurso_ver_consultas(request, id_concurso):
     """Muesta las consultas hechas por los usuarios"""

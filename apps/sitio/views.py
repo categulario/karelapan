@@ -265,8 +265,11 @@ def concurso_ver_consultas(request, id_concurso):
     }
     return render_to_response('consultas.html', data, context_instance=RequestContext(request))
 
+@login_required
 def medallero_view(request):
-    data = {}
+    data = {
+        'usuarios': Usuario.objects.order_by('-perfil__puntaje').filter(perfil__inscripciones__anio=settings.OLIMPIADA_ACTUAL)[:30]
+    }
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
 def usuarios_view(request):
@@ -279,8 +282,9 @@ def usuarios_view(request):
 
 @login_required
 def usuario_view(request, nombre_usuario):
-    data = {}
-    data['usuario'] = get_object_or_404(Usuario, username=nombre_usuario)
+    data = {
+        'usuario': get_object_or_404(Usuario, username=nombre_usuario)
+    }
     return render_to_response('usuario_ver.html', data, context_instance=RequestContext(request))
 
 def wiki_view(request):

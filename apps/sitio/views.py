@@ -430,7 +430,7 @@ def login(request):
                 else:
                     messages.error(request, 'Por razones que trascienden la escolástica, tu cuenta está desactivad. ¿Verificaste tu correo electrónico?')
             else:
-                messages.error(request, 'Nadie registrado con ese correo, ¿Y si verificas?')
+                messages.error(request, 'Nadie registrado con ese usuario, ¿Y si verificas?')
             return HttpResponseRedirect(request.POST['redirect'])
         else:
             messages.warning(request, '¡Hey hey hey! ¡Faltan los campos del formulario!')

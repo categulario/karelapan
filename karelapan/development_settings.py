@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 import os
 import logging
-# Django settings for karelapan project.
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'apps.bootstrapy'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -168,9 +169,9 @@ LOGGING = {
     }
 }
 
+BASE_URL = 'localhost:8000'
 GOOGLE_ANALYTHICS = False
 FACEBOOK = False
-BASE_URL = 'localhost:8000'
 
 MESSAGE_TAGS = {
     50: 'problem_debug'
@@ -181,7 +182,7 @@ LOGIN_URL = '/usuarios'
 RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
 RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
 
-RAIZ_CODIGOS = os.path.normpath(os.path.join(os.path.dirname(__file__),'../codigos/'))+'/'
+RAIZ_CODIGOS = os.path.join(MEDIA_ROOT, 'casos')+'/'
 
 #Cosas del demonio evaluador de karel
 #Ruta absoluta al archivo del registro
@@ -222,3 +223,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "apps.sitio.processors.path_processor",
     "apps.sitio.processors.avisos_processor",
 )
+OLIMPIADA_ACTUAL = 2014

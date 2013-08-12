@@ -134,6 +134,12 @@ class Perfil(models.Model):
     def __unicode__(self):
         return self.get_full_name()
 
+    def gravatar(self):
+        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
+
+    def gravatar_pequenio(self):
+        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
+
     class Meta:
         verbose_name_plural = 'perfiles'
 

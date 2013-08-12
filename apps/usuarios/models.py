@@ -142,6 +142,7 @@ class Perfil(models.Model):
 
     def save(self):
         self.nombre_completo = "%s %s %s"%(self.nombre, self.appat, self.apmat)
+        self.grupos.add(Grupo.objects.get_or_create(nombre='usuarios')[0])
         super(Perfil, self).save()
 
     class Meta:

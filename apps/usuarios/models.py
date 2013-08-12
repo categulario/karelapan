@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from apps.evaluador.models import Envio, Concurso
 from django.db.models import Min, Max
 from django.utils import timezone
+from django.conf import settings
 from modules.badges import badgify
 import datetime, hashlib
 
@@ -121,6 +122,10 @@ class Perfil(models.Model):
     confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
     nombre_completo     = models.CharField(max_length=200, blank=True, null=True)
     inscripciones       = models.ManyToManyField(Olimpiada, null=True, blank=True, related_name='inscritos')
+
+    def es_olimpico(self):
+        olimpiada_actual = Olimpiada.objects.get_or_create(anio=settings.OLIMPIADA_ACTUAL)[0]
+        return olimpiada_actual in self.inscripciones.all()
 
     def get_full_name(self):
         return "%s %s %s"%(self.nombre, self.appat, self.apmat)

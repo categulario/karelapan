@@ -26,7 +26,12 @@
         <tbody>
           {% for usuario in usuarios %}
             <tr>
-              <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }} [<span class="muted">{{ usuario.username }}</span>]</a></td>
+              <td>
+                <a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }} [<span class="muted">{{ usuario.username }}</span>]</a>
+                {% if usuario.perfil.es_olimpico %}
+                  <img src="{% static 'img/medallas_small.png' %}" width="30">
+                {% endif %}
+              </td>
               <td>{{ usuario.perfil.estado }}</td>
               <td>{{ usuario.perfil.puntaje }}</td>
             </tr>

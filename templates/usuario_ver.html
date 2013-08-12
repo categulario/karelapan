@@ -1,12 +1,22 @@
 {% extends 'template.html' %}
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 {% block titulo %} {{ usuario }} {% endblock %}
 {% block contenido %}
+  {% addtoblock 'js' %}
+    <script type="text/javascript" language="javascript">
+      $(document).ready(function(){
+          var posicion = $('#profile-pic').position();
+          posicion.top += 80;
+          posicion.left += 80;
+          $('#profile-m').css({top: posicion.top+'px', left: posicion.left+'px'});
+      });
+    </script>
+  {% endaddtoblock %}
   <div class="span2"></div>
   <div class="span8">
         <div class="row-fluid">
       <div class="span2">
-        <img src="{{ usuario.gravatar }}">
+        <img src="{{ usuario.gravatar }}" id="profile-pic">
       </div>
       <div class="span10">
         <h3>{{ usuario }} [<em class="text-info">{{ usuario.username }}</em>]<small>De {{ usuario.perfil.estado }}</small></h3>
@@ -100,4 +110,7 @@
     </div>
   </div>
   <div class="span2"></div>
+  {% if usuario.perfil.es_olimpico %}
+    <div id="profile-m"></div>
+  {% endif %}
 {% endblock %}

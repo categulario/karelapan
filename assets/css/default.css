@@ -68,3 +68,11 @@ ul.errorlist > li{
     background-image: url('../img/bg-inicio2.png');
     background-repeat: repeat-x;
 }
+#profile-m{
+    width: 50px;
+    height: 40px;
+    background-image: url('../img/medallas_small.png');
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    position: absolute;
+}

@@ -25,7 +25,7 @@
                 <strong>{{ forloop.counter }}</strong>
               </td>
               <td>
-                <a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.perfil.gravatar_pequenio }}"> {{ usuario }}</a>
+                <a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.perfil.gravatar_pequenio }}"> {{ usuario.perfil.nombre_completo }}</a>
               </td>
               <td>
                 {% progressbar usuario.score concurso.puntaje_total %}

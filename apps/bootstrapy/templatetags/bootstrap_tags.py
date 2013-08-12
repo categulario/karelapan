@@ -100,7 +100,7 @@ def progressbar(valor, valor_maximo):
     else:
         tipo = 'danger'
     div = int(valor*100/float(valor_maximo))
-    return '<div class="progress progress-'+tipo+' progress-striped active" data-title="'+str(valor)+' puntos"><div class="bar" style="width: '+str(div)+'%"></div></div>'
+    return '<div class="progress progress-'+tipo+' progress-striped active" data-title="'+str(valor)+' puntos de '+str(valor_maximo)+' en total"><div class="bar" style="width: '+str(div)+'%"></div></div>'
 
 register.tag('form_inline', form_inline)
 register.tag('form_horizontal', form_horizontal)

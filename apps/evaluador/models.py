@@ -106,16 +106,6 @@ class Problema(models.Model):
     def __unicode__(self):
         return self.nombre
 
-    def mejor_puntaje_usuario(self, id_usuario):
-        connection = pymongo.Connection()
-        db = connection['envios']
-        collection = db['intentos']
-        resultado = collection.find_one({'problema':self.id, 'usuario':id_usuario}).sort('puntaje', direction=pymongo.DESCENDING)
-        if resultado == None:
-            return -1
-        else:
-            return resultado['puntaje']
-
     def es_reciente(self):
         """Un problema es reciente durante 15 días después de su publicación"""
         publicacion = datetime.datetime(self.fecha_publicacion.year, self.fecha_publicacion.month, self.fecha_publicacion.day, tzinfo=timezone.now().tzinfo)

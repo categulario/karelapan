@@ -4,6 +4,7 @@ import logging
 import daemonize
 import time
 import sys
+import os
 import psycopg2
 import json
 from psycopg2.extras import DictCursor
@@ -65,7 +66,7 @@ def main():
                 "efectividad": 0.0,
                 "tiempo_ejecucion": 0
             }
-            archivomundo = settings.MEDIA_ROOT+'casos/'+problema['casos_de_evaluacion']
+            archivomundo = os.path.join(settings.MEDIA_ROOT, 'casos')+'/'+problema['casos_de_evaluacion']
             try:
                 f = file(archivomundo)
             except IOError:

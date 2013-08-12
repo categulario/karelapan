@@ -229,7 +229,7 @@ def concurso_ver_ranking(request, id_concurso):
         usuario.score = participacion.puntaje
         usuario.resultados = []
         for problema in concurso.problemas.all():
-            usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
+            usuario.resultados.append(badgify(Usuario(usuario).mejor_puntaje(problema, concurso)))
         usuarios.append(usuario)
     data = {
         'concurso'  : concurso,
@@ -246,7 +246,7 @@ def concurso_ver_ranking_publico(request, id_concurso):
         usuario.score = participacion.puntaje
         usuario.resultados = []
         for problema in concurso.problemas.all():
-            usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
+            usuario.resultados.append(badgify(Usuario(usuario).mejor_puntaje(problema, concurso)))
         usuarios.append(usuario)
     data = {
         'concurso'  : concurso,
@@ -268,7 +268,8 @@ def concurso_ver_consultas(request, id_concurso):
 @login_required
 def medallero_view(request):
     data = {
-        'usuarios': Usuario.objects.order_by('-perfil__puntaje').filter(perfil__inscripciones__anio=settings.OLIMPIADA_ACTUAL)[:30]
+        'usuarios': Usuario.objects.order_by('-perfil__puntaje').filter(perfil__inscripciones__anio=settings.OLIMPIADA_ACTUAL)[:30],
+        'concursos': Concurso.objects.filter(olimpiada__anio=settings.OLIMPIADA_ACTUAL, ranking_publico=True).order_by('-fecha_inicio')
     }
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 

@@ -132,7 +132,7 @@
     <script>
       var busca_envio = function(){
           $.ajax({
-              'url'    : 'http://'+$("#host").val()+'/api/envio/{{ envio }}/concurso/{{ concurso.id }}',
+              'url'    : '/api/envio/{{ envio }}/concurso/{{ concurso.id }}',
               'type'   : 'get',
               'success': function(msg){
                   if(msg != 'P' && msg != 'S'){

@@ -157,6 +157,20 @@ class Concurso(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    def puntaje_total(self):
+        return 100*self.problemas.count()
+
+    def ranking(self):
+        usuarios = []
+        for participacion in Participacion.objects.filter(concurso=self).order_by('-puntaje'):
+            usuario = participacion.usuario
+            usuario.score = participacion.puntaje
+            #~ usuario.resultados = []
+            #~ for problema in self.problemas.all():
+                #~ usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
+            usuarios.append(usuario)
+        return usuarios
+
     def lista_grupos(self):
         return ', '.join([str(g) for g in self.grupos.all()])
 

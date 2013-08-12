@@ -1,9 +1,44 @@
 {% extends 'template.html' %}
-{% load staticfiles %}
+{% load staticfiles bootstrap_tags sekizai_tags %}
 {% block titulo %} Medallero {% endblock %}
 {% block contenido %}
+  {% addtoblock 'js' %}
+    <script type="text/javascript" language="javascript" src="{% static 'js/medallero.js' %}"></script>
+  {% endaddtoblock %}
   <div class="span8">
     <h2>Medallero <small>Lo mejor de lo mejor</small></h2>
+    <p class="muted"><em>Concursos para la olimpiada en curso</em></p>
+    {% for concurso in concursos %}
+      <h3>{{ concurso }} <small>{{ concurso.fecha_inicio }} [<a href="{% url 'apps.sitio.views.concurso_ver_ranking_publico' concurso.id %}">ver ranking completo</a>]</small></h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:20px;">#</th>
+            <th style="width:200px;">Nombre</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in concurso.ranking %}
+            <tr>
+              <td>
+                <strong>{{ forloop.counter }}</strong>
+              </td>
+              <td>
+                <a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.perfil.gravatar_pequenio }}"> {{ usuario }}</a>
+              </td>
+              <td>
+                {% progressbar usuario.score concurso.puntaje_total %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% empty %}
+      <div class="well">
+        <h4>Aun no ha ocurrido ningún concurso</h4>
+      </div>
+    {% endfor %}
   </div>
   <div class="span4">
     <h4>Puntajes globales en karelapan <small><a href="">Ver todos</a></small></h4>
@@ -23,6 +58,10 @@
               <a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}"><img src="{{ usuario.gravatar_pequenio }}"> {{ usuario }}</a>
             </td>
             <td>{{ usuario.perfil.puntaje }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3"><strong>No hay usuarios inscritos a la olimpiada actual</strong></td>
           </tr>
         {% endfor %}
       </tbody>

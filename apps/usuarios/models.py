@@ -116,7 +116,7 @@ class Perfil(models.Model):
     problemas_resueltos = models.IntegerField(default=0)
     puntaje             = models.IntegerField(default=0)
     descripcion         = models.TextField()
-    grupos              = models.ManyToManyField(Grupo)
+    grupos              = models.ManyToManyField(Grupo, related_name='perfiles')
     ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi, related_name='+')
     confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
     nombre_completo     = models.CharField(max_length=200, blank=True, null=True)
@@ -218,7 +218,12 @@ class Usuario(User):
         return lista_usuarios
 
     def concursos_activos(self):
-        return Concurso.objects.filter(grupos__in=self.perfil.grupos.all(), fecha_inicio__lte=timezone.now(), fecha_fin__gte=timezone.now(), activo=True)
+        return Concurso.objects.filter(
+            grupos__perfiles=self.perfil,
+            fecha_inicio__lte=timezone.now(),
+            fecha_fin__gte=timezone.now(),
+            activo=True
+        )
 
     def participa_en_concurso(self):
         return self.concursos_activos().count() > 0

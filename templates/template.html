@@ -161,9 +161,15 @@
         {% for aviso in avisos %}
           <div class="alert alert-{{ aviso.tipo }}">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>&iexcl;Mira!</strong> {% autoescape off %}{{ aviso }}{% endautoescape %}
+            <strong>&iexcl;Mira!</strong> {{ aviso|safe }}
           </div>
         {% endfor %}
+        {% if tiene_concursos %}
+          <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>&iexcl;Atención!</strong> Hay concursos en los que puedes participar, visita la sección <a href="{% url 'apps.sitio.views.concursos_view' %}">concursos</a> para más información.<br>Durante este periodo no podrás enviar soluciones a problemas ni ver tus códigos en envíos.
+          </div>
+        {% endif %}
       <div class="row" id="bg-anim">
         {% block contenido %}
           <div class="span12"><h3>Karelapan</h3></div>

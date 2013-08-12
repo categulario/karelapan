@@ -222,5 +222,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "apps.sitio.processors.settings_processor",
     "apps.sitio.processors.path_processor",
     "apps.sitio.processors.avisos_processor",
+    "apps.sitio.processors.concursos_processor",
 )
 OLIMPIADA_ACTUAL = 2014

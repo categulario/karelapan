@@ -2,6 +2,7 @@
 # Archivo de procesadores para el sistema de templates de django
 from django.conf import settings
 from apps.sitio.models import Aviso
+from apps.usuarios.models import Usuario
 
 def settings_processor(request):
     return {
@@ -16,3 +17,11 @@ def path_processor(request):
 
 def avisos_processor(request):
     return {'avisos': Aviso.objects.filter(mostrado=True)}
+
+def concursos_processor(request):
+    """Indica si un usuario tiene concursos activos"""
+    if request.user.is_authenticated():
+        u = Usuario.objects.get(pk=request.user.id)
+        return {'tiene_concursos': u.participa_en_concurso()}
+    else:
+        return {'tiene_concursos': False}

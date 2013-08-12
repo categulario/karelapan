@@ -62,6 +62,12 @@ def descarga_codigo(request, id_envio):
     else:
         return HttpResponse('Forbidden', content_type='text/plain')
 
+def descarga_mundo(request, id_problema):
+    problema = get_object_or_404(Problema, pk=id_problema, publico=True)
+    response = HttpResponse(problema.mundo, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename="%s.world"'%(problema.nombre_administrativo)
+    return response
+
 def envio(request, id_envio, id_concurso=None):
     """Ofrece el veredicto de un envío a un usuario"""
     envio = get_object_or_404(Envio, pk=id_envio)

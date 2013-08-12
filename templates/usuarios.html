@@ -13,6 +13,8 @@
   {% else %}
     <div class="span2"></div>
     <div class="span8">
+      <p><strong>Lista</strong> de usuarios en orden alfabético</p>
+      <p>Hay <strong>{{ cuenta }}</strong> usuarios en total</p>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -31,6 +33,23 @@
           {% endfor %}
         </tbody>
       </table>
+      <div class="pagination pagination-centered">
+        <ul>
+          <li><a href="{% url 'apps.sitio.views.usuarios_view' %}">A</a></li>
+          {% if usuarios.has_previous %}
+            <li><a href="{% url 'apps.sitio.views.usuarios_view' %}?pagina={{ usuarios.previous_page_number }}">letra anterior</a></li>
+          {% else %}
+            <li class="disabled"><a>letra anterior</a></li>
+          {% endif %}
+          <li class="active"><a>{{ usuarios.number }}</a></li>
+          {% if usuarios.has_next %}
+            <li><a href="{% url 'apps.sitio.views.usuarios_view' %}?pagina={{ usuarios.next_page_number }}">letra siguiente</a></li>
+          {% else %}
+            <li class="disabled"><a>letra siguiente</a></li>
+          {% endif %}
+          <li><a href="{% url 'apps.sitio.views.usuarios_view' %}?pagina={{ usuarios.paginator.num_pages }}">Z</a></li>
+        </ul>
+      </div>
     </div>
     <div class="span2"></div>
   {% endif %}

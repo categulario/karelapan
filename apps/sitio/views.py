@@ -285,7 +285,8 @@ def usuarios_view(request):
     except EmptyPage:
         usuarios = paginator.page(paginator.num_pages)
     data = {
-        'usuarios'  : usuarios
+        'usuarios'  : usuarios,
+        'cuenta': Usuario.objects.count()
     }
     if 'next' in request.GET:
         data['next'] = request.GET['next']

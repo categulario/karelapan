@@ -34,7 +34,7 @@ class UltimosProblemas(Feed):
         obj.autor.email
 
     def item_author_link(self, obj):
-        return reverse('apps.sitio.views.usuario_view', args=[obj.autor.id])
+        return reverse('apps.sitio.views.usuario_view', args=[obj.autor.username])
 
     def item_pubdate(self, item):
         return datetime.datetime(item.fecha_publicacion.year, item.fecha_publicacion.month, item.fecha_publicacion.day)

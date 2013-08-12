@@ -169,7 +169,7 @@
     <script>
       var busca_envio = function(){
           $.ajax({
-              'url'    : 'http://'+$("#host").val()+'/api/envio/{{ envio }}',
+              'url'    : '/api/envio/{{ envio }}',
               'type'   : 'get',
               'success': function(msg){
                   if(msg != 'P' && msg != 'S'){

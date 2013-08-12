@@ -274,8 +274,18 @@ def medallero_view(request):
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
 def usuarios_view(request):
+    lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')
+    paginator = Paginator(lista_usuarios, 50)
+
+    page = request.GET.get('pagina')
+    try:
+        usuarios = paginator.page(page)
+    except PageNotAnInteger:
+        usuarios = paginator.page(1)
+    except EmptyPage:
+        usuarios = paginator.page(paginator.num_pages)
     data = {
-        'usuarios'  : Usuario.objects.all().order_by('perfil__nombre_completo')
+        'usuarios'  : usuarios
     }
     if 'next' in request.GET:
         data['next'] = request.GET['next']

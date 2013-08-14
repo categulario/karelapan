@@ -231,6 +231,21 @@ class Usuario(User):
             activo=True
         )
 
+    def concursos_activos_y_futuros(self):
+        concursos = Concurso.objects.filter(
+            grupos__perfiles=self.perfil,
+            fecha_fin__gte=timezone.now(),
+            activo=True
+        )
+        lista = []
+        for concurso in concursos:
+            if concurso.fecha_inicio <= timezone.now():
+                concurso.en_curso = True
+            else:
+                concurso.en_curso = False
+            lista.append(concurso)
+        return lista
+
     def participa_en_concurso(self):
         return self.concursos_activos().count() > 0
 

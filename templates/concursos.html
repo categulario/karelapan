@@ -12,8 +12,12 @@
         </p>
         <p>{{ concurso.descripcion }}</p>
         <h4>
-          Quedan {{ concurso.tiempo_restante }}
-          <a href="{% url 'apps.sitio.views.concurso_view' concurso.id %}" class="btn btn-success">Participar</a>
+          {% if concurso.en_curso %}Quedan{% else %}Faltan{% endif %} {{ concurso.tiempo_restante }}
+          {% if concurso.en_curso %}
+            <a href="{% url 'apps.sitio.views.concurso_view' concurso.id %}" class="btn btn-success">Participar</a>
+          {% else %}
+            <a href="#" class="btn btn-success disabled">Espera a que llegue la hora para participar</a>
+          {% endif %}
         </h4>
       </div>
     {% empty %}

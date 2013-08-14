@@ -141,12 +141,15 @@ def concursos_view(request):
     except EmptyPage:
         concursos = paginator.page(paginator.num_pages)
     data = {
-        'concursos' : Usuario.objects.get(pk=request.user.id).concursos_activos()
+        'concursos' : Usuario.objects.get(pk=request.user.id).concursos_activos_y_futuros()
     }
     if request.user.has_perm('evaluador.puede_ver_ranking'):
         data['concursos_todos'] = concursos
     for concurso in data['concursos']:
-        concurso.tiempo_restante = diferencia_str(concurso.fecha_fin)
+        if concurso.en_curso:
+            concurso.tiempo_restante = diferencia_str(concurso.fecha_fin)
+        else:
+            concurso.tiempo_restante = diferencia_str(concurso.fecha_inicio)
     return render_to_response('concursos.html', data, context_instance=RequestContext(request))
 
 @login_required

@@ -1,1 +1,1 @@
-kill $(cat gunicorn.pid) && gunicorn -c gconfig.py wsgi:app
+kill $(cat gunicorn.pid) && ../bin/gunicorn -c gconfig.py wsgi:app

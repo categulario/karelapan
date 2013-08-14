@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from django.db import models
+from django.utils import timezone
 
 class Noticia(models.Model):
     titulo      = models.CharField(max_length=140)
@@ -23,6 +24,11 @@ class Aviso(models.Model):
         ('error', 'Error (rojo)'),
     ))
     mostrado    = models.BooleanField(default=True)
+    caducidad   = models.DateTimeField()
+
+    def activo(self):
+        return timezone.now()<=self.caducidad
+    activo.boolean = True
 
     def __unicode__(self):
         return self.contenido

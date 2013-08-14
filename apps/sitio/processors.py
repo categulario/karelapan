@@ -3,6 +3,7 @@
 from django.conf import settings
 from apps.sitio.models import Aviso
 from apps.usuarios.models import Usuario
+from django.utils import timezone
 
 def settings_processor(request):
     return {
@@ -16,7 +17,7 @@ def path_processor(request):
     return {'path': request.path}
 
 def avisos_processor(request):
-    return {'avisos': Aviso.objects.filter(mostrado=True)}
+    return {'avisos': Aviso.objects.filter(mostrado=True, caducidad__gte=timezone.now())}
 
 def concursos_processor(request):
     """Indica si un usuario tiene concursos activos"""

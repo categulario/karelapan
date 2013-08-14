@@ -7,7 +7,7 @@ class NoticiaAdmin(admin.ModelAdmin):
     list_filter  = ('fecha', 'pegajoso')
 
 class AvisoAdmin(admin.ModelAdmin):
-    list_display = ('contenido', 'tipo', 'mostrado')
+    list_display = ('contenido', 'tipo', 'mostrado', 'caducidad', 'activo')
     ordering = ('tipo',)
     list_filter = ('tipo', 'mostrado')
 

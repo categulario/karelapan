@@ -501,16 +501,20 @@ def baja(request):
 
 def confirma_correo(request, correo, token):
     """Confirma el correo electrónico de un usuario"""
-    usuario = get_object_or_404(Usuario, email=correo, perfil__confirm_token=token)
-    usuario.is_active = True
-    usuario.perfil.confirm_token = None
-    usuario.save()
-    usuario.perfil.save()
-    data = {
-        'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
-    }
-    messages.success(request, 'Has verificado tu correo electrónico con éxito')
-    return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
+    usuario = get_object_or_404(Usuario, email=correo)
+    if usuario.perfil.confirm_token == token:
+        usuario.is_active = True
+        usuario.perfil.confirm_token = None
+        usuario.save()
+        usuario.perfil.save()
+        data = {
+            'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
+        }
+        messages.success(request, 'Has verificado tu correo electrónico con éxito')
+        return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
+    else:
+        messages.warning(request, 'Ya habías verificado tu cuenta, no puedes hacerlo de nuevo')
+        return HttpResponseRedirect('/')
 
 def recuperar_contrasenia(request):
     """Muestra la pantalla de recuperación de contraseña"""

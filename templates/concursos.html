@@ -18,6 +18,10 @@
           {% else %}
             <a href="#" class="btn btn-success disabled">Espera a que llegue la hora para participar</a>
           {% endif %}
+          <br>
+          {% if not concurso.en_curso %}
+            <small>(del {{ concurso.fecha_inicio }} al {{ concurso.fecha_fin }})</small>
+          {% endif %}
         </h4>
       </div>
     {% empty %}

@@ -24,4 +24,7 @@ urlpatterns += patterns('',
 if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^static/(?P<path>.*)$', 'django.views.static.serve'),
+        url(r'^404/$', 'apps.sitio.views.error404'),
+        url(r'^403/$', 'apps.sitio.views.error403'),
+        url(r'^500/$', 'apps.sitio.views.error500'),
     )

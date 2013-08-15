@@ -136,7 +136,7 @@ class Concurso(models.Model):
     nombre              = models.CharField(max_length=140)
     descripcion         = models.TextField()
     activo              = models.BooleanField(default=True)
-    problemas           = models.ManyToManyField(Problema)
+    problemas           = models.ManyToManyField(Problema, blank=True)
     grupos              = models.ManyToManyField('usuarios.Grupo', related_name='concursos')
     administradores     = models.ForeignKey('auth.Group', related_name='+')
     olimpiada           = models.ForeignKey('usuarios.Olimpiada', blank=True, null=True)

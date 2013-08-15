@@ -151,6 +151,35 @@ class Perfil(models.Model):
         self.grupos.add(Grupo.objects.get_or_create(nombre='usuarios')[0])
         super(Perfil, self).save()
 
+    def concursos_activos_y_futuros(self):
+        concursos = Concurso.objects.filter(
+            grupos__perfiles=self,
+            fecha_fin__gte=timezone.now(),
+            activo=True
+        )
+        lista = []
+        for concurso in concursos:
+            if concurso.fecha_inicio <= timezone.now():
+                concurso.en_curso = True
+            else:
+                concurso.en_curso = False
+            lista.append(concurso)
+        return lista
+
+    def concurso_actual(self):
+        try:
+            concurso = self.concursos_activos_y_futuros()[0]
+        except IndexError:
+            concurso = None
+        return concurso
+
+    def participa_en_concurso_futuro(self):
+        return Concurso.objects.filter(
+            grupos__perfiles=self,
+            fecha_fin__gte=timezone.now(),
+            activo=True
+        ).count() > 0
+
     class Meta:
         verbose_name_plural = 'perfiles'
 
@@ -248,6 +277,9 @@ class Usuario(User):
 
     def participa_en_concurso(self):
         return self.concursos_activos().count() > 0
+
+    def participa_en_concurso_futuro(self):
+        return self.concursos_activos_y_futuros().count() > 0
 
     def puede_hacer_consulta(self, concurso):
         """determina si el usuario puede hacer una consulta en un examen

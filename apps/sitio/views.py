@@ -33,7 +33,7 @@ def permiso_o_grupo_concurso(permiso):
             if request.user.is_authenticated():
                 concurso = Concurso.objects.get(pk=kwds['id_concurso'])
                 grupo = concurso.administradores
-                if grupo in request.user.groups.all() or user.has_perm(permiso):
+                if grupo in request.user.groups.all() or request.user.has_perm(permiso):
                     return vista(*args, **kwds)
             response =  HttpResponse('No tienes permitida esta acción', content_type='text/plain')
             response.status_code=403

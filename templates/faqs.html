@@ -7,9 +7,7 @@
     <dl>
       {% for pregunta in preguntas %}
         <dt>{{ pregunta }}</dt>
-        {% autoescape off %}
-        <dd class="faq">{{ pregunta.respuesta_full }}</dd>
-        {% endautoescape %}
+        <dd class="faq">{{ pregunta.respuesta_full|safe }}</dd>
       {% endfor %}
     </dl>
   </div>

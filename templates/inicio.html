@@ -41,7 +41,7 @@
     {% for noticia in noticias %}
       <div class="well well-small">
         {% if noticia.titulo %}<strong>{{ noticia.titulo }}</strong><br>{% endif %}
-        {% if noticia.pegajoso %}<i class="icon-fire"></i>{% else %}<i class="icon-star-empty"></i>{% endif %} {{ noticia.contenido }} <small><a href="/usuarios/ver/{{ noticia.autor.id }}">{{ noticia.autor }}</a></small><br>
+        {% if noticia.pegajoso %}<i class="icon-fire"></i>{% else %}<i class="icon-star-empty"></i>{% endif %} {{ noticia.contenido|safe }} <small><a href="/usuarios/ver/{{ noticia.autor.id }}">{{ noticia.autor }}</a></small><br>
         <small>{{ noticia.fecha }}</small>
       </div>
     {% endfor %}

@@ -525,7 +525,7 @@ def recuperar_contrasenia(request):
     if not request.user.is_authenticated():
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         if request.method == 'POST':
-            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
+            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field').encode('utf-8'), request.POST.get('recaptcha_response_field').encode('utf-8'))
             if respuesta == True:
                 usuario = get_object_or_404(Usuario, email=request.POST.get('correo'))
                 token_confirmacion = str(uuid1())

@@ -323,7 +323,7 @@ def registro_view(request):
         if request.method == 'POST':
             formulario = RegistroForm(request.POST)
             if formulario.is_valid():
-                respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST['recaptcha_challenge_field'], request.POST['recaptcha_response_field'])
+                respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field'), request.POST.get('recaptcha_response_field'))
                 if respuesta == True:
                     if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
                         nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=False)

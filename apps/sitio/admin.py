@@ -3,7 +3,7 @@ from apps.sitio.models import *
 
 class NoticiaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'contenido', 'autor', 'fecha', 'pegajoso')
-    ordering = ('fecha',)
+    ordering = ('-fecha',)
     list_filter  = ('fecha', 'pegajoso')
 
 class AvisoAdmin(admin.ModelAdmin):

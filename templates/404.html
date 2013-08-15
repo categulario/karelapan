@@ -10,7 +10,7 @@
     <script type="text/javascript" language="javascript" src="{% static 'js/bienvenida.js' %}"></script>
   {% endaddtoblock %}
   <div class="span12">
-    <h2>Karel intentó entrar a una página que no existe!</h2>
+    <h2>Karel intentó entrar a una página que no existe! <small>{{ request_path }}</small></h2>
   </div>
 </div>
 <div class="row">

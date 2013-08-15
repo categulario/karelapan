@@ -62,7 +62,7 @@ def problemas_view(request):
     data = {}
     niveles = Nivel.objects.all()
     for nivel in niveles:
-        nivel.problemas = nivel.problema_set.all()
+        nivel.problemas = nivel.problema_set.filter(publico=True)
         if request.user.is_authenticated():
             for problema in nivel.problemas:
                 problema.mejor_puntaje_usuario = badgify(Usuario.objects.get(pk=request.user.id).mejor_puntaje(problema))

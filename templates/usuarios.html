@@ -38,7 +38,7 @@
           {% endfor %}
         </tbody>
       </table>
-      <div class="pagination pagination-centered">
+      <div class="pagination pagination-centered hide-print">
         <ul>
           <li><a href="{% url 'apps.sitio.views.usuarios_view' %}">A</a></li>
           {% if usuarios.has_previous %}

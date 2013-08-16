@@ -1,0 +1,9 @@
+.alert{
+	display: none !important;
+}
+.hide-print{
+	display: none !important;
+}
+#pie{
+	display: none !important;
+}

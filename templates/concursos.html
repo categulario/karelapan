@@ -62,7 +62,7 @@
           No hay concursos viejos o así.
         </div>
       {% endfor %}
-      <div class="pagination pagination-centered">
+      <div class="pagination pagination-centered hide-print">
         <ul>
           <li><a href="{% url 'apps.sitio.views.concursos_view' %}">Últimos</a></li>
           {% if concursos_todos.has_previous %}

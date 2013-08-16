@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from django import forms
-from apps.usuarios.models import Perfil, Grupo
+from apps.usuarios.models import Perfil, Grupo, Usuario
 from django.core.exceptions import ValidationError
 
 def valida_nombre_de_usuario(cadena):
@@ -8,6 +8,16 @@ def valida_nombre_de_usuario(cadena):
     for i in cadena:
         if i not in caracteres:
             raise ValidationError('Caracter no válido')
+    try:
+        u = Usuario.objects.get(username=cadena)
+    except Usuario.DoesNotExist:
+        raise ValidationError('Este nombre de usuario ya está en uso')
+
+def valida_correo(cadena):
+    try:
+        u = Usuario.objects.get(email=cadena)
+    except Usuario.DoesNotExist:
+        raise ValidationError('Este correo electrónico ya está en uso')
 
 class PerfilForm(forms.ModelForm):
     required_css_class = 'required'
@@ -18,7 +28,7 @@ class PerfilForm(forms.ModelForm):
         exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi', 'inscripciones', 'nombre_completo', 'asesor')
 
 class RegistroForm(forms.ModelForm):
-    correo              = forms.EmailField()
+    correo              = forms.EmailField(validators=[valida_correo])
     nombre_asesor       = forms.CharField(required=False)
     nombre_de_usuario   = forms.CharField(validators=[valida_nombre_de_usuario])
     contrasenia         = forms.CharField(widget=forms.PasswordInput, label="Contraseña")

@@ -7,7 +7,7 @@ from apps.usuarios.models import Usuario, Grupo
 from modules.recaptcha import verifica
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from django.shortcuts import render_to_response, get_object_or_404
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail, EmailMessage, mail_admins
 from apps.usuarios.forms import RegistroForm, PerfilForm
 from django.template import RequestContext
 from modules.badges import badgify
@@ -355,6 +355,7 @@ def registro_view(request):
                         )
                         msg.content_subtype = "html"  # Main content is now text/html
                         msg.send()
+                        mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
                         messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
                         return HttpResponseRedirect('/')
                     else:

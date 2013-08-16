@@ -10,14 +10,16 @@ def valida_nombre_de_usuario(cadena):
             raise ValidationError('Caracter no válido')
     try:
         u = Usuario.objects.get(username=cadena)
-    except Usuario.DoesNotExist:
         raise ValidationError('Este nombre de usuario ya está en uso')
+    except Usuario.DoesNotExist:
+        pass
 
 def valida_correo(cadena):
     try:
         u = Usuario.objects.get(email=cadena)
-    except Usuario.DoesNotExist:
         raise ValidationError('Este correo electrónico ya está en uso')
+    except Usuario.DoesNotExist:
+        pass
 
 class PerfilForm(forms.ModelForm):
     required_css_class = 'required'

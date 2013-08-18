@@ -1,0 +1,15 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span4 offset4">
+    <img src="{{ MEDIA_URL }}{{ libro.portada }}" class="img-circle">
+    <h2>{{ libro }}</h2>
+    <p class="muted"><small><a href="{% url 'apps.libro.views.material' %}">volver al catálogo</a></small></p>
+    <p>{{ libro.descripcion|safe }}</p>
+    <h3>$ {{ libro.costo }}</h3>
+    <p class="center">
+      <button class="btn btn-large btn-primary">Pedir</button>
+    </p>
+  </div>
+{% endblock %}

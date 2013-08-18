@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^karelecatl/', include('apps.karelecatl.urls')),
+    url(r'^material/', include('apps.libro.urls')),
     url(r'^channel.html', 'apps.sitio.views.channel'),
 )
 

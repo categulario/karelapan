@@ -10,7 +10,7 @@ class CapituloInline(admin.StackedInline):
     extra = 1
 
 class LibroAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'grupo')
+    list_display = ('titulo', 'grupo', 'costo')
     prepopulated_fields = {"grupo": ("titulo",)}
     inlines = [CapituloInline]
 

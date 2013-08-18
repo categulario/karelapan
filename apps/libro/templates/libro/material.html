@@ -1,0 +1,24 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block titulo %} Inicio {% endblock %}
+{% block contenido %}
+  <div class="span12">
+    <h3>Material de preparación <small>Libros y quizá otras cosas útiles para ti, tus alumnos y mascotas</small></h3>
+    <div class="row-fluid">
+      <div class="span12">
+        <ul class="thumbnails">
+          {% for libro in libros %}
+            <li class="span3">
+              <div class="thumbnail">
+                <img src="{{ MEDIA_URL }}{{ libro.portada }}" alt="">
+                <h3><a href="{% url 'apps.libro.views.libro' libro.id %}">{{ libro }}</a></h3>
+                <p>{{ libro.descripcion|safe }}</p>
+                <h4>$ {{ libro.costo }}</h4>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

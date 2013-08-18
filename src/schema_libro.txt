@@ -1,0 +1,15 @@
+- Codigo
+	- codigo
+	- usado
+	- fecha_activación
+	- usuario
+	default: uuid
+
+- Libro
+	- titulo
+	- grupo
+
+- Capitulo
+	- titulo
+	- libro
+	- archivo

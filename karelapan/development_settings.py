@@ -138,7 +138,8 @@ INSTALLED_APPS = (
     'wiki.plugins.images',
     'wiki.plugins.macros',
     'apps.bootstrapy',
-    'apps.karelecatl'
+    'apps.karelecatl',
+    'apps.libro'
 )
 
 # A sample logging configuration. The only tangible logging

@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from wiki.urls import get_pattern as get_wiki_pattern
 from django_notify.urls import get_pattern as get_notify_pattern
 from django.conf import settings
+from django.conf.urls.static import static
 
 from django.contrib import admin
 admin.autodiscover()
@@ -28,3 +29,5 @@ if settings.DEBUG:
         url(r'^403/$', 'apps.sitio.views.error403'),
         url(r'^500/$', 'apps.sitio.views.error500'),
     )
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -197,13 +197,13 @@
                       </td>
                       <td>
                         <h2>{{ libro }}</h2>
-                        <p>{{ libro.descripcion|safe }}</p>
+                        <p><small>{{ libro.descripcion|safe }}</small></p>
                       </td>
                       <td>
                         <strong>Capítulos</strong>
                         <ul>
                           {% for capitulo in libro.capitulos.all %}
-                            <li>{{ capitulo }} <a href="" class="btn btn-small"><i class="icon-download"></i></a></li>
+                            <li>{{ capitulo }} <a href="{% url 'apps.libro.views.descargar_capitulo' capitulo.id %}" class="btn btn-small"><i class="icon-download"></i></a></li>
                           {% endfor %}
                         </ul>
                       </td>

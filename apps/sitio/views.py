@@ -17,6 +17,7 @@ from modules.fechas import diferencia_str
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from uuid import uuid1
 from functools import wraps
 
@@ -578,6 +579,7 @@ def confirma_recuperacion(request, correo, token):
         messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo perdiste tu contraseña?')
         return HttpResponseRedirect('/')
 
+@csrf_exempt
 def error404(request):
     return render_to_response('errors/404.html', context_instance=RequestContext(request))
 

@@ -8,7 +8,7 @@
       <div class="span12">
         <ul class="thumbnails">
           {% for libro in libros %}
-            <li class="span3">
+            <li class="span4">
               <div class="thumbnail">
                 <img src="{{ MEDIA_URL }}{{ libro.portada }}" alt="">
                 <h3><a href="{% url 'apps.libro.views.libro' libro.id %}">{{ libro }}</a></h3>

@@ -3,7 +3,7 @@
 {% block titulo %} Inicio {% endblock %}
 {% block contenido %}
   <div class="span4 offset4">
-    <img src="{{ MEDIA_URL }}{{ libro.portada }}" class="img-circle">
+    <img src="{{ MEDIA_URL }}{{ libro.portada }}" class="img-polaroid">
     <h2>{{ libro }}</h2>
     <p class="muted"><small><a href="{% url 'apps.libro.views.material' %}">volver al catálogo</a></small></p>
     <p>{{ libro.descripcion|safe }}</p>

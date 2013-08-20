@@ -324,7 +324,7 @@ def registro_view(request):
         if request.method == 'POST':
             formulario = RegistroForm(request.POST)
             if formulario.is_valid():
-                respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field'), request.POST.get('recaptcha_response_field'))
+                respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
                 if respuesta == True:
                     if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
                         nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=False)
@@ -527,7 +527,7 @@ def recuperar_contrasenia(request):
     if not request.user.is_authenticated():
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         if request.method == 'POST':
-            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field').encode('utf-8'), request.POST.get('recaptcha_response_field').encode('utf-8'))
+            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf-8'), request.POST.get('recaptcha_response_field', '').encode('utf-8'))
             if respuesta == True:
                 usuario = get_object_or_404(Usuario, email=request.POST.get('correo'))
                 token_confirmacion = str(uuid1())

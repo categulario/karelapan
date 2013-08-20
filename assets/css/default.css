@@ -76,3 +76,9 @@ ul.errorlist > li{
     background-position: right bottom;
     position: absolute;
 }
+.libro{
+    margin-top: 20px;
+}
+.libro > .span10{
+    background-color: #F5F5F5;
+}

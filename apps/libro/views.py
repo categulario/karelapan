@@ -33,10 +33,15 @@ def material(request):
     }
     return render_to_response('libro/material.html', data, context_instance=RequestContext(request))
 
-#TODO proteger esta vista
+@login_required
 def libro(request, id_libro):
     libro = get_object_or_404(Libro, pk=id_libro)
-    data = {
-        'libro': libro
-    }
-    return render_to_response('libro/libro.html', data, context_instance=RequestContext(request))
+    grupo = Grupo.objects.get_or_create(nombre=libro.grupo)[0]
+    if grupo in request.user.perfil.grupos.all():
+        data = {
+            'libro': libro
+        }
+        return render_to_response('libro/libro.html', data, context_instance=RequestContext(request))
+    else:
+        messages.warning(request, '¡No has comprado este libro!')
+        return HttpResponseRedirect('/material')

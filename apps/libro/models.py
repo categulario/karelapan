@@ -15,7 +15,7 @@ class Libro(models.Model):
 
 class Capitulo(models.Model):
     titulo      = models.CharField(max_length=50)
-    libro       = models.ForeignKey(Libro)
+    libro       = models.ForeignKey(Libro, related_name='capitulos')
     archivo     = models.FileField(upload_to='libro')
 
     def __unicode__(self):

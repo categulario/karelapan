@@ -188,16 +188,29 @@
           </form>
           <div class="row-fluid">
             <div class="span12">
-              <ul class="thumbnails">
-                {% for libro in user.libros.all %}
-                  <li class="span3">
-                    <div class="thumbnail">
-                      <img src="{{ MEDIA_URL }}{{ libro.portada }}" alt="">
-                      <h5><a href="{% url 'apps.libro.views.libro' libro.id %}">{{ libro }}</a></h5>
-                    </div>
-                  </li>
-                {% endfor %}
-              </ul>
+              <table class="table">
+                <tbody>
+                  {% for libro in user.libros.all %}
+                    <tr>
+                      <td>
+                        <img src="{{ MEDIA_URL }}{{ libro.portada }}" class="img-polaroid" width="100">
+                      </td>
+                      <td>
+                        <h2>{{ libro }}</h2>
+                        <p>{{ libro.descripcion|safe }}</p>
+                      </td>
+                      <td>
+                        <strong>Capítulos</strong>
+                        <ul>
+                          {% for capitulo in libro.capitulos.all %}
+                            <li>{{ capitulo }} <a href="" class="btn btn-small"><i class="icon-download"></i></a></li>
+                          {% endfor %}
+                        </ul>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

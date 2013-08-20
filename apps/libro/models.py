@@ -28,4 +28,4 @@ class Codigo(models.Model):
     libro               = models.ForeignKey(Libro)
 
     def __unicode__(self):
-        return self.titulo
+        return self.codigo

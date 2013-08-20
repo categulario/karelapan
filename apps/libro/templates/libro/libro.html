@@ -9,7 +9,30 @@
     <p>{{ libro.descripcion|safe }}</p>
     <h3>$ {{ libro.costo }}</h3>
     <p class="center">
-      <button class="btn btn-large btn-primary">Pedir</button>
+      {% if user.is_authenticated %}
+        <a href="#modal-deposito" role="button" class="btn btn-large btn-primary" data-toggle="modal">Comprar</a>
+      {% else %}
+        <button class="btn btn-large disabled">Inicia sesión para comprar</button>
+      {% endif %}
     </p>
   </div>
+  {% if user.is_authenticated %}
+    <div id="modal-deposito" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Modo de compra</h3>
+      </div>
+      <div class="modal-body">
+        <p>Por el momento la forma de hacer la compra es haciendo un depósito a la siguiente cuenta:</p>
+        <p style="font-family:monospace; font-weight:bold; font-size:24px;">5256 7880 4196 3794</p>
+        <p><img src="{% static 'img/banamex.png' %}"></p>
+        <p>Por el total de la compra, y enviar una copia de la ficha de depósito al correo <a href="mailto:juvencio@covi.org.mx">juvencio@covi.org.mx</a> junto con la cantidad de libros que quieres comprar</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal">Entendido!</button>
+      </div>
+    </div>
+  {% else %}
+    <button class="btn btn-large disabled">Inicia sesión para comprar</button>
+  {% endif %}
 {% endblock %}

@@ -180,11 +180,26 @@
         {% endif %}
         <div class="tab-pane" id="libros">
           Activa una compra de libro mediante un código;
-          <form class="form-inline">
+          <form class="form-inline" method="post" action="{% url 'apps.libro.views.activa_codigo' %}">
+            {% csrf_token %}
             <label class="control-label"><strong>Código</strong></label>
-            <input type="text">
+            <input type="text" name="codigo">
             <input type="submit" value="Activar" class="btn btn-success">
           </form>
+          <div class="row-fluid">
+            <div class="span12">
+              <ul class="thumbnails">
+                {% for libro in user.libros.all %}
+                  <li class="span3">
+                    <div class="thumbnail">
+                      <img src="{{ MEDIA_URL }}{{ libro.portada }}" alt="">
+                      <h5>{{ libro }}</h5>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ from django.contrib import admin
 from apps.libro.models import *
 
 class CodigoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'usado', 'fecha_activacion', 'usuario', 'libro')
+    list_display = ('id', 'codigo', 'usado', 'fecha_activacion', 'usuario', 'libro')
     list_filter = ('usado', 'libro')
 
 class CapituloInline(admin.StackedInline):

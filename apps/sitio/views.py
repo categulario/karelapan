@@ -579,6 +579,7 @@ def confirma_recuperacion(request, correo, token):
         messages.warning(request, 'Vamos, estás en una sesión, ¿Cómo perdiste tu contraseña?')
         return HttpResponseRedirect('/')
 
+
 @csrf_exempt
 def error404(request):
     return render_to_response('errors/404.html', context_instance=RequestContext(request))

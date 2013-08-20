@@ -33,6 +33,7 @@ def material(request):
     }
     return render_to_response('libro/material.html', data, context_instance=RequestContext(request))
 
+#TODO proteger esta vista
 def libro(request, id_libro):
     libro = get_object_or_404(Libro, pk=id_libro)
     data = {

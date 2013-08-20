@@ -193,7 +193,7 @@
                   <li class="span3">
                     <div class="thumbnail">
                       <img src="{{ MEDIA_URL }}{{ libro.portada }}" alt="">
-                      <h5>{{ libro }}</h5>
+                      <h5><a href="{% url 'apps.libro.views.libro' libro.id %}">{{ libro }}</a></h5>
                     </div>
                   </li>
                 {% endfor %}

@@ -55,7 +55,7 @@ def valida_mundos(str_mundo):
 def url_casos_evaluacion(problema, nombre_original_archivo):
     """Obtiene el nombre que tendrá el archivo de un set de casos de
     evaluación"""
-    return os.path.join('casos', problema.nombre_administrativo+'.nkec')
+    return problema.nombre_administrativo+'.nkec'
 
 def valida_json(cadena):
     """identifica si la cadena es json"""

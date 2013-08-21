@@ -192,14 +192,14 @@
                 <tbody>
                   {% for libro in user.libros.all %}
                     <tr>
-                      <td>
+                      <td width="100">
                         <img src="{{ MEDIA_URL }}{{ libro.portada }}" class="img-polaroid" width="100">
                       </td>
                       <td>
                         <h2>{{ libro }}</h2>
                         <p><small>{{ libro.descripcion|safe }}</small></p>
                       </td>
-                      <td>
+                      <td width="200">
                         <strong>Capítulos</strong>
                         <ul>
                           {% for capitulo in libro.capitulos.all %}

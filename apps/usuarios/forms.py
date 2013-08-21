@@ -2,6 +2,7 @@
 from django import forms
 from apps.usuarios.models import Perfil, Grupo, Usuario
 from django.core.exceptions import ValidationError
+import re
 
 def valida_nombre_de_usuario(cadena):
     caracteres = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@.-_+'
@@ -20,6 +21,13 @@ def valida_correo(cadena):
         raise ValidationError('Este correo electrónico ya está en uso')
     except Usuario.DoesNotExist:
         pass
+    m = re.match('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}', cadena)
+    if m:
+        a, b = m.span()
+        if b != len(cadena):
+            raise ValidationError('No es un correo válido')
+    else:
+        raise ValidationError('No es un correo válido')
 
 class PerfilForm(forms.ModelForm):
     required_css_class = 'required'

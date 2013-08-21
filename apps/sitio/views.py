@@ -158,6 +158,7 @@ def problema_concurso(request, id_concurso, id_problema):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     problema = get_object_or_404(Problema, pk=id_problema)
     usuario = Usuario.objects.get(pk=request.user.id)
+    participacion = get_object_or_404(Participacion, usuario=usuario, concurso=concurso)
     if problema in concurso.problemas.all() and concurso in usuario.concursos_activos():
         data = {
             'concurso'          : concurso,

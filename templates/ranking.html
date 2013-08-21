@@ -20,7 +20,7 @@
         {% for usuario in usuarios %}
           <tr>
             <td><strong>{{ forloop.counter }}.</strong></td>
-            <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.id %}">{{ usuario }}</a></td>
+            <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}">{{ usuario }}</a></td>
             <td>
               {{ usuario.score }}
             </td>

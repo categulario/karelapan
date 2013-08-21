@@ -29,7 +29,7 @@ def requiere_compra(vista):
 @require_POST
 @login_required
 def activa_codigo(request):
-    codigo = get_object_or_404(Codigo, codigo=request.POST.get('codigo', ''), usado=False)
+    codigo = get_object_or_404(Codigo, codigo=request.POST.get('codigo', '').strip(), usado=False)
     codigo.usado = True
     codigo.fecha_activacion = timezone.now()
     codigo.usuario = request.user

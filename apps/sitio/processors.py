@@ -23,6 +23,6 @@ def concursos_processor(request):
     """Indica si un usuario tiene concursos activos"""
     if request.user.is_authenticated():
         u = Usuario.objects.get(pk=request.user.id)
-        return {'tiene_concursos': u.participa_en_concurso()}
+        return {'tiene_concursos': u.participa_en_concurso() and not u.en_concurso()}
     else:
         return {'tiene_concursos': False}

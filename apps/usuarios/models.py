@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from apps.evaluador.models import Envio, Concurso
+from apps.evaluador.models import Envio, Concurso, Participacion
 from django.db.models import Min, Max
 from django.utils import timezone
 from django.conf import settings
@@ -274,6 +274,15 @@ class Usuario(User):
                 concurso.en_curso = False
             lista.append(concurso)
         return lista
+
+    def en_concurso(self):
+        concursos = Concurso.objects.filter(
+            grupos__perfiles=self.perfil,
+            fecha_inicio__lte=timezone.now(),
+            fecha_fin__gte=timezone.now(),
+            activo=True
+        )
+        return Participacion.objects.filter(concurso__in=concursos).count() > 0
 
     def participa_en_concurso(self):
         return self.concursos_activos().count() > 0

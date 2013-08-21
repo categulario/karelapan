@@ -179,7 +179,7 @@ def consultas(request, id_concurso, id_problema):
             })
         return HttpResponse(json.dumps(consulta_list), content_type='text/plain')
     else:
-        HttpResponse(json.dumps([]), content_type='text/plain')
+        return HttpResponse(json.dumps([]), content_type='text/plain')
 
 @permission_required('evaluador.puede_ver_ranking')
 def ranking_csv(request, id_concurso):

@@ -55,7 +55,7 @@ def valida_mundos(str_mundo):
 def url_casos_evaluacion(problema, nombre_original_archivo):
     """Obtiene el nombre que tendrá el archivo de un set de casos de
     evaluación"""
-    return problema.nombre_administrativo+'.nkec'
+    return 'casos/'+problema.nombre_administrativo+'.nkec'
 
 def valida_json(cadena):
     """identifica si la cadena es json"""
@@ -196,7 +196,6 @@ class Envio(models.Model):
     ), default='P')
     puntaje             = models.IntegerField(default=0)
     codigo              = models.TextField(blank=True, null=True)
-    #codigo_archivo      = models.FilePathField(path='/home/abraham/Desarrollo/django/KarelapanDjango/codigos')
     codigo_archivo      = models.CharField(max_length=140)
     tiempo_ejecucion    = models.IntegerField(default=0)
     resultado           = models.CharField(max_length=17, choices=(

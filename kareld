@@ -66,7 +66,7 @@ def main():
                 "efectividad": 0.0,
                 "tiempo_ejecucion": 0
             }
-            archivomundo = os.path.join(settings.MEDIA_ROOT, 'casos')+'/'+problema['casos_de_evaluacion']
+            archivomundo = settings.MEDIA_ROOT+'/'+problema['casos_de_evaluacion']
             try:
                 f = file(archivomundo)
             except IOError:

@@ -184,7 +184,7 @@ LOGIN_URL = '/usuarios'
 RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
 RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
 
-RAIZ_CODIGOS = os.path.join(MEDIA_ROOT, 'casos')+'/'
+RAIZ_CODIGOS = os.path.join(MEDIA_ROOT, 'codigos')+'/'
 
 #Cosas del demonio evaluador de karel
 #Ruta absoluta al archivo del registro

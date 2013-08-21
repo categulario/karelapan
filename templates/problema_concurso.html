@@ -78,7 +78,7 @@
     <h4>Consideraciones</h4>
     <p>
       <ul>
-        {% for consideracion in problema.consideracion_set.all %}
+        {% for consideracion in problema.consideraciones.all %}
           <li>{{ consideracion }}</li>
         {% endfor %}
       </ul>

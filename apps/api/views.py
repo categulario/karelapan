@@ -154,6 +154,7 @@ def busca_consultas(request, id_concurso):
         })
     return HttpResponse(json.dumps(consultas_list), content_type='text/plain')
 
+@login_required
 def consultas(request, id_concurso, id_problema):
     """Le da a un usuario sus consultas"""
     concurso    = get_object_or_404(Concurso, pk=id_concurso)

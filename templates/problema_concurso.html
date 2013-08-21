@@ -1,7 +1,14 @@
 {% extends 'template.html' %}
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 {% block titulo %} {{ problema }} {% endblock %}
 {% block contenido %}
+  {% addtoblock 'jshead' %}
+    <script type="text/javascript" language="javascript" src="{% static 'js/excanvas.js' %}"></script>
+  {% endaddtoblock %}
+  {% addtoblock 'js' %}
+    <script type="text/javascript" language="javascript" src="{% static 'js/mundo.js' %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'js/problema_concurso.js' %}"></script>
+  {% endaddtoblock %}
   <div class="span4">
     <div class="well">
       <strong>Mis intentos:</strong>

@@ -22,6 +22,28 @@ def mundo_ejemplo_solucion(request, id_problema):
     problema = get_object_or_404(Problema, pk=id_problema, publico=True)
     return HttpResponse(problema.mundo_resuelto, content_type='text/plain')
 
+@login_required
+def mundo_ejemplo_concurso(request, id_concurso, id_problema):
+    concurso    = get_object_or_404(Concurso, pk=id_concurso)
+    problema    = get_object_or_404(Problema, pk=id_problema)
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+        problema = get_object_or_404(Problema, pk=id_problema)
+        return HttpResponse(problema.mundo, content_type='text/plain')
+    else:
+        return HttpResponse('{}', content_type='text/plain')
+
+@login_required
+def mundo_ejemplo_solucion_concurso(request, id_concurso, id_problema):
+    concurso    = get_object_or_404(Concurso, pk=id_concurso)
+    problema    = get_object_or_404(Problema, pk=id_problema)
+    usuario = Usuario.objects.get(pk=request.user.id)
+    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+        problema = get_object_or_404(Problema, pk=id_problema)
+        return HttpResponse(problema.mundo_resuelto, content_type='text/plain')
+    else:
+        return HttpResponse('{}', content_type='text/plain')
+
 def nombres_escuela(request):
     if 'q' in request.GET:
         usuarios = Usuario.objects.filter(perfil__nombre_escuela__icontains=request.GET['q']).order_by('perfil__nombre_escuela').distinct('perfil__nombre_escuela')

@@ -169,8 +169,7 @@ def problema_concurso(request, id_concurso, id_problema):
             'mejor_tiempo'      : usuario.mejor_tiempo(problema, concurso),
             'consultas'         : Consulta.objects.filter(usuario=usuario, problema=problema, concurso=concurso, leido=True),
             'tiempo_restante_consultas': diferencia_str(concurso.fecha_inicio + datetime.timedelta(minutes=concurso.duracion_preguntas)),
-            'permite_consultas' : usuario.puede_hacer_consulta(concurso),
-            'js'                : ['js/excanvas.js', 'js/mundo.js', 'js/problema.js', 'js/problema_concurso.js']
+            'permite_consultas' : usuario.puede_hacer_consulta(concurso)
         }
         if request.method == 'POST': #Recibimos un envío
             archivo_codigo = settings.RAIZ_CODIGOS

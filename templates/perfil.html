@@ -179,7 +179,7 @@
           </div>
         {% endif %}
         <div class="tab-pane" id="libros">
-          Activa una compra de libro mediante un código;
+          Activa una compra de libro mediante un código
           <form class="form-inline" method="post" action="{% url 'apps.libro.views.activa_codigo' %}">
             {% csrf_token %}
             <label class="control-label"><strong>Código</strong></label>

@@ -216,7 +216,7 @@ def ranking_csv(request, id_concurso):
 
     i = 1
     for participacion in Participacion.objects.filter(concurso=concurso).order_by('-puntaje'):
-        writer.writerow([i, participacion.usuario, participacion.puntaje] + [participacion.usuario.mejor_puntaje(problema, concurso) for problema in concurso.problemas.all()])
+        writer.writerow([i, participacion.usuario, participacion.puntaje] + [Usuario(participacion.usuario).mejor_puntaje(problema, concurso) for problema in concurso.problemas.all()])
         i += 1
 
     return response

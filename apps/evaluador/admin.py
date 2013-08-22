@@ -9,7 +9,7 @@ def mostrar_problema(modeladmin, request, queryset):
     queryset.update(publico=True)
 mostrar_problema.short_description = "Muestra los problemas seleccionados"
 
-def reevaluar_envio(modeladmin, request, queryset).
+def reevaluar_envio(modeladmin, request, queryset):
     queryset.update(estatus='P')
 
 def activar_concurso(modeladmin, request, queryset):

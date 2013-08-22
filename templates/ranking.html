@@ -9,7 +9,7 @@
       <thead>
         <tr>
           <th>Lugar</th>
-          <th>Usuario</th>
+          <th>Nombre</th>
           <th>Puntos</th>
           {% for problema in concurso.problemas.all %}
             <th>{{ problema }}</th>
@@ -20,7 +20,7 @@
         {% for usuario in usuarios %}
           <tr>
             <td><strong>{{ forloop.counter }}.</strong></td>
-            <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}">{{ usuario }}</a></td>
+            <td><a href="{% url 'apps.sitio.views.usuario_view' usuario.username %}">{{ usuario.perfil.nombre_completo }}</a></td>
             <td>
               {{ usuario.score }}
             </td>

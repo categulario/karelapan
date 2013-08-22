@@ -12,6 +12,9 @@ mostrar_problema.short_description = "Muestra los problemas seleccionados"
 def reevaluar_envio(modeladmin, request, queryset):
     queryset.update(estatus='P')
 
+def publica_ranking(modeladmin, request, queryset):
+    queryset.update(ranking_publico=True)
+
 def activar_concurso(modeladmin, request, queryset):
     queryset.update(activo=True)
 activar_concurso.short_description = "Activa los concursos seleccionados"

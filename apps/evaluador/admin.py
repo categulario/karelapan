@@ -9,6 +9,9 @@ def mostrar_problema(modeladmin, request, queryset):
     queryset.update(publico=True)
 mostrar_problema.short_description = "Muestra los problemas seleccionados"
 
+def reevaluar_envio(modeladmin, request, queryset).
+    queryset.update(estatus='P')
+
 def activar_concurso(modeladmin, request, queryset):
     queryset.update(activo=True)
 activar_concurso.short_description = "Activa los concursos seleccionados"
@@ -47,6 +50,7 @@ class EnvioAdmin(admin.ModelAdmin):
     list_display    = ('id', 'usuario', 'problema', 'hora', 'estatus', 'puntaje', 'tiempo_ejecucion', 'resultado', 'concurso', 'ip')
     list_filter     = ('problema', 'hora', 'estatus', 'puntaje', 'resultado', 'concurso')
     readonly_fields = ('usuario', 'problema', 'puntaje', 'codigo', 'codigo_archivo', 'tiempo_ejecucion', 'resultado', 'mensaje', 'concurso', 'ip', 'casos')
+    actions             = [reevaluar_envio]
 
 class ConsultaAdmin(admin.ModelAdmin):
     list_display    = ('mensaje', 'hora', 'concurso', 'problema', 'usuario', 'respuesta', 'leido', 'descartado')

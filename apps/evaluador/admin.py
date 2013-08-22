@@ -42,7 +42,7 @@ class ProblemaAdmin(admin.ModelAdmin):
 class ConcursoAdmin(admin.ModelAdmin):
     list_display    = ('nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'lista_grupos', 'activo', 'ranking_publico', 'olimpiada')
     list_filter     = ('fecha_inicio', 'olimpiada')
-    actions         = [activar_concurso, desactivar_concurso]
+    actions         = [activar_concurso, desactivar_concurso, publica_ranking]
 
 class ParticipacionAdmin(admin.ModelAdmin):
     list_display    = ('id', 'usuario', 'concurso', 'puntaje')

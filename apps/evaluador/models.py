@@ -151,12 +151,9 @@ class Concurso(models.Model):
 
     def ranking(self):
         usuarios = []
-        for participacion in Participacion.objects.filter(concurso=self).order_by('-puntaje'):
+        for participacion in Participacion.objects.filter(concurso=self).order_by('-puntaje')[:5]:
             usuario = participacion.usuario
             usuario.score = participacion.puntaje
-            #~ usuario.resultados = []
-            #~ for problema in self.problemas.all():
-                #~ usuario.resultados.append(badgify(usuario.mejor_puntaje(problema, concurso)))
             usuarios.append(usuario)
         return usuarios
 

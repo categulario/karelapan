@@ -207,9 +207,12 @@ def concurso_view(request, id_concurso):
         segundos = diferencia.seconds%60
         concurso.quedan_segundos = ['', ' %d segundos'%segundos][segundos!=0]
 
-        participacion, creado = Participacion.objects.get_or_create(usuario=usuario, concurso=concurso)
+        participacion, creado = Participacion.objects.get_or_create(
+            usuario=usuario,
+            concurso=concurso,
+            defaults={'primera_ip': request.META['REMOTE_ADDR']}
+        )
         if creado:
-            participacion.primera_ip=request.META['REMOTE_ADDR']
             participacion.save()
             messages.success(request, 'Ahora estás participando en este concurso, ¡A darle!')
 

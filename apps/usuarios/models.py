@@ -119,7 +119,7 @@ class Perfil(models.Model):
     descripcion         = models.TextField()
     grupos              = models.ManyToManyField(Grupo, related_name='perfiles')
     ultima_omi          = models.ForeignKey(Olimpiada, default=default_omi, related_name='+')
-    confirm_token       = models.CharField(max_length=36, blank=True, null=True, editable=False)
+    confirm_token       = models.CharField(max_length=36, blank=True, null=True)
     nombre_completo     = models.CharField(max_length=200, blank=True, null=True)
     inscripciones       = models.ManyToManyField(Olimpiada, null=True, blank=True, related_name='inscritos')
 

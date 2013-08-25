@@ -8,7 +8,7 @@ class PerfilAdmin(admin.ModelAdmin):
     list_filter = ('subsistema', 'problemas_resueltos', 'puntaje', 'estado')
     ordering = ['nombre']
     search_fields = ('nombre', 'appat', 'apmat')
-    readonly_fields = ('problemas_resueltos', 'puntaje', 'usuario')
+    readonly_fields = ('problemas_resueltos', 'puntaje', 'usuario', 'confirm_token')
 
 class GrupoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'descripcion', 'elegible')

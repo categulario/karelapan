@@ -44,6 +44,8 @@ Las configuraciones de kareld están en '%s'
 """%(VERSION, FECHA, settings.__file__)
 
 def evalua(envio, cursor, connection):
+    cursor.execute("UPDATE evaluador_envio SET estatus='S' WHERE id='%d'"%envio['id'])
+    connection.commit()#Nos aseguramos de marcar este envio y evitar que otra llamada del evaluador lo revise
     cursor.execute("SELECT * FROM evaluador_problema WHERE id='%d'"%envio['problema_id'])
     problema = cursor.fetchone() #El problema
     cursor.execute("SELECT * FROM usuarios_perfil WHERE usuario_id='%d'"%envio['usuario_id'])
@@ -182,13 +184,12 @@ def evalua(envio, cursor, connection):
 def main():
     connection = psycopg2.connect("dbname=%s user=%s password=%s"%(settings.DATABASES['default']['NAME'], settings.DATABASES['default']['USER'], settings.DATABASES['default']['PASSWORD']))
     cursor = connection.cursor(cursor_factory=DictCursor)
+
     logging.debug('Demonio iniciado')
     while True:
         cursor.execute("SELECT * FROM evaluador_envio WHERE estatus='P' ORDER BY concurso_id,hora ASC LIMIT 1")
         envio = cursor.fetchone() #El envío a calificar
-        if envio is not None:
-            cursor.execute("UPDATE evaluador_envio SET estatus='S' WHERE id='%d'"%envio['id'])
-            connection.commit()#Nos aseguramos de marcar este envio y evitar que otra llamada del evaluador lo revise
+        if envio:
             evalua(envio, cursor, connection)
         else:
             time.sleep(1)

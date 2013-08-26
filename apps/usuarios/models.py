@@ -177,7 +177,8 @@ class Perfil(models.Model):
         return Concurso.objects.filter(
             grupos__perfiles=self,
             fecha_fin__gte=timezone.now(),
-            activo=True
+            activo=True,
+            importante=True
         ).count() > 0
 
     class Meta:
@@ -257,7 +258,8 @@ class Usuario(User):
             grupos__perfiles=self.perfil,
             fecha_inicio__lte=timezone.now(),
             fecha_fin__gte=timezone.now(),
-            activo=True
+            activo=True,
+            importante=True
         )
 
     def concursos_activos_y_futuros(self):
@@ -280,7 +282,8 @@ class Usuario(User):
             grupos__perfiles=self.perfil,
             fecha_inicio__lte=timezone.now(),
             fecha_fin__gte=timezone.now(),
-            activo=True
+            activo=True,
+            importante=True
         )
         return Participacion.objects.filter(concurso__in=concursos).count() > 0
 

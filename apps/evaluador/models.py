@@ -142,6 +142,7 @@ class Concurso(models.Model):
     olimpiada           = models.ForeignKey('usuarios.Olimpiada', blank=True, null=True)
     duracion_preguntas  = models.IntegerField(default=90, help_text="La duración en minutos del periodo en que pueden hacer preguntas los concursantes a partir del inicio del concurso")
     ranking_publico     = models.BooleanField(default=False)
+    importante          = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.nombre

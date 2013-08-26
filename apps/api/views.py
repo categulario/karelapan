@@ -212,11 +212,17 @@ def ranking_csv(request, id_concurso):
     response['Content-Disposition'] = 'attachment; filename="ranking_%s.csv"'%concurso.nombre
 
     writer = csv.writer(response)
-    writer.writerow(['Lugar', 'Usuario', 'Puntos'] + [problema.nombre.encode('utf-8') for problema in concurso.problemas.all()])
+    writer.writerow(['Lugar', 'Usuario', 'Escuela', 'Subsistema', 'Puntos'] + [problema.nombre.encode('utf-8') for problema in concurso.problemas.all()])
 
     i = 1
     for participacion in Participacion.objects.filter(concurso=concurso).order_by('-puntaje'):
-        writer.writerow([i, participacion.usuario, participacion.puntaje] + [Usuario(participacion.usuario).mejor_puntaje(problema, concurso) for problema in concurso.problemas.all()])
+        writer.writerow([
+            i,
+            participacion.usuario.perfil.nombre_completo,
+            participacion.usuario.perfil.nombre_escuela,
+            participacion.usuario.perfil.subsistema,
+            participacion.puntaje
+        ] + [Usuario(participacion.usuario).mejor_puntaje(problema, concurso) for problema in concurso.problemas.all()])
         i += 1
 
     return response

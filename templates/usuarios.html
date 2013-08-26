@@ -14,7 +14,144 @@
     <div class="span2"></div>
     <div class="span8">
       <p><strong>Lista</strong> de usuarios en orden alfabético</p>
-      <p>Hay <strong>{{ cuenta }}</strong> usuarios en total</p>
+      <p>Hay <strong>{{ cuenta }}</strong> usuarios en total <a href="" class="pull-right"><i class="icon-search"></i></a></p>
+      <div class="row-fluid">
+        <div class="span12">
+          <strong>Buscar en usuarios</strong>
+          <p>Solo pon los campos que necesites para tu búsqueda</p>
+          <form class="form-horizontal" method="get">
+            <div class="control-group">
+              <label class="control-label">Nombre</label>
+              <div class="controls">
+                <input type="text" name="nombre">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Correo</label>
+              <div class="controls">
+                <input type="text" name="correo">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Estado</label>
+              <div class="controls">
+                <select name="estado">
+                  <option value="">---</option>
+                  <option value="extranjero">Extranjero</option>
+                  <option value="aguascalientes">Aguascalientes</option>
+                  <option value="baja_california_norte">Baja California Norte</option>
+                  <option value="baja_california_sur">Baja California Sur</option>
+                  <option value="campeche">Campeche</option>
+                  <option value="chiapas">Chiapas</option>
+                  <option value="chihuahua">Chihuahua</option>
+                  <option value="coahuila">Coahuila</option>
+                  <option value="colima">Colima</option>
+                  <option value="df">Distrito Federal</option>
+                  <option value="durango">Durango</option>
+                  <option value="guanajuato">Guanajuato</option>
+                  <option value="guerrero">Guerrero</option>
+                  <option value="hidalgo">Hidalgo</option>
+                  <option value="jalisco">Jalisco</option>
+                  <option value="mexico">Estado de México</option>
+                  <option value="michoacan">Michoacán</option>
+                  <option value="morelos">Morelos</option>
+                  <option value="nayarit">Nayarit</option>
+                  <option value="nuevo_leon">Nuevo León</option>
+                  <option value="oaxaca">Oaxaca</option>
+                  <option value="puebla">Puebla</option>
+                  <option value="queretaro">Querétaro</option>
+                  <option value="quintana_roo">Quintana Roo</option>
+                  <option value="san_luis_potosi">San Luis Potosí</option>
+                  <option value="sinaloa">Sinaloa</option>
+                  <option value="sonora">Sonora</option>
+                  <option value="tabasco">Tabasco</option>
+                  <option value="tamaulipas">Tamaulipas</option>
+                  <option value="tlaxcala">Tlaxcala</option>
+                  <option value="veracruz">Veracruz</option>
+                  <option value="yucatan">Yucatán</option>
+                  <option value="zacatecas">Zacatecas</option>
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Subsistema</label>
+              <div class="controls">
+                <input type="text" name="correo">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Asesor</label>
+              <div class="controls">
+                <input type="text" name="correo">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Escuela</label>
+              <div class="controls">
+                <input type="text" name="correo">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Puntaje</label>
+              <div class="controls">
+                <div class="input-prepend">
+                  <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                      mayor que
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">mayor que</a></li>
+                      <li><a href="#">mayor o igual que</a></li>
+                      <li><a href="#">menor que</a></li>
+                      <li><a href="#">menor o igual que</a></li>
+                      <li><a href="#">igual que</a></li>
+                    </ul>
+                  </div>
+                  <input class="input-small" id="prependedDropdownButton" type="text">
+                </div>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Problemas resueltos</label>
+              <div class="controls">
+                <div class="input-prepend">
+                  <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                      mayor que
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">mayor que</a></li>
+                      <li><a href="#">mayor o igual que</a></li>
+                      <li><a href="#">menor que</a></li>
+                      <li><a href="#">menor o igual que</a></li>
+                      <li><a href="#">igual que</a></li>
+                    </ul>
+                  </div>
+                  <input class="input-small" id="prependedDropdownButton" type="text">
+                </div>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Olimpiada</label>
+              <div class="controls">
+                <select name="olimpiada">
+                  <option value="">---</option>
+                  {% for olimpiada in olimpiadas %}
+                    <option value="{{ olimpiada.id }}">{{ olimpiada }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">Go! <i class="icon-search icon-white"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
       <table class="table table-striped">
         <thead>
           <tr>

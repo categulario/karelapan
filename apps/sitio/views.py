@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.template.loader import render_to_string
 from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion, Consulta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from apps.usuarios.models import Usuario, Grupo
+from apps.usuarios.models import Usuario, Grupo, Olimpiada
 from modules.recaptcha import verifica
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from django.shortcuts import render_to_response, get_object_or_404
@@ -295,7 +295,8 @@ def usuarios_view(request):
         usuarios = paginator.page(paginator.num_pages)
     data = {
         'usuarios'  : usuarios,
-        'cuenta': Usuario.objects.count()
+        'cuenta': Usuario.objects.count(),
+        'olimpiadas': Olimpiada.objects.all()
     }
     if 'next' in request.GET:
         data['next'] = request.GET['next']

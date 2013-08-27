@@ -295,8 +295,8 @@ class Usuario(User):
         )
         return Participacion.objects.filter(concurso__in=concursos).count() > 0
 
-    def participa_en_concurso(self):
-        return self.concursos_activos().count() > 0
+    def participa_en_concurso(self, solo_importantes=True):
+        return self.concursos_activos(solo_importantes=solo_importantes).count() > 0
 
     def participa_en_concurso_futuro(self):
         return self.concursos_activos_y_futuros().count() > 0

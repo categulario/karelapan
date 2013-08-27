@@ -27,7 +27,7 @@ def mundo_ejemplo_concurso(request, id_concurso, id_problema):
     concurso    = get_object_or_404(Concurso, pk=id_concurso)
     problema    = get_object_or_404(Problema, pk=id_problema)
     usuario = Usuario.objects.get(pk=request.user.id)
-    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+    if concurso in usuario.concursos_activos(solo_importantes=False) and problema in concurso.problemas.all():
         problema = get_object_or_404(Problema, pk=id_problema)
         return HttpResponse(problema.mundo, content_type='text/plain')
     else:
@@ -38,7 +38,7 @@ def mundo_ejemplo_solucion_concurso(request, id_concurso, id_problema):
     concurso    = get_object_or_404(Concurso, pk=id_concurso)
     problema    = get_object_or_404(Problema, pk=id_problema)
     usuario = Usuario.objects.get(pk=request.user.id)
-    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+    if concurso in usuario.concursos_activos(solo_importantes=False) and problema in concurso.problemas.all():
         problema = get_object_or_404(Problema, pk=id_problema)
         return HttpResponse(problema.mundo_resuelto, content_type='text/plain')
     else:
@@ -99,7 +99,7 @@ def envio(request, id_envio, id_concurso=None):
         concurso = None
     if envio.usuario == request.user and envio.concurso == concurso:
         usuario = Usuario.objects.get(pk=request.user.id)
-        if not concurso and usuario.participa_en_concurso():#No se cargan veredictos durante el concurso
+        if not concurso and usuario.participa_en_concurso(solo_importantes=False):#No se cargan veredictos durante el concurso
             return HttpResponse('Forbidden', content_type='text/plain')
         if envio.estatus == 'E':
             resultado = {
@@ -124,7 +124,7 @@ def hacer_consulta(request):
     problema    = get_object_or_404(Problema, pk=id_problema)
     mensaje     = request.POST.get('mensaje')
     usuario = Usuario.objects.get(pk=request.user.id)
-    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+    if concurso in usuario.concursos_activos(solo_importantes=False) and problema in concurso.problemas.all():
         if mensaje != '':
             if usuario.puede_hacer_consulta(concurso):
                 if Consulta.objects.filter(concurso=concurso, problema=problema, usuario=usuario, leido=False).count() == 0:
@@ -182,7 +182,7 @@ def consultas(request, id_concurso, id_problema):
     concurso    = get_object_or_404(Concurso, pk=id_concurso)
     problema    = get_object_or_404(Problema, pk=id_problema)
     usuario = Usuario.objects.get(pk=request.user.id)
-    if concurso in usuario.concursos_activos() and problema in concurso.problemas.all():
+    if concurso in usuario.concursos_activos(solo_importantes=False) and problema in concurso.problemas.all():
         consultas = Consulta.objects.filter(problema=problema, concurso=concurso, usuario=usuario, leido=True)
         consulta_list = []
         for consulta in consultas:

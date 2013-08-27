@@ -203,7 +203,7 @@
                         <strong>Capítulos</strong>
                         <ul>
                           {% for capitulo in libro.capitulos.all %}
-                            <li>{{ capitulo }} <a href="{% url 'apps.libro.views.descargar_capitulo' capitulo.id %}" class="btn btn-small"><i class="icon-download"></i></a></li>
+                            <li><strong>{{ forloop.counter }}</strong> {{ capitulo }} <a href="{% url 'apps.libro.views.descargar_capitulo' capitulo.id %}" class="btn btn-small"><i class="icon-download"></i></a></li>
                           {% endfor %}
                         </ul>
                       </td>

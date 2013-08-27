@@ -197,7 +197,7 @@ def problema_concurso(request, id_concurso, id_problema):
 def concurso_view(request, id_concurso):
     concurso = get_object_or_404(Concurso, pk=id_concurso)
     usuario = Usuario.objects.get(pk=request.user.id)
-    if concurso in usuario.concursos_activos():
+    if concurso in usuario.concursos_activos(solo_importantes=False):
         diferencia = concurso.fecha_fin - timezone.now()
         concurso.quedan_dias    = ['', "%d días"%diferencia.days][diferencia.days!=0]
         horas = diferencia.seconds/3600

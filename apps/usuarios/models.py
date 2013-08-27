@@ -253,14 +253,22 @@ class Usuario(User):
                 lista_usuarios.append(Usuario.objects.get(pk=envio.usuario.id))
         return lista_usuarios
 
-    def concursos_activos(self):
-        return Concurso.objects.filter(
-            grupos__perfiles=self.perfil,
-            fecha_inicio__lte=timezone.now(),
-            fecha_fin__gte=timezone.now(),
-            activo=True,
-            importante=True
-        )
+    def concursos_activos(self, solo_importantes=True):
+        if solo_importantes:
+            return Concurso.objects.filter(
+                grupos__perfiles=self.perfil,
+                fecha_inicio__lte=timezone.now(),
+                fecha_fin__gte=timezone.now(),
+                activo=True,
+                importante=True
+            )
+        else:
+            return Concurso.objects.filter(
+                grupos__perfiles=self.perfil,
+                fecha_inicio__lte=timezone.now(),
+                fecha_fin__gte=timezone.now(),
+                activo=True
+            )
 
     def concursos_activos_y_futuros(self):
         concursos = Concurso.objects.filter(

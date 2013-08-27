@@ -21,6 +21,9 @@ class Capitulo(models.Model):
     def __unicode__(self):
         return self.titulo
 
+    class Meta:
+        ordering = ['id']
+
 default_code = lambda: str(uuid1())
 
 class Codigo(models.Model):

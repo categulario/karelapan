@@ -1,7 +1,10 @@
 {% extends 'template.html' %}
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 {% block titulo %} Usuarios {% endblock %}
 {% block contenido %}
+  {% addtoblock 'js' %}
+    <script type="text/javascript" language="javascript" src="{% static 'js/usuarios.js' %}"></script>
+  {% endaddtoblock %}
   {% if not user.is_authenticated %}
     <div class="span3"></div>
     <div class="span6">
@@ -111,20 +114,21 @@
               <div class="controls">
                 <div class="input-prepend">
                   <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="puntaje-button">
                       mayor que
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a href="#">mayor que</a></li>
-                      <li><a href="#">mayor o igual que</a></li>
-                      <li><a href="#">menor que</a></li>
-                      <li><a href="#">menor o igual que</a></li>
-                      <li><a href="#">igual que</a></li>
+                      <li><a href="#" class="puntaje-select" data-value="gt">mayor que</a></li>
+                      <li><a href="#" class="puntaje-select" data-value="ge">mayor o igual que</a></li>
+                      <li><a href="#" class="puntaje-select" data-value="lt">menor que</a></li>
+                      <li><a href="#" class="puntaje-select" data-value="le">menor o igual que</a></li>
+                      <li><a href="#" class="puntaje-select" data-value="eq">igual que</a></li>
                     </ul>
                   </div>
                   <input class="input-small" id="prependedDropdownButton" type="text" name="puntaje">
                 </div>
+                <input type="hidden" name="puntaje-ref" value="gt" id="puntaje-ref">
               </div>
             </div>
             <div class="control-group">
@@ -132,20 +136,21 @@
               <div class="controls">
                 <div class="input-prepend">
                   <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="problemas-button">
                       mayor que
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a href="#">mayor que</a></li>
-                      <li><a href="#">mayor o igual que</a></li>
-                      <li><a href="#">menor que</a></li>
-                      <li><a href="#">menor o igual que</a></li>
-                      <li><a href="#">igual que</a></li>
+                      <li><a href="#" class="problemas-select" data-value="gt">mayor que</a></li>
+                      <li><a href="#" class="problemas-select" data-value="ge">mayor o igual que</a></li>
+                      <li><a href="#" class="problemas-select" data-value="lt">menor que</a></li>
+                      <li><a href="#" class="problemas-select" data-value="le">menor o igual que</a></li>
+                      <li><a href="#" class="problemas-select" data-value="eq">igual que</a></li>
                     </ul>
                   </div>
                   <input class="input-small" id="prependedDropdownButton" type="text" name="problemas-resueltos">
                 </div>
+                <input type="hidden" name="problemas-ref" value="gt" id="problemas-ref">
               </div>
             </div>
             <div class="control-group">

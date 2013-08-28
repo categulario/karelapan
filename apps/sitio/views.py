@@ -300,6 +300,17 @@ def usuarios_view(request):
     if request.GET.get('olimpiada'):
         o = Olimpiada.objects.get(pk=request.GET.get('olimpiada'))
         ql.append(Q(perfil__inscripciones=o))
+    if request.GET.get('puntaje'):
+        if request.GET.get('puntaje-ref') == 'gt':
+            ql.append(Q(perfil__puntaje__gt=request.GET.get('puntaje')))
+        elif request.GET.get('puntaje-ref') == 'ge':
+            ql.append(Q(perfil__puntaje__gte=request.GET.get('puntaje')))
+        elif request.GET.get('puntaje-ref') == 'lt':
+            ql.append(Q(perfil__puntaje__lt=request.GET.get('puntaje')))
+        elif request.GET.get('puntaje-ref') == 'le':
+            ql.append(Q(perfil__puntaje__lte=request.GET.get('puntaje')))
+        elif request.GET.get('puntaje-ref') == 'eq':
+            ql.append(Q(perfil__puntaje=request.GET.get('puntaje')))
 
     if len(ql) == 0:
         lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')

@@ -329,7 +329,7 @@ def usuarios_view(request):
     if len(ql) == 0:
         lista_usuarios = Usuario.objects.all().order_by(ordenacion or 'perfil__nombre_completo')
     else:
-        lista_usuarios = Usuario.objects.filter(reduce(and_, ql)).order_by('perfil__nombre_completo')
+        lista_usuarios = Usuario.objects.filter(reduce(and_, ql)).order_by(ordenacion or 'perfil__nombre_completo')
     paginator = Paginator(lista_usuarios, 50)
 
     page = request.GET.get('pagina')

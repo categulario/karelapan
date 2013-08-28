@@ -322,9 +322,12 @@ def usuarios_view(request):
             ql.append(Q(perfil__problemas__lte=request.GET.get('problemas')))
         elif request.GET.get('problemas-ref') == 'eq':
             ql.append(Q(perfil__problemas=request.GET.get('problemas')))
+    ordenacion = None
+    if request.GET.get('ordenacion') in ['perfil__puntaje', '-perfil__puntaje', 'perfil__nombre_completo', '-perfil__nombre_completo']:
+        ordenacion = request.GET.get('ordenacion')
 
     if len(ql) == 0:
-        lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')
+        lista_usuarios = Usuario.objects.all().order_by(ordenacion or 'perfil__nombre_completo')
     else:
         lista_usuarios = Usuario.objects.filter(reduce(and_, ql)).order_by('perfil__nombre_completo')
     paginator = Paginator(lista_usuarios, 50)

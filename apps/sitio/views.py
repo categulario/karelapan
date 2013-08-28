@@ -1,14 +1,16 @@
 # -*- coding:utf-8 -*-
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from apps.evaluador.models import Nivel, Problema, Concurso, Envio, Participacion, Consulta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from apps.usuarios.models import Usuario, Grupo, Olimpiada
+from apps.usuarios.forms import RegistroForm, PerfilForm
 from modules.recaptcha import verifica
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail, EmailMessage, mail_admins
-from apps.usuarios.forms import RegistroForm, PerfilForm
+from django.db.models import Q
 from django.template import RequestContext
 from modules.badges import badgify
 from django.contrib import messages
@@ -17,9 +19,9 @@ from modules.fechas import diferencia_str
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from uuid import uuid1
 from functools import wraps
+from operator import or_, and_
+from uuid import uuid1
 
 import datetime
 import uuid
@@ -283,7 +285,23 @@ def medallero_view(request):
     return render_to_response('medallero.html', data, context_instance=RequestContext(request))
 
 def usuarios_view(request):
-    lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')
+    """Muestra la lista de usuarios, y quizá los filtra"""
+    ql = []
+    if request.GET.get('nombre'):
+        ql.append(Q(perfil__nombre_completo__icontains=request.GET.get('nombre')))
+    if request.GET.get('correo'):
+        ql.append(Q(email__icontains=request.GET.get('correo')))
+    if request.GET.get('estado'):
+        ql.append(Q(perfil__estado=request.GET.get('estado')))
+    if request.GET.get('subsistema'):
+        ql.append(Q(perfil__subsistema=request.GET.get('subsistema')))
+    if request.GET.get('escuela'):
+        ql.append(Q(perfil__nombre_escuela__icontains=request.GET.get('escuela')))
+
+    if len(ql) == 0:
+        lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')
+    else:
+        lista_usuarios = Usuario.objects.filter(reduce(and_, ql)).order_by('perfil__nombre_completo')
     paginator = Paginator(lista_usuarios, 50)
 
     page = request.GET.get('pagina')

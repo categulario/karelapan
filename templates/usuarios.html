@@ -11,25 +11,25 @@
     </div>
     <div class="span3"></div>
   {% else %}
-    <div class="span2"></div>
-    <div class="span8">
+    <div class="span1"></div>
+    <div class="span10">
       <p><strong>Lista</strong> de usuarios en orden alfabético</p>
       <p>Hay <strong>{{ cuenta }}</strong> usuarios en total <a href="" class="pull-right"><i class="icon-search"></i></a></p>
-      <div class="row-fluid">
-        <div class="span12">
-          <strong>Buscar en usuarios</strong>
-          <p>Solo pon los campos que necesites para tu búsqueda</p>
-          <form class="form-horizontal" method="get">
+      <form class="form-horizontal" method="get">
+        <div class="row-fluid">
+          <div class="span6">
+            <strong>Buscar en usuarios</strong>
+            <p>Solo pon los campos que necesites para tu búsqueda</p>
             <div class="control-group">
               <label class="control-label">Nombre</label>
               <div class="controls">
-                <input type="text" name="nombre">
+                <input type="text" name="nombre" placeholder="que contenga..">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label">Correo</label>
               <div class="controls">
-                <input type="text" name="correo">
+                <input type="text" name="correo" placeholder="que contenga..">
               </div>
             </div>
             <div class="control-group">
@@ -76,21 +76,36 @@
             <div class="control-group">
               <label class="control-label">Subsistema</label>
               <div class="controls">
-                <input type="text" name="correo">
+                <select name="subsistema">
+                  <option value="">---</option>
+                  <option value="PRIMARIAS">PRIMARIAS</option>
+                  <option value="SECUNDARIAS">SECUNDARIAS</option>
+                  <option value="DGETI">DGETI</option>
+                  <option value="CECYTEV">CECYTEV</option>
+                  <option value="DGETA">DGETA</option>
+                  <option value="DGB">DGB</option>
+                  <option value="COBAEV">COBAEV</option>
+                  <option value="CONALEP">CONALEP</option>
+                  <option value="TEBAEV">TEBAEV</option>
+                  <option value="PARTICULAR">PARTICULAR</option>
+                  <option value="OTROS">OTROS</option>
+                </select>
               </div>
             </div>
             <div class="control-group">
               <label class="control-label">Asesor</label>
               <div class="controls">
-                <input type="text" name="correo">
+                <input type="text" name="asesor" placeholder="que sea...">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label">Escuela</label>
               <div class="controls">
-                <input type="text" name="correo">
+                <input type="text" name="escuela" placeholder="que contenga...">
               </div>
             </div>
+          </div>
+          <div class="span6">
             <div class="control-group">
               <label class="control-label">Puntaje</label>
               <div class="controls">
@@ -108,7 +123,7 @@
                       <li><a href="#">igual que</a></li>
                     </ul>
                   </div>
-                  <input class="input-small" id="prependedDropdownButton" type="text">
+                  <input class="input-small" id="prependedDropdownButton" type="text" name="puntaje">
                 </div>
               </div>
             </div>
@@ -129,7 +144,7 @@
                       <li><a href="#">igual que</a></li>
                     </ul>
                   </div>
-                  <input class="input-small" id="prependedDropdownButton" type="text">
+                  <input class="input-small" id="prependedDropdownButton" type="text" name="problemas-resueltos">
                 </div>
               </div>
             </div>
@@ -144,14 +159,23 @@
                 </select>
               </div>
             </div>
+            <strong>Ordenar por</strong>
             <div class="control-group">
               <div class="controls">
-                <button type="submit" class="btn btn-primary">Go! <i class="icon-search icon-white"></i></button>
+                <input type="radio" name="ordenacion" value="nombre_ASC" checked="1"> Nombre ascendente<br>
+                <input type="radio" name="ordenacion" value="nombre_DESC"> Nombre descendente<br>
+                <input type="radio" name="ordenacion" value="puntaje_ASC"> Puntaje ascendente<br>
+                <input type="radio" name="ordenacion" value="puntaje_DESC"> Puntaje descendente
               </div>
             </div>
-          </form>
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-primary btn-large">Go! <i class="icon-search icon-white"></i></button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -193,6 +217,6 @@
         </ul>
       </div>
     </div>
-    <div class="span2"></div>
+    <div class="span1"></div>
   {% endif %}
 {% endblock %}

@@ -14,7 +14,7 @@
     <div class="span1"></div>
     <div class="span10">
       <p><strong>Lista</strong> de usuarios en orden alfabético</p>
-      <p>Hay <strong>{{ cuenta }}</strong> usuarios en total <a href="" class="pull-right"><i class="icon-search"></i></a></p>
+      <p>Hay <strong>{{ cuenta }}</strong> usuarios en total <a href="" class="pull-right btn"><i class="icon-search"></i></a></p>
       <form class="form-horizontal" method="get">
         <div class="row-fluid">
           <div class="span6">
@@ -162,10 +162,10 @@
             <strong>Ordenar por</strong>
             <div class="control-group">
               <div class="controls">
-                <input type="radio" name="ordenacion" value="nombre_ASC" checked="1"> Nombre ascendente<br>
-                <input type="radio" name="ordenacion" value="nombre_DESC"> Nombre descendente<br>
-                <input type="radio" name="ordenacion" value="puntaje_ASC"> Puntaje ascendente<br>
-                <input type="radio" name="ordenacion" value="puntaje_DESC"> Puntaje descendente
+                <input type="radio" name="ordenacion" value="nombre" checked="1"> Nombre ascendente<br>
+                <input type="radio" name="ordenacion" value="-nombre"> Nombre descendente<br>
+                <input type="radio" name="ordenacion" value="puntaje"> Puntaje ascendente<br>
+                <input type="radio" name="ordenacion" value="-puntaje"> Puntaje descendente
               </div>
             </div>
             <div class="control-group">

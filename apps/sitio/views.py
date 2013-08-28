@@ -297,8 +297,9 @@ def usuarios_view(request):
         ql.append(Q(perfil__subsistema=request.GET.get('subsistema')))
     if request.GET.get('escuela'):
         ql.append(Q(perfil__nombre_escuela__icontains=request.GET.get('escuela')))
-    #~ if request.GET.get('olimpiada'):
-        #~ ql.append(Q(perfil__participaciones__icontains=request.GET.get('escuela')))
+    if request.GET.get('olimpiada'):
+        o = Olimpiada.objects.get(pk=request.GET.get('olimpiada'))
+        ql.append(Q(perfil__inscripciones=o))
 
     if len(ql) == 0:
         lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')
@@ -315,7 +316,7 @@ def usuarios_view(request):
         usuarios = paginator.page(paginator.num_pages)
     data = {
         'usuarios'  : usuarios,
-        'cuenta': Usuario.objects.count(),
+        'cuenta': lista_usuarios.count(),
         'olimpiadas': Olimpiada.objects.all()
     }
     if 'next' in request.GET:

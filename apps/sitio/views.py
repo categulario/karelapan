@@ -311,6 +311,17 @@ def usuarios_view(request):
             ql.append(Q(perfil__puntaje__lte=request.GET.get('puntaje')))
         elif request.GET.get('puntaje-ref') == 'eq':
             ql.append(Q(perfil__puntaje=request.GET.get('puntaje')))
+    if request.GET.get('problemas'):
+        if request.GET.get('problemas-ref') == 'gt':
+            ql.append(Q(perfil__problemas__gt=request.GET.get('problemas')))
+        elif request.GET.get('problemas-ref') == 'ge':
+            ql.append(Q(perfil__problemas__gte=request.GET.get('problemas')))
+        elif request.GET.get('problemas-ref') == 'lt':
+            ql.append(Q(perfil__problemas__lt=request.GET.get('problemas')))
+        elif request.GET.get('problemas-ref') == 'le':
+            ql.append(Q(perfil__problemas__lte=request.GET.get('problemas')))
+        elif request.GET.get('problemas-ref') == 'eq':
+            ql.append(Q(perfil__problemas=request.GET.get('problemas')))
 
     if len(ql) == 0:
         lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')

@@ -297,6 +297,8 @@ def usuarios_view(request):
         ql.append(Q(perfil__subsistema=request.GET.get('subsistema')))
     if request.GET.get('escuela'):
         ql.append(Q(perfil__nombre_escuela__icontains=request.GET.get('escuela')))
+    #~ if request.GET.get('olimpiada'):
+        #~ ql.append(Q(perfil__participaciones__icontains=request.GET.get('escuela')))
 
     if len(ql) == 0:
         lista_usuarios = Usuario.objects.all().order_by('perfil__nombre_completo')

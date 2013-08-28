@@ -183,6 +183,9 @@ class Perfil(models.Model):
 
     class Meta:
         verbose_name_plural = 'perfiles'
+        permissions = (
+            ('descargar_reporte', 'Puede descargar reportes de alumnos'),
+        )
 
 class Usuario(User):
     class Meta:

@@ -30,7 +30,7 @@ class Codigo(models.Model):
     codigo              = models.CharField(max_length=36, default=default_code)
     usado               = models.BooleanField(default=False, editable=False)
     fecha_activacion    = models.DateTimeField(blank=True, null=True, editable=False)
-    usuario             = models.ForeignKey('auth.User', blank=True, null=True, editable=False)
+    usuario             = models.ForeignKey('auth.User', blank=True, null=True, editable=False, related_name='codigos')
     libro               = models.ForeignKey(Libro)
 
     def __unicode__(self):

@@ -30,6 +30,12 @@ def requiere_compra(vista):
 @login_required
 def activa_codigo(request):
     codigo = get_object_or_404(Codigo, codigo=request.POST.get('codigo', '').strip(), usado=False)
+
+    otros_codigos = Codigo.objects.filter(libro=codigo.libro, usuario=request.user)
+    if len(otros_codigos) > 0:
+        messages.warning(request, 'Ya tienes activado un código para este libro')
+        return HttpResponseRedirect(request.POST.get('next', '/perfil'))
+
     codigo.usado = True
     codigo.fecha_activacion = timezone.now()
     codigo.usuario = request.user

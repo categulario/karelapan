@@ -116,7 +116,7 @@ def problema_detalle(request, nombre_administrativo):
 @login_required
 def envios_view(request):
     lista_envios = Envio.objects.filter(concurso=None)
-    paginator = Paginator(lista_envios, 25)
+    paginator = Paginator(lista_envios, 100)
 
     page = request.GET.get('pagina')
     try:
@@ -330,7 +330,7 @@ def usuarios_view(request):
         lista_usuarios = Usuario.objects.all().order_by(ordenacion or 'perfil__nombre_completo')
     else:
         lista_usuarios = Usuario.objects.filter(reduce(and_, ql)).order_by(ordenacion or 'perfil__nombre_completo')
-    paginator = Paginator(lista_usuarios, 50)
+    paginator = Paginator(lista_usuarios, 100)
 
     page = request.GET.get('pagina')
     try:

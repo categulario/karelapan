@@ -69,7 +69,7 @@ def libro(request, id_libro):
         messages.warning(request, '¡No has comprado este libro!')
         return HttpResponseRedirect('/material')
 
-descargar_capitulo = requiere_compra(login_required(ObjectDownloadView.as_view(model=Capitulo, file_field='archivo')))
+descargar_capitulo = login_required(requiere_compra(ObjectDownloadView.as_view(model=Capitulo, file_field='archivo')))
 
 #~ @login_required
 #~ def descargar_capitulo(request, id_capitulo):

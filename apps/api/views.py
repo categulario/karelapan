@@ -72,6 +72,7 @@ def existe_usuario(request, nombre_usuario):
     except Usuario.DoesNotExist:
         return HttpResponse('nope', content_type='text/plain')
 
+@login_required
 def descarga_codigo(request, id_envio):
     """Le ofrece a un usuario la posibilidad de descargar uno de sus
     códigos enviados"""

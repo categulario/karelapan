@@ -47,4 +47,4 @@ class RegistroForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Perfil
-        exclude = ('usuario', 'problemas_resueltos', 'puntaje', 'grupos', 'nombre_completo', 'asesor', 'inscripciones')
+        exclude = ('usuario', 'problemas_resueltos', 'puntaje', 'grupos', 'nombre_completo', 'asesor', 'inscripciones', 'confirm_token')

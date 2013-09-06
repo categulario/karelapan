@@ -380,7 +380,7 @@ def registro_view(request):
         if request.method == 'POST':
             formulario = RegistroForm(request.POST)
             if formulario.is_valid():
-                if len(re.findall('.*chuck.*norris.*', request.POST.get('nombre_de_usuario', ''))) == 0:
+                if len(re.findall('.*chuck.*norris.*', request.POST.get('nombre_de_usuario', ''), flags=re.IGNORECASE)) == 0:
                     respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
                     if respuesta == True:
                         if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
@@ -425,17 +425,17 @@ def registro_view(request):
                         'La muralla china fue originalmente creada para mantener a chuck alejado del lugar',
                         'Cuando los fantasmas se sientan al rededor de la hoguera cuentan historias de chuck norris',
                         'Chuck norris ya estuvo en marte, es por eso que no hay vida allí',
-                        'Chuck norris puede dividir el átomo con sus manos'
+                        'Chuck norris puede dividir el átomo con sus manos',
+                        'Chuck norris contó hasta el infinito, dos veces...'
                     ]
                     data = {
                         'fact': choice(facts)
                     }
-                    return render_to_response('usuarios/nochuck.html', data, context_instance=RequestContext(request))
+                    return render_to_response('eggs/nochuck.html', data, context_instance=RequestContext(request))
             else:
                 messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
             data['formulario'] = formulario
             return render_to_response('registro.html', data, context_instance=RequestContext(request))
-
         else:
             data['formulario'] = RegistroForm()
             return render_to_response('registro.html', data, context_instance=RequestContext(request))

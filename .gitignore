@@ -13,3 +13,4 @@ gconfig.py
 settings.py
 assets/tiny_mce/*
 *~
+*.sublime*

@@ -22,6 +22,7 @@ from django.conf import settings
 from functools import wraps
 from operator import or_, and_
 from uuid import uuid1
+import re
 
 import datetime
 import uuid
@@ -376,45 +377,48 @@ def registro_view(request):
         if request.method == 'POST':
             formulario = RegistroForm(request.POST)
             if formulario.is_valid():
-                respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
-                if respuesta == True:
-                    if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
-                        nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=False)
-                        nuevo_usuario.set_password(request.POST.get('contrasenia'))
-                        nuevo_usuario.save()
+                if len(re.findall('.*chuck.*norris.*', request.POST.get('nombre_de_usuario', ''))) == 0:
+                    respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
+                    if respuesta == True:
+                        if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
+                            nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=False)
+                            nuevo_usuario.set_password(request.POST.get('contrasenia'))
+                            nuevo_usuario.save()
 
-                        perfil = formulario.save(commit=False)
-                        token_confirmacion = str(uuid1())
-                        perfil.confirm_token = token_confirmacion
-                        try:
-                            id_asesor = int(request.POST.get('asesor'))
-                            perfil.asesor = Usuario.objects.get(pk=id_asesor)
-                        except ValueError:
-                            perfil.asesor = None
-                        perfil.usuario = nuevo_usuario
-                        perfil.nombre_completo = "%s %s %s"%(request.POST.get('nombre'),request.POST.get('appat'),request.POST.get('apmat'))
-                        perfil.save()
-                        perfil.grupos = [Grupo.objects.get_or_create(nombre='usuarios')[0], Grupo.objects.get_or_create(nombre=request.POST.get('subsistema'))[0]]
-                        perfil.save()
-                        data = {
-                            'token': token_confirmacion,
-                            'correo': nuevo_usuario.email
-                        }
-                        msg = EmailMessage(
-                            'Confirma tu correo electrónico',
-                            render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
-                            'Karelapan <karelapan@gmail.com>',
-                            [nuevo_usuario.email]
-                        )
-                        msg.content_subtype = "html"  # Main content is now text/html
-                        msg.send()
-                        mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
-                        messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
-                        return HttpResponseRedirect('/')
+                            perfil = formulario.save(commit=False)
+                            token_confirmacion = str(uuid1())
+                            perfil.confirm_token = token_confirmacion
+                            try:
+                                id_asesor = int(request.POST.get('asesor'))
+                                perfil.asesor = Usuario.objects.get(pk=id_asesor)
+                            except ValueError:
+                                perfil.asesor = None
+                            perfil.usuario = nuevo_usuario
+                            perfil.nombre_completo = "%s %s %s"%(request.POST.get('nombre'),request.POST.get('appat'),request.POST.get('apmat'))
+                            perfil.save()
+                            perfil.grupos = [Grupo.objects.get_or_create(nombre='usuarios')[0], Grupo.objects.get_or_create(nombre=request.POST.get('subsistema'))[0]]
+                            perfil.save()
+                            data = {
+                                'token': token_confirmacion,
+                                'correo': nuevo_usuario.email
+                            }
+                            msg = EmailMessage(
+                                'Confirma tu correo electrónico',
+                                render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
+                                'Karelapan <karelapan@gmail.com>',
+                                [nuevo_usuario.email]
+                            )
+                            msg.content_subtype = "html"  # Main content is now text/html
+                            msg.send()
+                            mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
+                            messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
+                            return HttpResponseRedirect('/')
+                        else:
+                            messages.error(request, 'Las contraseñas no coinciden')
                     else:
-                        messages.error(request, 'Las contraseñas no coinciden')
+                        messages.error(request, 'Recaptcha dice que eres un robot: %s'%(respuesta))
                 else:
-                    messages.error(request, 'Recaptcha dice que eres un robot: %s'%(respuesta))
+                    return render_to_response('usuarios/nochuck.html', context_instance=RequestContext(request))
             else:
                 messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
             data['formulario'] = formulario

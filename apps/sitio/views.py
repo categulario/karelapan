@@ -89,9 +89,11 @@ def problema_detalle(request, nombre_administrativo):
                         messages.warning(request, 'El archivo pesa demasiado, lo siento')
                         return HttpResponseRedirect('/problema/'+nombre_administrativo)
                 else:
+                    if request.POST.get('codigo', '') == 'import karel': #Huevo de pascua
+                        return render_to_response('eggs/karel.html', context_instance=RequestContext(request))
                     archivo_codigo += str(uuid.uuid1())+'.karel'
                     f = open(archivo_codigo, 'w')
-                    f.write(request.POST['codigo'].encode("utf-8"))
+                    f.write(request.POST.get('codigo', '').encode("utf-8"))
                     f.close()
                 envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
                 problema.veces_intentado += 1

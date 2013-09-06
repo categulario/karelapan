@@ -22,6 +22,7 @@ from django.conf import settings
 from functools import wraps
 from operator import or_, and_
 from uuid import uuid1
+from random import choice
 import re
 
 import datetime
@@ -418,7 +419,16 @@ def registro_view(request):
                     else:
                         messages.error(request, 'Recaptcha dice que eres un robot: %s'%(respuesta))
                 else:
-                    return render_to_response('usuarios/nochuck.html', context_instance=RequestContext(request))
+                    facts = [
+                        'La muralla china fue originalmente creada para mantener a chuck alejado del lugar',
+                        'Cuando los fantasmas se sientan al rededor de la hoguera cuentan historias de chuck norris',
+                        'Chuck norris ya estuvo en marte, es por eso que no hay vida allí',
+                        'Chuck norris puede dividir el átomo con sus manos'
+                    ]
+                    data = {
+                        'fact': choice(facts)
+                    }
+                    return render_to_response('usuarios/nochuck.html', data, context_instance=RequestContext(request))
             else:
                 messages.error(request, 'Hay errores en algunos campos del formulario, verifica')
             data['formulario'] = formulario

@@ -12,7 +12,7 @@ import json
 import csv
 
 def index(request):
-    return HttpResponse("Bienvenido a la API de Karelapan. Ejecute un comando.", content_type="text/plain")
+    return HttpResponse("Hola, humano", content_type="text/plain")
 
 def mundo_ejemplo(request, id_problema):
     problema = get_object_or_404(Problema, pk=id_problema, publico=True)
@@ -91,6 +91,7 @@ def descarga_mundo(request, id_problema):
     response['Content-Disposition'] = 'attachment; filename="%s.world"'%(problema.nombre_administrativo)
     return response
 
+@login_required
 def envio(request, id_envio, id_concurso=None):
     """Ofrece el veredicto de un envío a un usuario"""
     envio = get_object_or_404(Envio, pk=id_envio)
@@ -117,6 +118,7 @@ def envio(request, id_envio, id_concurso=None):
         return HttpResponse('Forbidden', content_type='text/plain')
 
 @csrf_exempt
+@login_required
 def hacer_consulta(request):
     """Recibe una consulta de un usuario durante el examen"""
     id_concurso = request.POST.get('concurso')

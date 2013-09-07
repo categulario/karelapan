@@ -33,7 +33,6 @@ def default_group():
 def default_omi():
     return Olimpiada.objects.get_or_create(anio=1512)[0]
 
-
 class Perfil(models.Model):
     usuario             = models.OneToOneField(User)
     nombre              = models.CharField(max_length=120)
@@ -185,6 +184,7 @@ class Perfil(models.Model):
         verbose_name_plural = 'perfiles'
         permissions = (
             ('descargar_reporte', 'Puede descargar reportes de alumnos'),
+            ('ver_estatus', 'Puede ver el status del usuario')
         )
 
 class Usuario(User):

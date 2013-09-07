@@ -293,6 +293,8 @@ def usuarios_view(request):
     ql = []
     if request.GET.get('nombre'):
         ql.append(Q(perfil__nombre_completo__icontains=request.GET.get('nombre')))
+    if request.GET.get('username'):
+        ql.append(Q(username__icontains=request.GET.get('username')))
     if request.GET.get('correo'):
         ql.append(Q(email__icontains=request.GET.get('correo')))
     if request.GET.get('estado'):

@@ -7,7 +7,7 @@
     <h4>
       {{ concurso }}
       {% if concurso.ranking_publico %}
-        {% url 'apps.sitio.views.concurso_ver_ranking_publico' concurso.id %}
+        <small><a href="{% url 'apps.sitio.views.concurso_ver_ranking_publico' concurso.id %}">ranking</a></small>
       {% endif %}
     </h4>
     <p>{{ concurso.descripcion }}</p>

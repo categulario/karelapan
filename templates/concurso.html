@@ -6,6 +6,9 @@
   <div class="span6">
     <h4>
       {{ concurso }}
+      {% if concurso.ranking_publico %}
+        {% url 'apps.sitio.views.concurso_ver_ranking_publico' concurso.id %}
+      {% endif %}
     </h4>
     <p>{{ concurso.descripcion }}</p>
     <p class="lead">Quedan {{ concurso.quedan_dias }}{{ concurso.quedan_horas }}{{ concurso.quedan_minutos }}{{ concurso.quedan_segundos }}</p>

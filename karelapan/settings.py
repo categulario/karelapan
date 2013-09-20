@@ -25,7 +25,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost:8000']
+ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -137,9 +137,7 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
-    'apps.bootstrapy',
-    'apps.karelecatl',
-    'apps.libro'
+    'apps.bootstrapy'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -173,7 +171,7 @@ LOGGING = {
 
 BASE_URL = 'localhost:8000'
 GOOGLE_ANALYTHICS = False
-FACEBOOK = False
+FACEBOOK = True
 
 MESSAGE_TAGS = {
     50: 'problem_debug'
@@ -184,7 +182,7 @@ LOGIN_URL = '/usuarios'
 RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
 RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
 
-RAIZ_CODIGOS = os.path.join(MEDIA_ROOT, 'codigos')+'/'
+RAIZ_CODIGOS = os.path.normpath(os.path.join(os.path.dirname(__file__),'../codigos/'))+'/'
 
 #Cosas del demonio evaluador de karel
 #Ruta absoluta al archivo del registro
@@ -224,6 +222,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "apps.sitio.processors.settings_processor",
     "apps.sitio.processors.path_processor",
     "apps.sitio.processors.avisos_processor",
-    "apps.sitio.processors.concursos_processor",
 )
 OLIMPIADA_ACTUAL = 2014

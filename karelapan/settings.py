@@ -3,11 +3,11 @@ import os
 import logging
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Abraham Toriz Cruz', 'a.wonderful.code@gmail.com'),
+    ('Abraham Toriz Cruz', 'karelapan@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -25,7 +25,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.karelapan.com', 'localhost:8000']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -52,22 +52,22 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__),'../media/'))
+MEDIA_ROOT = '/home/covi/staticfiles/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = '/media/'
+MEDIA_URL = 'http://static.covi.org.mx/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__),'../static/'))
+STATIC_ROOT = '/home/covi/staticfiles/static/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
+STATIC_URL = 'http://static.covi.org.mx/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -137,7 +137,9 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
-    'apps.bootstrapy'
+    'apps.bootstrapy',
+    'apps.karelecatl',
+    'apps.libro',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -169,9 +171,9 @@ LOGGING = {
     }
 }
 
-BASE_URL = 'localhost:8000'
-GOOGLE_ANALYTHICS = False
+GOOGLE_ANALYTHICS = True
 FACEBOOK = True
+BASE_URL = 'karelapan.com'
 
 MESSAGE_TAGS = {
     50: 'problem_debug'
@@ -182,7 +184,7 @@ LOGIN_URL = '/usuarios'
 RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
 RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
 
-RAIZ_CODIGOS = os.path.normpath(os.path.join(os.path.dirname(__file__),'../codigos/'))+'/'
+RAIZ_CODIGOS = os.path.join(MEDIA_ROOT, 'codigos')+'/'
 
 #Cosas del demonio evaluador de karel
 #Ruta absoluta al archivo del registro
@@ -222,5 +224,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "apps.sitio.processors.settings_processor",
     "apps.sitio.processors.path_processor",
     "apps.sitio.processors.avisos_processor",
+    "apps.sitio.processors.concursos_processor",
 )
 OLIMPIADA_ACTUAL = 2014

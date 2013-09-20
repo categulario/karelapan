@@ -3,3 +3,4 @@ south
 django-sekizai
 fabric
 gunicorn
+psutil

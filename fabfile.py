@@ -6,8 +6,8 @@ from fabric.contrib.console import confirm
 from fabric.context_managers import cd, lcd, settings, hide
 
 USER = 'covi'
-HOST = 'covi.com.mx'
-APP_NAME = 'karelapan'
+HOST = 'covi.org.mx'
+APP_NAME = 'karelapandjango'
 
 # Host and login username:
 env.hosts = ['%s@%s' % (USER, HOST)]
@@ -17,7 +17,7 @@ WSGI_MODULE = '%s.wsgi' % APP_NAME
 DJANGO_APP_ROOT = os.path.join(VENV_DIR, APP_NAME)
 GUNICORN_CONFIG = "%s/gconfig.py"%DJANGO_APP_ROOT
 GUNICORN_PIDFILE = "%s/gunicorn.pid" % DJANGO_APP_ROOT
-STATIC_ROOT = '/home/%s/webapps/%s_media/static' % (USER, APP_NAME)
+STATIC_ROOT = '/home/%s/staticfiles/static/'%USER
 
 def start():
     """Prepara todo para comenzar a trabajar"""

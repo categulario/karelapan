@@ -13,7 +13,7 @@ APP_NAME = 'karelapandjango'
 env.hosts = ['%s@%s' % (USER, HOST)]
 
 VENV_DIR = "/home/%s/portal/EntornoKarelapan"%USER
-WSGI_MODULE = '%s.wsgi' % APP_NAME
+WSGI_MODULE = 'karelapan.wsgi'
 DJANGO_APP_ROOT = os.path.join(VENV_DIR, APP_NAME)
 GUNICORN_CONFIG = "%s/gconfig.py"%DJANGO_APP_ROOT
 GUNICORN_PIDFILE = "%s/gunicorn.pid" % DJANGO_APP_ROOT
@@ -92,7 +92,7 @@ def run_venv(command, **kwargs):
     """
     run("source %s/bin/activate" % env.venv + " && " + command, **kwargs)
 
-def install_dependencies():
+def install_requirements():
     """Instala las nuevas dependencias del paquete en el servidor remoto"""
     with virtualenv(VENV_DIR):
         with cd(DJANGO_APP_ROOT):
@@ -122,7 +122,7 @@ def memory():
 def deploy():
     """Actualiza el servidor de producción"""
     pull()
-    install_dependencies()
+    install_requirements()
     build_static()
     migrate()
     server_restart()

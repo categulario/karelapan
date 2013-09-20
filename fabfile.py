@@ -64,11 +64,12 @@ def lensure_gunicorn(debug=False):
 
 def server_start():
     """Inicia el servidor"""
-    run("%(venv_dir)s/bin/gunicorn -c %(config_file)s %(wsgimodule)s:application"%{
-        'venv_dir': VENV_DIR,
-        'config_file': GUNICORN_CONFIG,
-        'wsgimodule': WSGI_MODULE
-    })
+    with cd(DJANGO_APP_ROOT):
+        run("%(venv_dir)s/bin/gunicorn -c %(config_file)s %(wsgimodule)s:application"%{
+            'venv_dir': VENV_DIR,
+            'config_file': GUNICORN_CONFIG,
+            'wsgimodule': WSGI_MODULE
+        })
 
 def server_restart():
     """

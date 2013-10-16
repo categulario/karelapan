@@ -103,7 +103,7 @@ def build_static():
     """Recolecta los archivos estáticos en remoto"""
     with virtualenv(VENV_DIR):
         with cd(DJANGO_APP_ROOT):
-            run_venv("./manage.py collectstatic -v 0 --noinput --clear")
+            run_venv("./manage.py collectstatic -v 0 --noinput")
     run("chmod -R ugo+r %s" % STATIC_ROOT)
 
 def migrate():

@@ -662,7 +662,4 @@ def error403(request):
 
 def test(request):
     """Confirma el correo electrónico de un usuario"""
-    data = {
-        'js': ['js/excanvas.js', 'js/mundo.js', 'js/bienvenida.js']
-    }
-    return render_to_response('correo_confirmado.html', data, context_instance=RequestContext(request))
+    return render_to_response('sitio/test.html', context_instance=RequestContext(request))

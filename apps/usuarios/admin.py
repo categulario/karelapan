@@ -1,7 +1,14 @@
 from django.contrib import admin
 from django.contrib import auth
 from apps.usuarios.models import *
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponseRedirect
+
+def export_selected_objects(modeladmin, request, queryset):
+    selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+    ct = ContentType.objects.get_for_model(queryset.model)
+    return HttpResponseRedirect("/exportar/?ct=%s&ids=%s" % (ct.pk, ",".join(selected)))
+export_selected_objects.short_description = "Exportar"
 
 class PerfilAdmin(admin.ModelAdmin):
     list_display = ('get_full_name', 'correo', 'estado', 'subsistema', 'asesor', 'problemas_resueltos', 'puntaje', 'ultima_omi', 'lista_grupos')
@@ -28,3 +35,5 @@ admin.site.register(Perfil, PerfilAdmin)
 admin.site.register(Olimpiada)
 admin.site.unregister(auth.models.User)
 admin.site.register(auth.models.User, UserAdmin)
+
+admin.site.add_action(export_selected_objects)

@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
@@ -659,6 +660,12 @@ def error500(request):
 
 def error403(request):
     return render_to_response('errors/403.html', context_instance=RequestContext(request))
+
+@permission_required('usuarios.descargar_reporte')
+def exportar(request):
+    ct = get_object_or_404(ContentType, pk=request.GET.get('ct', '0'))
+    ct.model_class().objects.filter(id__in=request.GET.get('ids', '').split(','))
+    return HttpResponse('ok', content_type='text/plain')
 
 def test(request):
     """Confirma el correo electrónico de un usuario"""

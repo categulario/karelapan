@@ -14,7 +14,14 @@ class GrupoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'descripcion', 'elegible')
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'is_staff', 'last_login', 'date_joined')
+    list_display = ('username', 'email', 'is_staff', 'last_login', 'date_joined', 'is_active')
+    actions = ['activate_user', 'disable_user']
+    def activate_user(modeladmin, request, queryset):
+        queryset.update(is_active=True)
+    activate_user.short_description = "Activa los usuarios seleccionados"
+    def disable_user(modeladmin, request, queryset):
+        queryset.update(is_active=False)
+    disable_user.short_description = "Inhabilita a los usuarios seleccionados"
 
 admin.site.register(Grupo, GrupoAdmin)
 admin.site.register(Perfil, PerfilAdmin)

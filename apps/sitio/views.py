@@ -386,7 +386,7 @@ def registro_view(request):
                     respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
                     if respuesta == True:
                         if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
-                            nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=False)
+                            nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=True)
                             nuevo_usuario.set_password(request.POST.get('contrasenia'))
                             nuevo_usuario.save()
 
@@ -407,16 +407,16 @@ def registro_view(request):
                                 'token': token_confirmacion,
                                 'correo': nuevo_usuario.email
                             }
-                            msg = EmailMessage(
-                                'Confirma tu correo electrónico',
-                                render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
-                                'Karelapan <karelapan@gmail.com>',
-                                [nuevo_usuario.email]
-                            )
-                            msg.content_subtype = "html"  # Main content is now text/html
-                            msg.send()
-                            mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
-                            messages.success(request, 'Te has registrado correctamente, revisa tu correo para verificar tu cuenta')
+                            # msg = EmailMessage(
+                            #     'Confirma tu correo electrónico',
+                            #     render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
+                            #     'Karelapan <karelapan@gmail.com>',
+                            #     [nuevo_usuario.email]
+                            # )
+                            # msg.content_subtype = "html"  # Main content is now text/html
+                            # msg.send()
+                            # mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
+                            messages.success(request, 'Te has registrado correctamente!')
                             return HttpResponseRedirect('/')
                         else:
                             messages.error(request, 'Las contraseñas no coinciden')

@@ -3,7 +3,7 @@ import os
 import logging
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'karelapan',                      # Or path to database file if using sqlite3.
         'USER': 'karelapan',
         'PASSWORD': 'karelapan',
@@ -106,7 +106,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'karelapan.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'wsgi.app'
+WSGI_APPLICATION = 'karelapan.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__),'../templates'),

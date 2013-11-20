@@ -35,7 +35,7 @@ class PerfilForm(forms.ModelForm):
     asesor              = forms.CharField(widget=forms.HiddenInput, required=False)
     class Meta:
         model = Perfil
-        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi', 'inscripciones', 'nombre_completo', 'asesor')
+        exclude = ('usuario', 'grupos', 'problemas_resueltos', 'puntaje', 'sexo', 'fecha_nacimiento', 'ultima_omi', 'inscripciones', 'nombre_completo', 'asesor', 'confirm_token')
 
 class RegistroForm(forms.ModelForm):
     correo              = forms.EmailField(validators=[valida_correo])

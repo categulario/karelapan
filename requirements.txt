@@ -4,3 +4,6 @@ django-sekizai
 fabric
 gunicorn
 psutil
+wiki
+django-tinymce
+django_downloadview

@@ -1,10 +1,16 @@
 from django.contrib import admin
 from apps.sitio.models import *
+from apps.usuarios.models import Usuario
 
 class NoticiaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'contenido', 'autor', 'fecha', 'pegajoso')
     ordering = ('-fecha',)
     list_filter  = ('fecha', 'pegajoso')
+    readonly_fields = ('autor',)
+
+    def save_model(self, request, obj, form, change):
+        obj.autor = Usuario.objects.get(pk=request.user.id)
+        obj.save()
 
 class AvisoAdmin(admin.ModelAdmin):
     list_display = ('contenido', 'tipo', 'mostrado', 'caducidad', 'activo')

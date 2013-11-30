@@ -4,3 +4,5 @@ django-sekizai
 fabric
 gunicorn
 psutil
+django-mailgun
+requests

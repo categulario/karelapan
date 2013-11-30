@@ -197,13 +197,10 @@ LOG_LEVEL = logging.DEBUG
 LOCKFILE = '/tmp/kareld.lock'
 
 #Cosas relativas el envío de correos
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = '500Leymoon'
-EMAIL_HOST_USER = 'karelapan@gmail.com'
-EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[Karelapan] '
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = 'key-7a0sv5o4k3w2n67ffh4t0wtmf92if6k2'
+MAILGUN_SERVER_NAME = 'karelapan.com'
 
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "table,spellchecker,paste,searchreplace",

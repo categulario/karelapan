@@ -408,15 +408,15 @@ def registro_view(request):
                                 'token': token_confirmacion,
                                 'correo': nuevo_usuario.email
                             }
-                            # msg = EmailMessage(
-                            #     'Confirma tu correo electrónico',
-                            #     render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
-                            #     'Karelapan <karelapan@gmail.com>',
-                            #     [nuevo_usuario.email]
-                            # )
-                            # msg.content_subtype = "html"  # Main content is now text/html
-                            # msg.send()
-                            # mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
+                            msg = EmailMessage(
+                                'Confirma tu correo electrónico',
+                                render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
+                                'Karelapan <karelapan@gmail.com>',
+                                [nuevo_usuario.email]
+                            )
+                            msg.content_subtype = "html"  # Main content is now text/html
+                            msg.send()
+                            mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
                             messages.success(request, 'Te has registrado correctamente!')
                             return HttpResponseRedirect('/')
                         else:

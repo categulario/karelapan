@@ -3,22 +3,21 @@ import os
 import logging
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Abraham Toriz Cruz', 'karelapan@gmail.com'),
-    ('Julio Aguilar', 'madth3@gmail.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'nuevocovi',                      # Or path to database file if using sqlite3.
-        'USER': 'covi',
-        'PASSWORD': 'covipg.11',
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'karelapan',                      # Or path to database file if using sqlite3.
+        'USER': 'karelapan',
+        'PASSWORD': 'karelapan',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
@@ -107,7 +106,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'karelapan.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'wsgi.app'
+WSGI_APPLICATION = 'karelapan.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__),'../templates'),
@@ -198,10 +197,13 @@ LOG_LEVEL = logging.DEBUG
 LOCKFILE = '/tmp/kareld.lock'
 
 #Cosas relativas el envío de correos
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = '500Leymoon'
+EMAIL_HOST_USER = 'karelapan@gmail.com'
+EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[Karelapan] '
-EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = 'key-7a0sv5o4k3w2n67ffh4t0wtmf92if6k2'
-MAILGUN_SERVER_NAME = 'karelapan.com'
+EMAIL_USE_TLS = True
 
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "table,spellchecker,paste,searchreplace",

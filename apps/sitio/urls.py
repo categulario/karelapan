@@ -1,5 +1,6 @@
 from django.conf.urls import patterns,url
 from feed import UltimosProblemas
+from django.conf import settings
 
 urlpatterns = patterns('apps.sitio.views',
     url(r'^$', 'index_view'),
@@ -31,5 +32,10 @@ urlpatterns = patterns('apps.sitio.views',
     url(r'^verifica/(?P<correo>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})/token/(?P<token>[a-z0-9-]+)/', 'confirma_correo'),
     url(r'^recuperar_contrasenia/', 'recuperar_contrasenia'),
     url(r'^confirma_recuperacion/(?P<correo>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})/token/(?P<token>[a-z0-9-]+)/', 'confirma_recuperacion'),
-    url(r'^test/', 'test')
+    url(r'^exportar/', 'exportar'),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('apps.sitio.views',
+        url(r'^test/', 'test'),
+    )

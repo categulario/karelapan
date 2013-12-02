@@ -6,3 +6,6 @@ gunicorn
 psutil
 django-mailgun
 requests
+wiki
+django-tinymce
+django_downloadview

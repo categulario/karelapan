@@ -93,7 +93,7 @@ def run_venv(command, **kwargs):
     """
     run("source %s/bin/activate" % env.venv + " && " + command, **kwargs)
 
-def install_requirements():
+def requirements():
     """Instala las nuevas dependencias del paquete en el servidor remoto"""
     with virtualenv(VENV_DIR):
         with cd(DJANGO_APP_ROOT):
@@ -123,7 +123,7 @@ def memory():
 def deploy():
     """Actualiza el servidor de producción"""
     pull()
-    install_requirements()
+    requirements()
     build_static()
     migrate()
     server_restart()

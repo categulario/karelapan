@@ -202,7 +202,7 @@ EMAIL_SUBJECT_PREFIX = '[Karelapan] '
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 MAILGUN_ACCESS_KEY = 'key-7a0sv5o4k3w2n67ffh4t0wtmf92if6k2'
 MAILGUN_SERVER_NAME = 'karelapan.com'
-SERVER_EMAIL = 'support@karelapan.com'
+SERVER_EMAIL = 'soporte@karelapan.com'
 
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "table,spellchecker,paste,searchreplace",

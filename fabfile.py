@@ -120,6 +120,21 @@ def memory():
     """Monitorea la memoria usada"""
     run("ps -u %s -o rss,pid,comm"%USER)
 
+def kwasap():
+    with virtualenv(VENV_DIR):
+        with cd(DJANGO_APP_ROOT):
+            run_venv("./kareld wasap")
+
+def kstart():
+    with virtualenv(VENV_DIR):
+        with cd(DJANGO_APP_ROOT):
+            run_venv("./kareld start --debug")
+
+def kstop():
+    with virtualenv(VENV_DIR):
+        with cd(DJANGO_APP_ROOT):
+            run_venv("./kareld stop")
+
 def deploy():
     """Actualiza el servidor de producción"""
     pull()

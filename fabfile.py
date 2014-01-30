@@ -135,6 +135,14 @@ def kstop():
         with cd(DJANGO_APP_ROOT):
             run_venv("./kareld stop")
 
+def error_log():
+    with cd(DJANGO_APP_ROOT):
+        run("tail error.log")
+
+def kerrors():
+    with cd(DJANGO_APP_ROOT):
+        run("tail registro.log")
+
 def deploy():
     """Actualiza el servidor de producción"""
     pull()

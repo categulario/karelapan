@@ -17,7 +17,7 @@ WSGI_MODULE = 'karelapan.wsgi'
 DJANGO_APP_ROOT = os.path.join(VENV_DIR, APP_NAME)
 GUNICORN_CONFIG = "%s/gconfig.py"%DJANGO_APP_ROOT
 GUNICORN_PIDFILE = "%s/gunicorn.pid" % DJANGO_APP_ROOT
-STATIC_ROOT = '/home/%s/staticfiles/static/'%USER
+STATIC_ROOT = '/home/%s/temp/staticfiles/static/'%USER
 
 def start():
     """Prepara todo para comenzar a trabajar"""

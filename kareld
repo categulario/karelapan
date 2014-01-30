@@ -59,7 +59,7 @@ def evalua(envio, cursor, connection):
         "efectividad": 0.0,
         "tiempo_ejecucion": 0
     }
-    archivomundo = settings.MEDIA_ROOT+'/'+problema['casos_de_evaluacion']
+    archivomundo = os.path.join(settings.MEDIA_ROOT, problema['casos_de_evaluacion'])
     try:
         f = file(archivomundo)
     except IOError:

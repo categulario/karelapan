@@ -1,11 +1,12 @@
-django<=1.5.5
-south
-django-sekizai
+django==1.5.5
+south==1.0
+django-sekizai==0.7
 fabric
-gunicorn
+gunicorn==19.1.1
 psutil
 django-mailgun
 requests
-wiki
+wiki==0.0.23
 django-tinymce
 django_downloadview
+django-debug-toolbar==1.2.1

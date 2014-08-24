@@ -144,12 +144,6 @@ class Perfil(models.Model):
     def gravatar_pequenio(self):
         return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
 
-    def save(self):
-        self.nombre_completo = "%s %s %s"%(self.nombre, self.appat, self.apmat)
-        super(Perfil, self).save()
-        self.grupos.add(Grupo.objects.get_or_create(nombre='usuarios')[0])
-        super(Perfil, self).save()
-
     def concursos_activos_y_futuros(self):
         concursos = Concurso.objects.filter(
             grupos__perfiles=self,

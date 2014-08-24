@@ -391,33 +391,43 @@ def registro_view(request):
                             nuevo_usuario.set_password(request.POST.get('contrasenia'))
                             nuevo_usuario.save()
 
-                            perfil = formulario.save(commit=False)
-                            token_confirmacion = str(uuid1())
-                            perfil.confirm_token = token_confirmacion
+                            data = formulario.cleaned_data
+                            data['confirm_token'] = str(uuid1())
+
+                            perfil = nuevo_usuario.perfil
+
+                            for key, value in data.iteritems():
+                                setattr(perfil, key, value)
+
                             try:
                                 id_asesor = int(request.POST.get('asesor'))
                                 perfil.asesor = Usuario.objects.get(pk=id_asesor)
                             except ValueError:
                                 perfil.asesor = None
-                            perfil.usuario = nuevo_usuario
-                            perfil.nombre_completo = "%s %s %s"%(request.POST.get('nombre'),request.POST.get('appat'),request.POST.get('apmat'))
+
                             perfil.save()
+
                             perfil.grupos = [Grupo.objects.get_or_create(nombre='usuarios')[0], Grupo.objects.get_or_create(nombre=request.POST.get('subsistema'))[0]]
                             perfil.save()
+
                             data = {
                                 'token': token_confirmacion,
                                 'correo': nuevo_usuario.email
                             }
+
                             msg = EmailMessage(
                                 'Confirma tu correo electrónico',
                                 render_to_string('mail/confirma.html', data, context_instance=RequestContext(request)),
                                 'Karelapan <karelapan@gmail.com>',
                                 [nuevo_usuario.email]
                             )
+
                             msg.content_subtype = "html"  # Main content is now text/html
                             msg.send()
+
                             mail_admins('Nuevo registro', 'Se ha registrado un usuario con el nombre %s en la fecha %s'%(perfil.nombre_completo, nuevo_usuario.date_joined))
                             messages.success(request, 'Te has registrado correctamente!')
+
                             return HttpResponseRedirect('/')
                         else:
                             messages.error(request, 'Las contraseñas no coinciden')
@@ -457,7 +467,6 @@ def perfil_view(request):
         formulario = PerfilForm(request.POST, instance=usuario.perfil)
         if formulario.is_valid():
             perfil = formulario.save(commit=False)
-            perfil.nombre_completo = "%s %s %s"%(request.POST.get('nombre'), request.POST.get('appat'), request.POST.get('apmat'))
             try:
                 id_asesor = int(request.POST.get('asesor'))
                 perfil.asesor = Usuario.objects.get(pk=id_asesor)

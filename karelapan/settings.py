@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 import os
 import logging
-PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -26,7 +26,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['.karelapan.com', 'localhost:8000']
+ALLOWED_HOSTS = ['.karelapan.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -225,4 +225,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "apps.sitio.processors.avisos_processor",
     "apps.sitio.processors.concursos_processor",
 )
-OLIMPIADA_ACTUAL = 2014
+OLIMPIADA_ACTUAL = 2015

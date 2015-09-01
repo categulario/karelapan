@@ -29,6 +29,35 @@ e instalar las dependencias del proyecto
 $ pip install -r requirements.txt
 ```
 
+Luego hay que instalar las tablas adecuadas
+
+```bash
+$ ./manage.py syncdb --all
+$ ./manage.py migrate --fake
+```
+
+Quizá en ese paso se ofrezca la posibilidad de crear un usuario, no hay que rechazarla.
+
+En este momento sería buena idea, si es una copia de desarrollo, editar el archivo `bin/activate` dentro del entorno virtual y añadir la línea `export DJANGO_SETTINGS_MODULE="karelapan.settings_dev"` para usar el archivo de configuración alterno. Igualmente es útil añadir la línea `unset DJANGO_SETTINGS_MODULE` para desactivar esto al salir del entorno.
+
+Para este momento deberías cargar un par de funciones que uso en postgresql para la evaluación de problemas
+
+```bash
+$ psql -d covi < src/pgsql_functions.sql
+```
+
+Y si todo sale bien, para este momento puedes arrancar el demonio evaluador de karelapan:
+
+```bash
+$ ./kareld start
+```
+
+y luego el servidor web de desarrollo:
+
+```
+$ ./manage.py runserver
+```
+
 # KarelCore
 
 Xalapa, Ver. 2012

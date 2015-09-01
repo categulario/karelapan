@@ -14,8 +14,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'karelapan.db',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'covi',
+        'USER': 'covi',
+        'PASSWORD': 'covi',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -221,4 +225,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "apps.sitio.processors.avisos_processor",
     "apps.sitio.processors.concursos_processor",
 )
-OLIMPIADA_ACTUAL = 2014
+OLIMPIADA_ACTUAL = 2015

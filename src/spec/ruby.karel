@@ -1,0 +1,28 @@
+#!ruby
+
+def gira-derecha
+    3 veces
+        gira-izquierda
+    fin
+fin
+
+def toma-todo
+    mientras junto-a-zumbador
+        coge-zumbador
+    fin
+fin
+
+def gira(n)
+    n veces
+        gira-izquierda
+    fin
+fin
+
+si orientado-al-norte y no-junto-a-zumbador
+    avanza
+    gira-izquierda
+    mientras frente-libre y (orientado-al-norte u orientado-al-sur)
+        avanza
+    fin
+    gira(10)
+fin

@@ -1,0 +1,20 @@
+{
+    "resultado": "OK",
+    "mensaje": "El mensaje final"
+    "casos":[
+        {
+            "terminacion": "OK",
+            "mensaje": "mensaje final del compilador",
+            "puntos": 50
+        },
+        {
+            "terminacion": "ERROR",
+            "mensaje": "El error del compilador",
+            "puntos": 0
+        }
+    ],
+    "puntaje": 50,
+    "total": 100,
+    "efectividad": 0.5,
+    "tiempo_ejecucion": 0.009
+}

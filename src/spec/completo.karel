@@ -1,0 +1,12 @@
+iniciar-programa
+    define-nueva-instruccion f34 como inicio
+        repetir sucede(5) veces inicio
+            avanza;
+            gira-izquierda;
+        fin;
+    fin;
+    define-nueva-instruccion cosa(n) como repetir n veces apagate;
+    inicia-ejecucion
+        apagate;
+    termina-ejecucion
+finalizar-programa

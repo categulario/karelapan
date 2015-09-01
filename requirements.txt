@@ -10,3 +10,4 @@ wiki==0.0.23
 django-tinymce
 django_downloadview
 django-debug-toolbar==1.2.1
+psycopg2

@@ -1,0 +1,92 @@
+{
+    "casos":[
+        {
+            "mundo":{
+              "karel": {
+                "posicion": [1, 1],
+                "orientacion": "norte",
+                "mochila": 0
+              },
+              "casillas": [
+                {
+                    "fila": 10,
+                    "columna": 1,
+                    "zumbadores": 1,
+                    "paredes": ["norte"]
+                },
+                {
+                    "fila": 11,
+                    "columna": 1,
+                    "zumbadores": 0,
+                    "paredes": ["sur"]
+                }
+              ],
+              "dimensiones": {
+                "columnas": 100,
+                "filas": 100
+              }
+            },
+            "resultado": {
+                "casillas" : [
+                    {
+                        "fila": 10,
+                        "columna": 1,
+                        "zumbadores": 0
+                    },
+                    {
+                        "fila": 11,
+                        "columna": 1,
+                        "zumbadores": 0
+                    },
+                    {
+                        "fila": 1,
+                        "columna": 1,
+                        "zumbadores":1
+                    }
+                ]
+            },
+            "puntaje": 51
+        },
+        {
+            "mundo":{
+              "karel": {
+                "posicion": [1, 1],
+                "orientacion": "norte",
+                "mochila": 0
+              },
+              "casillas": [
+                {
+                    "fila": 100,
+                    "columna": 1,
+                    "zumbadores": 1,
+                    "paredes": []
+                }
+              ],
+              "dimensiones": {
+                "columnas": 100,
+                "filas": 100
+              }
+            },
+            "resultado": {
+                "casillas" : [
+                    {
+                        "fila": 1,
+                        "columna": 1,
+                        "zumbadores":1
+                    },
+                    {
+                        "fila": 5,
+                        "columna": 5,
+                        "zumbadores": 1
+                    }
+                ],
+                "karel":{
+                    "posicion": [1, 1],
+                    "orientacion": "sur",
+                    "mochila": 0
+                }
+            },
+            "puntaje": 49
+        }
+    ]
+}

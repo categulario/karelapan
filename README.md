@@ -58,6 +58,10 @@ y luego el servidor web de desarrollo:
 $ ./manage.py runserver
 ```
 
+## Producción
+
+Aquí hay que configurar Nginx y gunicorn para comenzar a servir peticiones desde la internet, en uno de los pasos previos ya se instaló gunicorn así que lo interesante es nginx.
+
 # KarelCore
 
 Xalapa, Ver. 2012

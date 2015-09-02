@@ -20,7 +20,7 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     (r'^notify/', get_notify_pattern()),
-    (r'^wiki/', get_wiki_pattern())
+    (r'^wiki/', get_wiki_pattern()),
 )
 
 if settings.DEBUG:

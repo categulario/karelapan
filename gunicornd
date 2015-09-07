@@ -1,0 +1,16 @@
+#!/bin/bash
+case $1 in
+	'start' )
+		gunicorn -c gconfig.py karelapan.wsgi:application
+		;;
+	'stop' )
+		kill $(cat gunicorn.pid)
+		;;
+	'reload' )
+		kill $(cat gunicorn.pid)
+		gunicorn -c gconfig.py karelapan.wsgi:application
+		;;
+	* )
+		echo Nothing to do
+		;;
+esac

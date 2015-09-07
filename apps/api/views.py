@@ -1,13 +1,14 @@
 # -*- coding:utf-8 -*-
+from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.csrf import csrf_exempt
+import django.contrib.auth as auth
 from apps.evaluador.models import Problema, Envio, Concurso, Consulta, Participacion
 from apps.usuarios.models import Usuario
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required, permission_required
-import django.contrib.auth as auth
-from django.http import HttpResponseRedirect, HttpResponse
-from django.utils import timezone
+from apps.sitio.utils import get_remote_addr
 from django.db.models import Q
+from django.utils import timezone
+from django.http import HttpResponseRedirect, HttpResponse
 import json
 import csv
 
@@ -131,7 +132,7 @@ def hacer_consulta(request):
         if mensaje != '':
             if usuario.puede_hacer_consulta(concurso):
                 if Consulta.objects.filter(concurso=concurso, problema=problema, usuario=usuario, leido=False).count() == 0:
-                    consulta = Consulta(concurso=concurso, problema=problema, usuario=usuario, mensaje=request.POST.get('mensaje'), ip=request.META['REMOTE_ADDR'])
+                    consulta = Consulta(concurso=concurso, problema=problema, usuario=usuario, mensaje=request.POST.get('mensaje'), ip=get_remote_addr(request))
                     consulta.save()
                     return HttpResponse('ok', content_type='text/plain')
                 else:

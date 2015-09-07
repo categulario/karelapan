@@ -11,6 +11,7 @@ from modules.recaptcha import verifica
 from apps.sitio.models import Aviso, Noticia, PreguntaFrecuente
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail, EmailMessage, mail_admins
+from apps.sitio.utils import get_remote_addr
 from django.db.models import Q
 from django.template import RequestContext
 from modules.badges import badgify
@@ -101,7 +102,7 @@ def problema_detalle(request, nombre_administrativo):
                     problema=problema,
                     codigo_archivo=archivo_codigo,
                     codigo=open(archivo_codigo, 'r').read(),
-                    ip=request.META['HTTP_X_FORWARDED_FOR'].split(', ')[0],
+                    ip=get_remote_addr(request),
                 )
                 problema.veces_intentado += 1
                 problema.save()
@@ -197,7 +198,7 @@ def problema_concurso(request, id_concurso, id_problema):
                 f = open(archivo_codigo, 'w')
                 f.write(request.POST['codigo'].encode("utf-8"))
                 f.close()
-            envio = Envio(usuario=usuario, problema=problema, concurso=concurso, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
+            envio = Envio(usuario=usuario, problema=problema, concurso=concurso, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=get_remote_addr(request))
             envio.save()
             messages.success(request, 'Problema enviado, espera el veredicto')
             data['envio'] = envio.id
@@ -223,7 +224,7 @@ def concurso_view(request, id_concurso):
         participacion, creado = Participacion.objects.get_or_create(
             usuario=usuario,
             concurso=concurso,
-            defaults={'primera_ip': request.META['REMOTE_ADDR']}
+            defaults={'primera_ip': get_remote_addr(request)}
         )
         if creado:
             participacion.save()
@@ -390,7 +391,7 @@ def registro_view(request):
             formulario = RegistroForm(request.POST)
             if formulario.is_valid():
                 if len(re.findall('.*chuck.*norris.*', request.POST.get('nombre_de_usuario', ''), flags=re.IGNORECASE)) == 0:
-                    respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
+                    respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, get_remote_addr(request), request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
                     if respuesta == True:
                         if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
                             user_model = auth.get_user_model()
@@ -616,7 +617,7 @@ def recuperar_contrasenia(request):
     if not request.user.is_authenticated():
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         if request.method == 'POST':
-            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf-8'), request.POST.get('recaptcha_response_field', '').encode('utf-8'))
+            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, get_remote_addr(request), request.POST.get('recaptcha_challenge_field', '').encode('utf-8'), request.POST.get('recaptcha_response_field', '').encode('utf-8'))
             if respuesta == True:
                 usuario = get_object_or_404(Usuario, email=request.POST.get('correo'))
                 token_confirmacion = str(uuid1())

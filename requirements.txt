@@ -6,7 +6,6 @@ gunicorn==19.1.1
 psutil==1.0.1
 django-mailgun==0.2.2
 requests==1.2.3
-wiki==0.0.22
 django-tinymce
 django_downloadview==1.2
 django-debug-toolbar==1.2.1

@@ -20,18 +20,17 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     (r'^notify/', get_notify_pattern()),
-    (r'^wiki/', get_wiki_pattern()),
 )
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        url(r'^static/(?P<path>.*)$', 'django.views.static.serve'),
         url(r'^404/$', 'apps.sitio.views.error404'),
         url(r'^403/$', 'apps.sitio.views.error403'),
         url(r'^500/$', 'apps.sitio.views.error500'),
     )
 
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
     import debug_toolbar
 

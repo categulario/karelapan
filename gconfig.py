@@ -4,8 +4,8 @@ import os
 
 _debug = os.environ.get('DJANGO_SETTINGS_MODULE', 'karelapan.settings').endswith('dev')
 
-#bind = "unix:/tmp/gunicorn.sock"
-bind = "127.0.0.1:8000"
+bind = "unix:/tmp/gunicorn.sock"
+#bind = "127.0.0.1:8000"
 workers = multiprocessing.cpu_count() * 2 + 1
 preload_app = True
 daemon = not _debug

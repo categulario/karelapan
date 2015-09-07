@@ -96,7 +96,7 @@ def problema_detalle(request, nombre_administrativo):
                     f = open(archivo_codigo, 'w')
                     f.write(request.POST.get('codigo', '').encode("utf-8"))
                     f.close()
-                envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['REMOTE_ADDR'])
+                envio = Envio(usuario=usuario, problema=problema, codigo_archivo=archivo_codigo, codigo=open(archivo_codigo, 'r').read(), ip=request.META['HTTP_X_FORWARDED_FOR'])
                 problema.veces_intentado += 1
                 problema.save()
                 envio.save()

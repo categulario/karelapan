@@ -47,7 +47,7 @@ $BODY$
     COST 100;
 
 ALTER FUNCTION actualiza_puntaje_concurso(integer, integer)
-    OWNER TO covi;
+    OWNER TO karelapan;
 
 ALTER FUNCTION actualiza_puntaje(integer)
-    OWNER TO covi;
+    OWNER TO karelapan;

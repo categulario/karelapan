@@ -393,7 +393,9 @@ def registro_view(request):
                     respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.META['REMOTE_ADDR'], request.POST.get('recaptcha_challenge_field', '').encode('utf8'), request.POST.get('recaptcha_response_field', '').encode('utf8'))
                     if respuesta == True:
                         if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
-                            nuevo_usuario = Usuario(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=True)
+                            user_model = auth.get_user_model()
+
+                            nuevo_usuario = user_model(username=request.POST.get('nombre_de_usuario') ,email=request.POST.get('correo'), is_active=True)
                             nuevo_usuario.set_password(request.POST.get('contrasenia'))
                             nuevo_usuario.save()
 
@@ -403,6 +405,7 @@ def registro_view(request):
                             perfil = nuevo_usuario.perfil
 
                             for key, value in data.iteritems():
+                                if key == 'asesor': continue
                                 setattr(perfil, key, value)
 
                             try:
@@ -417,7 +420,7 @@ def registro_view(request):
                             perfil.save()
 
                             data = {
-                                'token': token_confirmacion,
+                                'token': str(uuid1()),
                                 'correo': nuevo_usuario.email
                             }
 

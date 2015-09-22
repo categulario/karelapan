@@ -5,24 +5,23 @@ from fabric.api import local, settings, abort, run, env
 from fabric.contrib.console import confirm
 from fabric.context_managers import cd, lcd, settings, hide
 
-USER = 'covi'
-HOST = 'covi.org.mx'
-APP_NAME = 'karelapandjango'
+USER = 'abraham'
+HOST = 'karelapan.com'
 
 # Host and login username:
 env.hosts = ['%s@%s' % (USER, HOST)]
 
-VENV_DIR = "/home/%s/portal/EntornoKarelapan"%USER
+VENV_DIR = '/var/www/envs/karelapan_env'
 WSGI_MODULE = 'karelapan.wsgi'
-DJANGO_APP_ROOT = os.path.join(VENV_DIR, APP_NAME)
-GUNICORN_CONFIG = "%s/gconfig.py"%DJANGO_APP_ROOT
-GUNICORN_PIDFILE = "%s/gunicorn.pid" % DJANGO_APP_ROOT
-STATIC_ROOT = '/home/%s/temp/staticfiles/static/'%USER
+DJANGO_APP_ROOT = os.path.join(VENV_DIR, 'karelapan')
+GUNICORN_CONFIG = '%s/gconfig.py'%DJANGO_APP_ROOT
+GUNICORN_PIDFILE = '%s/gunicorn.pid'%DJANGO_APP_ROOT
+STATIC_ROOT = '/var/www/sites/karelapan_static'
 
 def start():
     """Prepara todo para comenzar a trabajar"""
     local("git pull -u origin master")
-    local("./dev_manage.py migrate")
+    local("./manage.py migrate")
 
 def end():
     """Deja el directorio de trabajo en limpio para la siguiente sesión"""

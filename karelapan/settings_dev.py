@@ -15,9 +15,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'covi',
-        'USER': 'covi',
-        'PASSWORD': 'covi',
+        'NAME': 'karelapan',
+        'USER': 'karelapan',
+        'PASSWORD': '',
         'HOST': '',
         'PORT': '',
     }
@@ -131,10 +131,10 @@ INSTALLED_APPS = (
     'tinymce',
     'django.contrib.humanize',
     'south',
-    'django_notify',
-    'mptt',
+    # 'django_notify',
+    # 'mptt',
     'sekizai',
-    'sorl.thumbnail',
+    # 'sorl.thumbnail',
     'apps.bootstrapy',
     'apps.karelecatl',
     'apps.libro',
@@ -189,8 +189,8 @@ MESSAGE_TAGS = {
 
 LOGIN_URL = '/usuarios'
 
-RECAPTCHA_PRIVATE_KEY = '6LcsLeMSAAAAAIZK9hnABwjYqePREa_UXdE2ugll'
-RECAPTCHA_PUBLIC_KEY = '6LcsLeMSAAAAACtSgJKW0jCrLSC5zPg8Av2ZgT-H'
+RECAPTCHA_PRIVATE_KEY = '6Lcn-d4SAAAAAK1JqewI5KFbErcvxQxh9cT4chZq'
+RECAPTCHA_PUBLIC_KEY = '6Lcn-d4SAAAAAHG7GUXTs9D9mxRBp2wNGvTETCU0'
 
 RAIZ_CODIGOS = os.path.join(MEDIA_ROOT, 'codigos')+'/'
 

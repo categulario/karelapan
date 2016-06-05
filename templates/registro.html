@@ -27,7 +27,10 @@
       {% endfor %}
       <div class="control-group">
         <label class="control-label">¿Eres un robot?</label>
-        <div class="controls" id="recaptcha"></div>
+        <div class="controls" id="recaptcha">
+          <script src='https://www.google.com/recaptcha/api.js'></script>
+          <div class="g-recaptcha" data-sitekey="6Lcn-d4SAAAAAHG7GUXTs9D9mxRBp2wNGvTETCU0"></div>
+        </div>
       </div>
       <div class="control-group">
         <div class="controls">
@@ -36,13 +39,5 @@
         </div>
       </div>
     </form>
-  </div>
-  <div class="span3">
-    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    <script>
-        Recaptcha.create("{{ RECAPTCHA_PUBLIC_KEY }}", "recaptcha", {
-            theme: "clean"
-        });
-    </script>
   </div>
 {% endblock %}

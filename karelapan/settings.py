@@ -131,10 +131,10 @@ INSTALLED_APPS = (
     'tinymce',
     'django.contrib.humanize',
     'south',
-    'django_notify',
-    'mptt',
+    # 'django_notify',
+    # 'mptt',
     'sekizai',
-    'sorl.thumbnail',
+    # 'sorl.thumbnail',
     'apps.bootstrapy',
     'apps.karelecatl',
     'apps.libro',
@@ -158,7 +158,7 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
     },
     'loggers': {
         'django.request': {

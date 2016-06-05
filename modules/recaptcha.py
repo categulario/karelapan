@@ -23,19 +23,18 @@
 #
 import urllib
 import urllib2
+import json
 
-def verifica(privatekey, remoteip, challenge, response):
-    respuesta = urllib2.urlopen('http://www.google.com/recaptcha/api/verify', urllib.urlencode({
-        'privatekey': privatekey,
+def verifica(privatekey, response, remoteip):
+    respuesta = urllib2.urlopen('https://www.google.com/recaptcha/api/siteverify', urllib.urlencode({
+        'secret': privatekey,
+        'response': response,
         'remoteip': remoteip,
-        'challenge': challenge,
-        'response': response
     }))
     res = respuesta.read()
-    if res.split('\n')[0] == 'true':
-        return True
-    else:
-        return res.split('\n')[1]
+    data = json.loads(res)
+
+    return data['success']
 
 if __name__ == '__main__':
     print verifica('a', 'b', 'c', 'd')

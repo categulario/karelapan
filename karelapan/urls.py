@@ -1,6 +1,4 @@
 from django.conf.urls import patterns, include, url
-from wiki.urls import get_pattern as get_wiki_pattern
-from django_notify.urls import get_pattern as get_notify_pattern
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,10 +14,6 @@ urlpatterns = patterns('',
     url(r'^karelecatl/', include('apps.karelecatl.urls')),
     url(r'^material/', include('apps.libro.urls')),
     url(r'^channel.html', 'apps.sitio.views.channel'),
-)
-
-urlpatterns += patterns('',
-    (r'^notify/', get_notify_pattern()),
 )
 
 if settings.DEBUG:

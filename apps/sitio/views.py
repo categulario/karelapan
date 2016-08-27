@@ -391,7 +391,11 @@ def registro_view(request):
             formulario = RegistroForm(request.POST)
             if formulario.is_valid():
                 if len(re.findall('.*chuck.*norris.*', request.POST.get('nombre_de_usuario', ''), flags=re.IGNORECASE)) == 0:
-                    respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.POST.get('g-recaptcha-response', '').encode('utf8'), get_remote_addr(request))
+                    respuesta = verifica(
+                        settings.RECAPTCHA_PRIVATE_KEY,
+                        request.POST.get('g-recaptcha-response', '').encode('utf8'),
+                        get_remote_addr(request)
+                    )
                     if respuesta == True:
                         if request.POST['contrasenia'] == request.POST['repetir_contrasenia']:
                             user_model = auth.get_user_model()
@@ -617,7 +621,11 @@ def recuperar_contrasenia(request):
     if not request.user.is_authenticated():
         data['RECAPTCHA_PUBLIC_KEY'] = settings.RECAPTCHA_PUBLIC_KEY
         if request.method == 'POST':
-            respuesta = verifica(settings.RECAPTCHA_PRIVATE_KEY, request.POST.get('g-recaptcha-response', '').encode('utf-8'), get_remote_addr(request))
+            respuesta = verifica(
+                settings.RECAPTCHA_PRIVATE_KEY,
+                request.POST.get('g-recaptcha-response', '').encode('utf-8'),
+                get_remote_addr(request)
+            )
             if respuesta == True:
                 usuario = get_object_or_404(Usuario, email=request.POST.get('correo'))
                 token_confirmacion = str(uuid1())

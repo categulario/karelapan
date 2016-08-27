@@ -139,10 +139,10 @@ class Perfil(models.Model):
         return self.get_full_name()
 
     def gravatar(self):
-        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
+        return 'https://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
 
     def gravatar_pequenio(self):
-        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
+        return 'https://www.gravatar.com/avatar/'+hashlib.md5(str(self.usuario.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
 
     def concursos_activos_y_futuros(self):
         concursos = Concurso.objects.filter(
@@ -187,10 +187,10 @@ class Usuario(User):
         ordering = ('perfil__nombre', 'perfil__appat', 'perfil__apmat')
 
     def gravatar(self):
-        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.email).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
+        return 'https://www.gravatar.com/avatar/'+hashlib.md5(str(self.email).lower()).hexdigest()+'?s=200&r=g&d=monsterid'
 
     def gravatar_pequenio(self):
-        return 'http://www.gravatar.com/avatar/'+hashlib.md5(str(self.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
+        return 'https://www.gravatar.com/avatar/'+hashlib.md5(str(self.email).lower()).hexdigest()+'?s=25&r=g&d=monsterid'
 
     def lista_problemas_intentados(self):
         problemas_resueltos = self.lista_problemas_resueltos()
@@ -314,4 +314,3 @@ class Usuario(User):
 
     def __unicode__(self):
         return "%s %s %s"%(self.perfil.nombre, self.perfil.appat, self.perfil.apmat)
-

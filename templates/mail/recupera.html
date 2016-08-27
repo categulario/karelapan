@@ -9,7 +9,7 @@
     <div class="article-content" align="left">
       <p>Tu nombre de usuario es: <strong>{{ nombre_usuario }}</strong></p>
       <p>Karelapan sospecha que solicitaste recuperación de la contraseña, si es así, sigue el enlace, de lo contrario ignora este mensaje</p>
-      <p><a href="http://{{ host }}{% url 'apps.sitio.views.confirma_recuperacion' correo token %}">http://{{ host }}{% url 'apps.sitio.views.confirma_recuperacion' correo token %}</a></p>
+      <p><a href="https://{{ host }}{% url 'apps.sitio.views.confirma_recuperacion' correo token %}">https://{{ host }}{% url 'apps.sitio.views.confirma_recuperacion' correo token %}</a></p>
     </div>
   </td>
 {% endblock %}

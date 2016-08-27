@@ -14,9 +14,9 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'karelapan',
-        'USER': 'karelapan',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'karelapan.db',
+        'USER': '',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',

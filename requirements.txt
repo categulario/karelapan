@@ -2,7 +2,7 @@ django==1.5.5
 south==1.0
 django-sekizai==0.7
 fabric==1.7.0
-gunicorn==19.1.1
+gunicorn==19.5.0
 psutil==1.0.1
 django-mailgun==0.2.2
 requests==1.2.3
